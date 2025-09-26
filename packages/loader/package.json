@@ -15,7 +15,6 @@
     "require": "./dist/yascml.umd.cjs"
   },
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build"
   },
   "devDependencies": {
