@@ -4,14 +4,13 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "files": [
-    "dist",
-    "index.d.ts"
+    "dist"
   ],
   "main": "./dist/counter.umd.cjs",
   "module": "./dist/counter.js",
-  "types": "./index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "types": "./index.d.ts",
+    "types": "./dist/index.d.ts",
     "import": "./dist/counter.js",
     "require": "./dist/counter.umd.cjs"
   },
@@ -21,6 +20,9 @@
   },
   "devDependencies": {
     "typescript": "~5.9.2",
-    "vite": "^7.1.5"
+    "vite": "^7.1.5",
+    "unplugin-dts": "~1.0.0-beta.6",
+    "@types/node": "~24.5.2",
+    "@microsoft/api-extractor": "~7.52.13"
   }
 }
