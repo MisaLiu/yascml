@@ -61,11 +61,10 @@ Object.defineProperty(window, '$SugarCube', {
     const scScriptRaw = scScriptDOM.innerHTML;
     document.body.removeChild(scScriptDOM);
 
-    const blankSCScriptDOM = document.createElement('script');
-    blankSCScriptDOM.id = 'script-sugarcube';
-    document.body.appendChild(blankSCScriptDOM);
-
-    eval(patchSCScript(scScriptRaw));
+    const newSCScriptDOM = document.createElement('script');
+    newSCScriptDOM.id = 'script-sugarcube';
+    newSCScriptDOM.innerHTML = patchSCScript(scScriptRaw);
+    document.body.appendChild(newSCScriptDOM);
   };
 
   window.addEventListener('DOMContentLoaded', async () => {
