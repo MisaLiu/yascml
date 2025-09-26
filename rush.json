@@ -8,5 +8,11 @@
     "defaultBranch": "main",
     "defaultRemote": "origin"
   },
-  "projects": []
+  "projects": [
+    {
+      "packageName": "@yascml/loader",
+      "projectFolder": "packages/loader",
+      "reviewCategory": "production"
+    }
+  ]
 }
