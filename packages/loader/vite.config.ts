@@ -6,8 +6,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src-lib/main.ts'),
-      name: 'Counter',
-      fileName: 'counter',
+      name: 'YASCML',
+      fileName: 'yascml',
     },
   },
   plugins: [
