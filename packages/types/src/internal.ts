@@ -29,9 +29,21 @@ export type SimpleStoreAPI = {
   create: (storageId: string, persistant: boolean) => SimpleStorageAdapter;
 };
 
+export type OutlinesAPI = {
+  init(): void;
+  show(): void;
+  hide(): void;
+};
+
+export type LinksAPI = {
+  init(): void;
+};
+
 export type SugarCubeInternal = {
   LoadScreen: $LoadScreenAPI;
   SimpleStore: SimpleStoreAPI;
+  Outlines: OutlinesAPI | null;
+  Links: LinksAPI | null;
   $init: {
     initStorage(): void;
   }
