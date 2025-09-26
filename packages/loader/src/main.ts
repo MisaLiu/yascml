@@ -1,4 +1,5 @@
 import { patchSCScript } from './utils';
+import { initLoader } from './init/loader';
 import { initSugarCube } from './init/engine';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
@@ -21,6 +22,9 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
     }
   });
   observer.observe(document.documentElement, { attributes: true, attributeFilter: [ 'data-init' ] });
+
+  // Init loader
+  initLoader();
 
   const injectSCScript = () => {
     const scScriptDOM = document.querySelector('#script-sugarcube') as HTMLScriptElement;
