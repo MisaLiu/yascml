@@ -1,5 +1,5 @@
 import { patchSCScript } from './utils';
-import { initSugarCube } from './initEngine';
+import { initSugarCube } from './init/engine';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
