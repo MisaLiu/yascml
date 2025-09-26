@@ -5,7 +5,7 @@ import dts from 'unplugin-dts/vite';
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src-lib/main.ts'),
+      entry: resolve(__dirname, 'src/main.ts'),
       name: 'YASCML',
       fileName: 'yascml',
     },
