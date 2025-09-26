@@ -10,6 +10,11 @@
   },
   "projects": [
     {
+      "packageName": "@yascml/types",
+      "projectFolder": "packages/types",
+      "reviewCategory": "devDependencies"
+    },
+    {
       "packageName": "@yascml/loader",
       "projectFolder": "packages/loader",
       "reviewCategory": "production"

@@ -1,0 +1,21 @@
+{
+  "name": "@yascml/types",
+  "description": "Types used in YASCML",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "types": "./src/index.d.ts",
+  "exports": {
+    "types": "./src/index.d.ts"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2",
+    "@types/twine-sugarcube": "~2.37.2"
+  }
+}
