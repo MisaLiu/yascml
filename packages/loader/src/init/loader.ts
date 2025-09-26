@@ -9,6 +9,7 @@ export const initLoader = () => {
 
     value: Object.seal(Object.assign(Object.create(null), {
       version: __LOADER_VERSION__,
+      plugins: [],
     } as YASCML)),
   });
 };
