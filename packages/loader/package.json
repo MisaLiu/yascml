@@ -24,6 +24,7 @@
     "unplugin-dts": "~1.0.0-beta.6",
     "@types/node": "~24.5.2",
     "@microsoft/api-extractor": "~7.52.13",
-    "@types/twine-sugarcube": "~2.37.2"
+    "@types/twine-sugarcube": "~2.37.2",
+    "@yascml/types": "workspace:*"
   }
 }

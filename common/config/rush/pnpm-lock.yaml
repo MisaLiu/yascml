@@ -11,6 +11,10 @@ importers:
   .: {}
 
   ../../packages/loader:
+    dependencies:
+      '@yascml/types':
+        specifier: workspace:*
+        version: link:../types
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ~7.52.13

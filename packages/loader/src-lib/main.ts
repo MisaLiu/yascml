@@ -1,5 +1,4 @@
-import { SugarCube } from './types';
-import { SugarCubeInternal } from './types/internal';
+import { SugarCube, SugarCubeInternal } from '@yascml/types';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
@@ -8,22 +7,22 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
 ;(() => {
   const SugarCubeInternalExposeScript = `;
 function initStorage() {
-  storage = SimpleStore.create(Story.domId, true);
-  session = SimpleStore.create(Story.domId, false);
+  storage = SimpleStore.create(Story.id ?? Story.domId, true);
+  session = SimpleStore.create(Story.id ?? Story.domId, false);
 
   window.SugarCube.storage = storage;
   window.SugarCube.session = session;
 };
-let _Outliner = null;
-let _Outlines = null;
-try { _Outliner = Outliner } catch {}
+let _Outlines = null, _Links = null;
 try { _Outlines = Outlines } catch {}
+try { _Outlines = Outliner } catch {}
+try { _Links = Links } catch {}
 Object.defineProperty(window, '$SugarCube', {
   value: Object.freeze({
     LoadScreen,
     SimpleStore,
-    Outliner: _Outliner,
     Outlines: _Outlines,
+    Links: _Links,
     $init: {
       initStorage
     }
@@ -53,10 +52,7 @@ Object.defineProperty(window, '$SugarCube', {
       throw new Error('Failed to patch script: Unable to find script data');
     }
 
-    const scriptReal = scriptMatch[1];
-    // console.log(scriptReal.match(/,jQuery\(\(function\(\){(.+)}\)\)/)[1]);
-    // return scriptReal;
-    return scriptReal.replace(/,jQuery\(\(function\(\){(.+)}\)\)/, SugarCubeInternalExposeScript);
+    return scriptMatch[1].replace(/,jQuery\(\(function\(\){(.+)}\)\)/, SugarCubeInternalExposeScript);
   };
 
   const injectSCScript = () => {
@@ -85,18 +81,17 @@ Object.defineProperty(window, '$SugarCube', {
     sc.UIBar.init();
     sc.Engine.init();
     if (sce.Outlines) sce.Outlines.init();
-    if (sce.Outliner) sce.Outliner.init();
     if (sc.Engine.runUserScripts) sc.Engine.runUserScripts();
     sc.L10n.init();
 
-    if (!sc.session.has('rcWarn') && sc.storage.name === 'cookie') {
-      sc.session.set('rcWarn', 1);
+    if (!sc.session!.has('rcWarn') && sc.storage!.name === 'cookie') {
+      sc.session!.set('rcWarn', 1);
       window.alert(sc.L10n.get('warningNoWebStorage'));
     }
 
     sc.Save.init();
     sc.Setting.init();
-    if (sc.Links) sc.Links.init();
+    if (sce.Links) sce.Links.init();
     sc.Macro.init();
     sc.Engine.start();
 
