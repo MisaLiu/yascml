@@ -5,6 +5,7 @@ export type $LoadScreenAPI = LoadScreenAPI & {
   clear: () => void,
   hide: () => void,
   show: () => void,
+  size?: number,
 };
 
 export interface SimpleStorageAdapter {
@@ -39,11 +40,17 @@ export type LinksAPI = {
   init(): void;
 };
 
+export type AlertAPI = {
+  error(where: string | null, message: string | Error): void;
+  fatal(where: string | null, message: string | Error): void;
+};
+
 export type SugarCubeInternal = {
   LoadScreen: $LoadScreenAPI;
   SimpleStore: SimpleStoreAPI;
   Outlines: OutlinesAPI | null;
   Links: LinksAPI | null;
+  Alert: AlertAPI;
   $init: {
     initStorage(): void;
   }

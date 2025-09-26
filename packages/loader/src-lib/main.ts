@@ -1,4 +1,4 @@
-import { SugarCube, SugarCubeInternal } from '@yascml/types';
+import { initSugarCube } from './initEngine';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
@@ -23,6 +23,7 @@ Object.defineProperty(window, '$SugarCube', {
     SimpleStore,
     Outlines: _Outlines,
     Links: _Links,
+    Alert,
     $init: {
       initStorage
     }
@@ -67,61 +68,27 @@ Object.defineProperty(window, '$SugarCube', {
     eval(patchSCScript(scScriptRaw));
   };
 
-  const initSugarCube = (sc: SugarCube, sce: SugarCubeInternal, loadScreenLockId: number) => {
-    if (document.normalize) {
-      document.normalize();
-    }
-
-    if (sc.Story.load) sc.Story.load();
-    else sc.Story.init();
-
-    sce.$init.initStorage();
-
-    sc.Dialog.init();
-    sc.UIBar.init();
-    sc.Engine.init();
-    if (sce.Outlines) sce.Outlines.init();
-    if (sc.Engine.runUserScripts) sc.Engine.runUserScripts();
-    sc.L10n.init();
-
-    if (!sc.session!.has('rcWarn') && sc.storage!.name === 'cookie') {
-      sc.session!.set('rcWarn', 1);
-      window.alert(sc.L10n.get('warningNoWebStorage'));
-    }
-
-    sc.Save.init();
-    sc.Setting.init();
-    if (sce.Links) sce.Links.init();
-    sc.Macro.init();
-    sc.Engine.start();
-
-    const $window = $(window);
-		const vprCheckId = setInterval(() => {
-			if (!$window.width()) {
-				return;
-			}
-
-			clearInterval(vprCheckId);
-			sc.UIBar.start();
-
-			sce.LoadScreen.unlock(loadScreenLockId);
-
-			jQuery.event.trigger({ type : ':storyready' });
-		}, sc.Engine.minDomActionDelay);
-  };
-
   window.addEventListener('DOMContentLoaded', async () => {
     injectSCScript();
 
     const sc = window.SugarCube;
+    const sci = window.$SugarCube!;
     if (!sc) {
       throw new Error('SugarCube not loaded properly!');
     }
 
-    const lockId = window.$SugarCube!.LoadScreen.lock();
-		window.$SugarCube!.LoadScreen.init();
+    const lockId = sci.LoadScreen.lock();
+		sci.LoadScreen.init();
 
-    initSugarCube(window.SugarCube!, window.$SugarCube!, lockId);
+    initSugarCube(sc, sci)
+      .then(() => {
+        setTimeout(() => sci.LoadScreen.unlock(lockId), (sc.Engine.DOM_DELAY ?? sc.Engine.minDomActionDelay) * 2);
+      })
+      .catch((e) => {
+        console.error(e);
+        sci.LoadScreen.clear();
+        return sci.Alert.fatal(null, e.message);
+      });
 
     observer.disconnect();
   });
