@@ -12,10 +12,9 @@
     "types": "./src/index.d.ts"
   },
   "scripts": {
-    "build": "tsc"
+    "build": ""
   },
   "devDependencies": {
-    "typescript": "~5.9.2",
     "@types/twine-sugarcube": "~2.37.2"
   }
 }

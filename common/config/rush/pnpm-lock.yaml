@@ -11,10 +11,6 @@ importers:
   .: {}
 
   ../../packages/loader:
-    dependencies:
-      '@yascml/types':
-        specifier: workspace:*
-        version: link:../types
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ~7.52.13
@@ -25,6 +21,9 @@ importers:
       '@types/twine-sugarcube':
         specifier: ~2.37.2
         version: 2.37.2
+      '@yascml/types':
+        specifier: workspace:*
+        version: link:../types
       typescript:
         specifier: ~5.9.2
         version: 5.9.2
@@ -40,9 +39,6 @@ importers:
       '@types/twine-sugarcube':
         specifier: ~2.37.2
         version: 2.37.2
-      typescript:
-        specifier: ~5.9.2
-        version: 5.9.2
 
 packages:
 
