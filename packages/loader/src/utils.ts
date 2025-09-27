@@ -35,6 +35,38 @@ export const patchSCScript = (script: string) => {
   return scriptMatch[1].replace(/,jQuery\(\(function\(\){(.+)}\)\)/, SugarCubeInternalExposeScript);
 };
 
+type ExecuteScriptConfig = Partial<{
+  domProps: Partial<Record<keyof HTMLScriptElement & string, string>>;
+}>;
+
+/**
+ * Basically an async alternative to `eval()`, support both script string and blob.
+ */
+export const executeScript = (script: string | Blob, config: ExecuteScriptConfig = {}) => new Promise((res, rej) => {
+  const dom = document.createElement('script');
+  dom.type = 'text/javascript';
+  if (config.domProps) {
+    Object.assign(dom, config.domProps);
+  }
+  document.body.appendChild(dom);
+
+  // Inline scripts won't trigger this event.
+  dom.addEventListener('load', () => {
+    res(void 0);
+  });
+
+  dom.addEventListener('error', (e) => {
+    rej(e);
+  });
+
+  setTimeout(() => {
+    if (typeof script === 'string') {
+      dom.innerHTML = script;
+      res(void 0);
+    } else dom.src = URL.createObjectURL(script);
+  }, 0);
+});
+
 export const isValidModMeta = (obj: Partial<ModMetaFile>) => (
   obj.id !== (void 0) && obj.name !== (void 0) && obj.author !== (void 0) && obj.version !== (void 0)
 );

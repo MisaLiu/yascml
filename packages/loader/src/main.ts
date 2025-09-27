@@ -1,6 +1,6 @@
-import { patchSCScript } from './utils';
 import { initLoader } from './init/loader';
 import { initSugarCube } from './init/engine';
+import { executeScript, patchSCScript } from './utils';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
@@ -26,19 +26,20 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   // Init loader
   initLoader();
 
-  const injectSCScript = () => {
+  const _patchSCScript = () => {
     const scScriptDOM = document.querySelector('#script-sugarcube') as HTMLScriptElement;
     const scScriptRaw = scScriptDOM.innerHTML;
     document.body.removeChild(scScriptDOM);
 
-    const newSCScriptDOM = document.createElement('script');
-    newSCScriptDOM.id = 'script-sugarcube';
-    newSCScriptDOM.innerHTML = patchSCScript(scScriptRaw);
-    document.body.appendChild(newSCScriptDOM);
+    return patchSCScript(scScriptRaw);
   };
 
   window.addEventListener('DOMContentLoaded', async () => {
-    injectSCScript();
+    await executeScript(_patchSCScript(), {
+      domProps: {
+        id: 'script-sugarcube',
+      },
+    });
 
     const sc = window.SugarCube;
     const sci = window.$SugarCube!;
