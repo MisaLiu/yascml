@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
-import { isValidModMeta } from '../utils';
-import { ModMetaFile, ModMetaFull } from '../types';
+import { isValidModMeta } from './utils';
+import { ModMetaFile, ModMetaFull } from './types';
 
 export const importModFromFile = async (modZip: Blob) => {
   const zip = await JSZip.loadAsync(modZip);
@@ -18,6 +18,7 @@ export const importModFromFile = async (modZip: Blob) => {
     postloadScripts: [],
     cssFiles: [],
     extraFiles: [],
+    enabled: true,
   };
 
   if (modMeta.preloadScripts !== (void 0)) {
@@ -80,3 +81,8 @@ export const importModFromUrl = (url: string) => (
     .then(e => e.blob())
     .then(e => importModFromFile(e))
 );
+
+export const importMod = (file: string | Blob) => {
+  if (typeof file === 'string') return importModFromUrl(file);
+  return importModFromFile(file);
+};
