@@ -2,7 +2,7 @@ import JSZip from 'jszip';
 import { isValidModMeta } from '../utils';
 import { ModMetaFile, ModMetaFull } from '../types';
 
-export const importMod = async (modZip: Blob) => {
+export const importModFromFile = async (modZip: Blob) => {
   const zip = await JSZip.loadAsync(modZip);
   if (!zip.file('meta.json'))
     throw new Error('"meta.json" not found in mod file, is this a valid mod file?');
@@ -74,3 +74,9 @@ export const importMod = async (modZip: Blob) => {
 
   return result;
 };
+
+export const importModFromUrl = (url: string) => (
+  fetch(url)
+    .then(e => e.blob())
+    .then(e => importModFromFile(e))
+);
