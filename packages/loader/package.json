@@ -25,5 +25,8 @@
     "@microsoft/api-extractor": "~7.52.13",
     "@types/twine-sugarcube": "~2.37.2",
     "@yascml/types": "workspace:*"
+  },
+  "dependencies": {
+    "jszip": "~3.10.1"
   }
 }

@@ -1,3 +1,4 @@
+import { ModMetaFile } from "./types";
 
 const SugarCubeInternalExposeScript = `;
 function initStorage() {
@@ -33,3 +34,7 @@ export const patchSCScript = (script: string) => {
 
   return scriptMatch[1].replace(/,jQuery\(\(function\(\){(.+)}\)\)/, SugarCubeInternalExposeScript);
 };
+
+export const isValidModMeta = (obj: Partial<ModMetaFile>) => (
+  obj.id !== (void 0) && obj.name !== (void 0) && obj.author !== (void 0) && obj.version !== (void 0)
+);
