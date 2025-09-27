@@ -28,7 +28,7 @@ export const importMod = async (modZip: Blob) => {
         continue;
       }
 
-      const script = await file.async('string');
+      const script = new File([await file.async('blob')], path);
       result.preloadScripts.push(script);
     }
   }
@@ -41,7 +41,7 @@ export const importMod = async (modZip: Blob) => {
         continue;
       }
 
-      const script = await file.async('string');
+      const script = new File([await file.async('blob')], path);
       result.postloadScripts.push(script);
     }
   }
@@ -54,7 +54,7 @@ export const importMod = async (modZip: Blob) => {
         continue;
       }
 
-      const cssFile = await file.async('string');
+      const cssFile = new File([await file.async('blob')], path);
       result.cssFiles.push(cssFile);
     }
   }

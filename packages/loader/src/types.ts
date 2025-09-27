@@ -21,9 +21,9 @@ export type ModMetaFile = ModMeta & {
 };
 
 export type ModMetaFull = ModMeta & {
-  preloadScripts: string[],
-  postloadScripts: string[],
-  cssFiles: string[],
+  preloadScripts: File[],
+  postloadScripts: File[],
+  cssFiles: File[],
   extraFiles: File[],
 };
 
