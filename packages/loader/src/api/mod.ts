@@ -1,4 +1,5 @@
 import { importMod } from '../importer';
+import { triggerEvent } from '../utils';
 
 /**
  * Add a mod, could be a `Blob` or file url.
@@ -7,6 +8,7 @@ import { importMod } from '../importer';
 const add = async (file: string | Blob) => {
   const mod = await importMod(file);
   window.YASCML.mods.push(mod);
+  triggerEvent('$modadded', { mod: mod });
 };
 
 /**
@@ -18,7 +20,8 @@ const remove = (modId: string) => {
   if (index === -1)
     throw new Error(`Cannot find mod ID: ${modId}`);
 
-  window.YASCML.mods.splice(index, 1);
+  const removedMod = window.YASCML.mods.splice(index, 1)[0];
+  triggerEvent('$modremoved', { mod: removedMod });
 };
 
 const enable = (modId: string) => {
@@ -27,6 +30,7 @@ const enable = (modId: string) => {
     throw new Error(`Cannot find mod ID: ${modId}`);
 
   window.YASCML.mods[index].enabled = true;
+  triggerEvent('$modenabled', { mod: window.YASCML.mods[index] });
 };
 
 const disable = (modId: string) => {
@@ -35,6 +39,7 @@ const disable = (modId: string) => {
     throw new Error(`Cannot find mod ID: ${modId}`);
 
   window.YASCML.mods[index].enabled = false;
+  triggerEvent('$moddisabled', { mod: window.YASCML.mods[index] });
 };
 
 export default {

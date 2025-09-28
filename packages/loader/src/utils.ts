@@ -35,6 +35,10 @@ export const patchSCScript = (script: string) => {
   return scriptMatch[1].replace(/,jQuery\(\(function\(\){(.+)}\)\)/, SugarCubeInternalExposeScript);
 };
 
+export const triggerEvent = <T extends Object>(type: string, detail: T = {} as T) => (
+  document.dispatchEvent(new CustomEvent(type, { detail }))
+);
+
 type ExecuteScriptConfig = Partial<{
   domProps: Partial<Record<keyof HTMLScriptElement & string, string>>;
 }>;
