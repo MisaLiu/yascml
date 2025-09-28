@@ -14,7 +14,8 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
       name: 'YASCML',
-      fileName: 'yascml',
+      fileName: (format) => `yascml${format !== 'iife' ? `.${format}` : ''}.js`,
+      formats: [ 'umd', 'iife' ],
     },
   },
   plugins: [
