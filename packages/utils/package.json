@@ -1,0 +1,17 @@
+{
+  "name": "@yascml/utils",
+  "description": "Utils used in YASCML",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "module": "./src/main.ts",
+  "exports": {
+    "import": "./src/main.ts"
+  },
+  "scripts": {
+    "build": ""
+  }
+}
