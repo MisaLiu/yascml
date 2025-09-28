@@ -1,6 +1,7 @@
 import { initLoader } from './init/loader';
 import { initSugarCube } from './init/engine';
-import { executeScript, patchSCScript } from './utils';
+import { patchEngineScript } from './patcher';
+import { executeScript } from './utils';
 import { initPostloadMods, initPreloadMods } from './init/mods';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
@@ -29,7 +30,7 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
     const scScriptRaw = scScriptDOM.innerHTML;
     document.body.removeChild(scScriptDOM);
 
-    return patchSCScript(scScriptRaw);
+    return patchEngineScript(scScriptRaw);
   };
 
   window.addEventListener('DOMContentLoaded', async () => {
