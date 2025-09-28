@@ -53,5 +53,7 @@ export type SugarCubeInternal = {
   Alert: AlertAPI;
   $init: {
     initStorage(): void;
+    initBeforeStory?(): void;
+    initAfterL10n?(): void;
   }
 };

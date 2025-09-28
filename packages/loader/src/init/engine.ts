@@ -13,6 +13,8 @@ export const initSugarCube = (sc: SugarCube, sci: SugarCubeInternal): Promise<vo
       document.normalize();
     }
 
+    if (sci.$init.initBeforeStory) sci.$init.initBeforeStory();
+
     if (sc.Story.load) sc.Story.load();
     else sc.Story.init();
 
@@ -31,6 +33,8 @@ export const initSugarCube = (sc: SugarCube, sci: SugarCubeInternal): Promise<vo
 			sc.session!.set('rcWarn', 1);
 			window.alert(sc.L10n.get('warningNoWebStorage'));
 		}
+
+    if (sci.$init.initAfterL10n) sci.$init.initAfterL10n();
 
     sc.Save.init();
     sc.Setting.init();
