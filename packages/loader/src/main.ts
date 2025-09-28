@@ -1,12 +1,13 @@
 import { initLoader } from './init/loader';
 import { initSugarCube } from './init/engine';
 import { executeScript, patchSCScript } from './utils';
+import { initPostloadMods, initPreloadMods } from './init/mods';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
 }
 
-;(() => {
+(() => {
   // Prevent initialize of SugarCube
   document.documentElement.setAttribute('data-init', 'yascml-loading');
 
@@ -23,9 +24,6 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   });
   observer.observe(document.documentElement, { attributes: true, attributeFilter: [ 'data-init' ] });
 
-  // Init loader
-  initLoader();
-
   const _patchSCScript = () => {
     const scScriptDOM = document.querySelector('#script-sugarcube') as HTMLScriptElement;
     const scScriptRaw = scScriptDOM.innerHTML;
@@ -35,6 +33,9 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   };
 
   window.addEventListener('DOMContentLoaded', async () => {
+    // Init loader
+    await initLoader();
+
     await executeScript(_patchSCScript(), {
       domProps: {
         id: 'script-sugarcube',
@@ -50,7 +51,9 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
     const lockId = sci.LoadScreen.lock();
 		sci.LoadScreen.init();
 
-    initSugarCube(sc, sci)
+    initPreloadMods()
+      .then(() => initSugarCube(sc, sci))
+      .then(() => initPostloadMods())
       .then(() => {
         setTimeout(() => sci.LoadScreen.unlock(lockId), (sc.Engine.DOM_DELAY ?? sc.Engine.minDomActionDelay) * 2);
       })
