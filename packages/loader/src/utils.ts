@@ -67,6 +67,21 @@ export const executeScript = (script: string | Blob, config: ExecuteScriptConfig
   }, 0);
 });
 
+export const loadStyle = (style: string | Blob) => {
+  if (typeof style === 'string') {
+    const dom = document.createElement('style');
+    dom.innerHTML = style;
+    const headDOM = document.head ?? document.getElementsByTagName('head');
+    headDOM.appendChild(dom);
+  } else {
+    const dom = document.createElement('link');
+    dom.rel = 'stylesheet';
+    dom.href = URL.createObjectURL(style);
+    const headDOM = document.head ?? document.getElementsByTagName('head');
+    headDOM.appendChild(dom);
+  }
+};
+
 export const isValidModMeta = (obj: Partial<ModMetaFile>) => (
   obj.id !== (void 0) && obj.name !== (void 0) && obj.author !== (void 0) && obj.version !== (void 0)
 );

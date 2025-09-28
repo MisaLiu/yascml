@@ -1,10 +1,12 @@
-import { executeScript } from '../utils';
+import { executeScript, loadStyle } from '../utils';
 
 export const initPreloadMods = async () => {
   const mods = window.YASCML.mods;
 
   for (const mod of mods) {
     if (!mod.enabled) return;
+
+    mod.cssFiles.forEach((file) => loadStyle(file));
     await Promise.all(
       mod.preloadScripts.map((file) => executeScript(file))
     );
