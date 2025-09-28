@@ -28,6 +28,10 @@ export type ModMetaFull = ModMeta & {
   extraFiles: File[],
 };
 
+export type LoaderConfig = Partial<{
+  embedModPath: string[],
+}>;
+
 export type YASCML = {
   version: string,
   mods: ModMetaFull[], // TODO
