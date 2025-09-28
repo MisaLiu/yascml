@@ -30,7 +30,7 @@ Object.defineProperty(window, '$SugarCube', {
     Alert,
     $init: {
       initStorage,
-      ${customInit ? customInit.join(',')  : ''}
+      ${customInit ? customInit.filter(e => e !== 'initStorage').join(',')  : ''}
     },
     ${customExpose ? customExpose.join(',')  : ''}
   }),
@@ -40,14 +40,12 @@ Object.defineProperty(window, '$SugarCube', {
  * Patch the original SugarCube script, expose some internal variables and remove initial function.
  * 
  * @param script 
- * @param customStorageInit 
  * @param customExpose 
  * @param customInit 
  * @returns 
  */
 export const patchEngineScript = (
   script: string,
-  customStorageInit?: string,
   customExpose?: string[],
   customInit?: { [name: string]: string }
 ) => {
@@ -56,9 +54,11 @@ export const patchEngineScript = (
     throw new Error('Failed to patch script: Unable to find script data');
   }
 
+  const customStorageInit = customInit ? customInit['initStorage'] : (void 0);
   let replaceInitScript = `;${buildSugarCubeStorageInit(customStorageInit)}`;
   if (customInit) {
     for (const name in customInit) {
+      if (name === 'initStorage') continue;
       replaceInitScript += buildCustomInitFunction(name, customInit[name]);
     }
   }

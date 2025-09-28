@@ -30,6 +30,10 @@ export type ModMetaFull = ModMeta & {
 
 export type LoaderConfig = Partial<{
   embedModPath: string[],
+  custom: Partial<{
+    export: string[];
+    init: Partial<{ [name: string]: string }>;
+  }>
 }>;
 
 export type YASCML = {

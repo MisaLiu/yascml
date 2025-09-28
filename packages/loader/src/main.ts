@@ -26,11 +26,31 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   observer.observe(document.documentElement, { attributes: true, attributeFilter: [ 'data-init' ] });
 
   const _patchSCScript = () => {
+    const toFirstUpperCase = (string: string) => (
+      `${string.charAt(0).toUpperCase()}${string.slice(1)}`
+    );
+
     const scScriptDOM = document.querySelector('#script-sugarcube') as HTMLScriptElement;
     const scScriptRaw = scScriptDOM.innerHTML;
     document.body.removeChild(scScriptDOM);
+    
+    let customExport: string[] = [];
+    const customInit: Record<string, string> = {};
+    const { YASCMLConfig } = window;
 
-    return patchEngineScript(scScriptRaw);
+    if (YASCMLConfig && YASCMLConfig.custom) {
+      if (YASCMLConfig.custom.export) customExport = YASCMLConfig.custom.export;
+      if (YASCMLConfig.custom.init) {
+        for (const name in YASCMLConfig.custom.init) {
+          const code = YASCMLConfig.custom.init[name];
+          if (!code) continue;
+
+          customInit[`init${toFirstUpperCase(name)}`] = code;
+        }
+      }
+    }
+
+    return patchEngineScript(scScriptRaw, customExport, customInit);
   };
 
   window.addEventListener('DOMContentLoaded', async () => {
