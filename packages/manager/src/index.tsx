@@ -23,7 +23,7 @@ const buildManagerEntry = () => {
 };
 
 (() => {
-  render(App(), dialogContent);
+  render(<App />, dialogContent);
 
   document.querySelector('#menu-yascml')?.appendChild(buildManagerEntry());
 })();
