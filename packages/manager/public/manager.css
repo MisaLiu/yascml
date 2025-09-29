@@ -35,3 +35,44 @@
 #ui-dialog-body.yascmanager td:last-child {
   text-align: right;
 }
+
+#ui-dialog-body.yascmanager #mods-list button {
+  color: #eee;
+  background-color: transparent;
+  border: 1px solid #444;
+  height: 2.237em;
+  width: 2.237em;
+}
+
+#ui-dialog-body.yascmanager #mods-list button:disabled {
+  color: #444;
+  border-color: #444;
+}
+
+#ui-dialog-body.yascmanager #mods-list button.delete:not(:disabled) {
+  background-color: #911;
+  border-color: #b33;
+}
+
+#ui-dialog-body.yascmanager #mods-list button.delete:not(:disabled):hover {
+  background-color: #b33;
+  border-color: #d55;
+}
+
+#ui-dialog-body.yascmanager #mods-list button::before,
+#ui-dialog-body.yascmanager .buttons button::before {
+  font-family: sc-icons !important;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;
+  line-height: 1;
+  speak-as: never;
+  text-rendering: auto;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ui-dialog-body.yascmanager button.delete::before {
+  content: '\f2ed';
+}

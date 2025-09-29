@@ -14,7 +14,7 @@ export const ModList = () => {
               <div class="subtitle">Author: {mod.author}</div>
             </td>
             <td>
-              <button class="delete" type="button" role="button" tabIndex={0}>X</button>
+              <button class="delete" type="button" role="button" tabIndex={0} />
             </td>
           </tr>
         ))}
