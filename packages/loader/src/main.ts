@@ -1,6 +1,6 @@
 import { initLoader } from './init/loader';
 import { initSugarCube } from './init/engine';
-import { patchEngineScript } from './patcher';
+import { patchEngineScript } from './patcher/engine';
 import { executeScript } from './utils';
 import { initPostloadMods, initPreloadMods } from './init/mods';
 
