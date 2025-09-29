@@ -44,9 +44,24 @@
   width: 2.237em;
 }
 
+#ui-dialog-body.yascmanager #mods-list button:not(:disabled):hover {
+  background-color: #222;
+  border-color: #ddd;
+}
+
 #ui-dialog-body.yascmanager #mods-list button:disabled {
   color: #444;
   border-color: #444;
+}
+
+#ui-dialog-body.yascmanager #mods-list button.enabled:not(:disabled) {
+  background-color: #161;
+  border-color: #383;
+}
+
+#ui-dialog-body.yascmanager #mods-list button.enabled:not(:disabled):hover {
+  background-color: #383;
+  border-color: #5a5;
 }
 
 #ui-dialog-body.yascmanager #mods-list button.delete:not(:disabled) {
@@ -71,6 +86,14 @@
   text-transform: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#ui-dialog-body.yascmanager button.enabled::before {
+  content: '\f04b';
+}
+
+#ui-dialog-body.yascmanager button.disabled::before {
+  content: '\f04c';
 }
 
 #ui-dialog-body.yascmanager button.delete::before {
