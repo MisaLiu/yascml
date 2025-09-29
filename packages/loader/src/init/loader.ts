@@ -20,7 +20,9 @@ export const initLoader = async () => {
     if (window.YASCMLConfig.embedModPath) {
       for (const path of window.YASCMLConfig.embedModPath) {
         try {
-          window.YASCML.mods.push(await importModFromUrl(path));
+          const mod = await importModFromUrl(path);
+          mod.embedded = true;
+          window.YASCML.mods.push(mod);
         } catch (e) {
           console.warn(`Error when loading embed mod: ${path}, skipping...`);
           console.error(e);
