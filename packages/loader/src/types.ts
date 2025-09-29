@@ -1,3 +1,4 @@
+import api from './api';
 
 // TODO
 export type ModMeta = {
@@ -39,4 +40,5 @@ export type LoaderConfig = Partial<{
 export type YASCML = {
   version: string,
   mods: ModMetaFull[], // TODO
+  api: typeof api,
 };
