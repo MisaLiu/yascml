@@ -11,28 +11,32 @@ export const define: typeof Reflect.defineProperty = (target, p, attributes) => 
   });
 };
 
-type ReplaceTarget = { [name: string]: Function };
+type FunctionKeys<T> = {
+  [K in keyof T]: T[K] extends Function ? K : never;
+}[keyof T & string];
 
-type ReplaceAttributes<T extends ReplaceTarget, P extends keyof T> = (
+type ReplaceAttributes<T extends object, P extends FunctionKeys<T>> = (
   Omit<PropertyDescriptor, 'value'> &
-  ThisType<T & { [K in `$${string & P}`]: T[P] }> & 
+  ThisType<T & { [K in `$${P}`]: T[P] }> & 
   {
-    value(this: T & { [K in `$${string & P}`]: T[P] }, ...args: any[]): any
+    value(this: T & { [K in `$${P}`]: T[P] }, ...args: any[]): any
   }
 );
 
 /**
  * Used to replace a funcion.
  */
-export const replace = <T extends ReplaceTarget, P extends keyof T>(
+export const replace = <
+  T extends object,
+  P extends FunctionKeys<T>
+>(
   target: T,
   p: P,
   attributes: ReplaceAttributes<T, P>
 ) => {
-  if (typeof target[p] !== 'function')
-    throw new Error('Unsupported target');
-
   const OrigFn = target[p];
+  if (typeof OrigFn !== 'function')
+    throw new Error('Unsupported target');
 
   if (!Reflect.defineProperty(target, `$${String(p)}`, {
     configurable: false,
