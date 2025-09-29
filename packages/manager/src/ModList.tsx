@@ -3,6 +3,12 @@ import { useModList } from './useModList';
 export const ModList = () => {
   const { modList } = useModList();
 
+  const toggleEnabled = (id: string) => {
+    const mod = window.YASCML.api.mod.get(id);
+    if (mod.enabled) window.YASCML.api.mod.disable(id);
+    else window.YASCML.api.mod.enable(id);
+  }
+
   const deleteMod = (id: string) => {
     window.YASCML.api.mod.remove(id);
   };
@@ -12,7 +18,15 @@ export const ModList = () => {
       <tbody>
         {modList.map((mod) => (
           <tr key={mod.id}>
-            <td></td>
+            <td>
+              <button
+                class={mod.enabled ? 'enabled' : 'disabled'}
+                type="button"
+                role="button"
+                tabIndex={0}
+                onClick={() => toggleEnabled(mod.id)}
+              />
+            </td>
             <td>
               <div>{mod.name}</div>
               <div class="subtitle">Author: {mod.author}</div>
