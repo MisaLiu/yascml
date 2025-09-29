@@ -1,8 +1,10 @@
+import { ModList } from './ModList';
 
 export const App = () => {
   return (
-    <div>
-      Hello world!
-    </div>
+    <>
+      <h2>Mod List</h2>
+      <ModList />
+    </>
   );
 };

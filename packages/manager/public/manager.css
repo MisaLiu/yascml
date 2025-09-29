@@ -1,0 +1,37 @@
+#ui-dialog-body.yascmanager {
+  padding: 0;
+}
+
+#ui-dialog-body.yascmanager > div > :not(:first-child) {
+  border-top: 1px solid #444;
+}
+
+#ui-dialog-body.yascmanager > div > h2 {
+  background-color: #222;
+  font-size: inherit;
+  margin: 0;
+  padding: .1em 0 .1em .4em;
+}
+
+#ui-dialog-body.yascmanager table {
+  border-spacing: 0;
+  width: 100%;
+}
+
+#ui-dialog-body.yascmanager td {
+  padding: .33em;
+}
+
+#ui-dialog-body.yascmanager td:nth-child(2) {
+  line-height: 1.2;
+  width: 100%;
+}
+
+#ui-dialog-body.yascmanager .subtitle {
+  font-size: 75%;
+  margin-left: .25em;
+}
+
+#ui-dialog-body.yascmanager td:last-child {
+  text-align: right;
+}
