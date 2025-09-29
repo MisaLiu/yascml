@@ -1,6 +1,7 @@
 import { initLoader } from './init/loader';
 import { initSugarCube } from './init/engine';
 import { patchEngineScript } from './patcher/engine';
+import { patchObject, unpatchObject } from './patcher/object';
 import { executeScript } from './utils';
 import { initPostloadMods, initPreloadMods } from './init/mods';
 
@@ -57,11 +58,13 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
     // Init loader
     await initLoader();
 
+    patchObject();
     await executeScript(_patchSCScript(), {
       domProps: {
         id: 'script-sugarcube',
       },
     });
+    unpatchObject();
 
     const sc = window.SugarCube;
     const sci = window.$SugarCube!;
