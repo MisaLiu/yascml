@@ -42,9 +42,18 @@ const disable = (modId: string) => {
   triggerEvent('$moddisabled', { mod: window.YASCML.mods[index] });
 };
 
+const get = (modId: string) => {
+  const index = window.YASCML.mods.findIndex(e => e.id === modId);
+  if (index === -1)
+    throw new Error(`Cannot find mod ID: ${modId}`);
+
+  return window.YASCML.mods[index];
+};
+
 export default {
   add,
   remove,
   enable,
   disable,
+  get,
 };
