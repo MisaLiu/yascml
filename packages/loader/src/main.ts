@@ -1,3 +1,4 @@
+import { replace } from '@yascml/utils';
 import { initLoader } from './init/loader';
 import { initSugarCube } from './init/engine';
 import { patchEngineScript } from './patcher/engine';
@@ -71,6 +72,19 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
     if (!sc) {
       throw new Error('SugarCube not loaded properly!');
     }
+
+    // Add mod menu list to sidebar
+    replace(sc.UIBar, 'init', {
+      value() {
+        this.$init();
+
+        const navDOM = document.querySelector('#menu') as HTMLDivElement;
+        const menuListDOM = document.createElement('ul');
+
+        menuListDOM.id = 'menu-yascml';
+        navDOM.appendChild(menuListDOM);
+      },
+    });
 
     const lockId = sci.LoadScreen.lock();
 		sci.LoadScreen.init();

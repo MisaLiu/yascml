@@ -27,6 +27,7 @@
     "@yascml/types": "workspace:*"
   },
   "dependencies": {
-    "jszip": "~3.10.1"
+    "jszip": "~3.10.1",
+    "@yascml/utils": "workspace:*"
   }
 }
