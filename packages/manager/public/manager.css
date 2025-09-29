@@ -99,3 +99,8 @@
 #ui-dialog-body.yascmanager button.delete::before {
   content: '\f2ed';
 }
+
+#ui-dialog-body.yascmanager button.delete:disabled::before {
+  content: '\f1f8';
+}
+

@@ -37,6 +37,7 @@ export const ModList = () => {
                 type="button"
                 role="button"
                 tabIndex={0}
+                disabled={mod.embedded}
                 onClick={() => deleteMod(mod.id)}
               />
             </td>
