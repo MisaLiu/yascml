@@ -6,13 +6,9 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/yascml.umd.cjs",
-  "module": "./dist/yascml.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/yascml.js",
-    "require": "./dist/yascml.umd.cjs"
+    "types": "./dist/index.d.ts"
   },
   "scripts": {
     "build": "tsc && vite build"
