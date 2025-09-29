@@ -23,6 +23,11 @@
       "packageName": "@yascml/loader",
       "projectFolder": "packages/loader",
       "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yascml/manager",
+      "projectFolder": "packages/manager",
+      "reviewCategory": "production"
     }
   ]
 }
