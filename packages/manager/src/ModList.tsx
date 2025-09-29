@@ -3,6 +3,10 @@ import { useModList } from './useModList';
 export const ModList = () => {
   const { modList } = useModList();
 
+  const deleteMod = (id: string) => {
+    window.YASCML.api.mod.remove(id);
+  };
+
   return (
     <table id="mods-list">
       <tbody>
@@ -14,7 +18,13 @@ export const ModList = () => {
               <div class="subtitle">Author: {mod.author}</div>
             </td>
             <td>
-              <button class="delete" type="button" role="button" tabIndex={0} />
+              <button
+                class="delete"
+                type="button"
+                role="button"
+                tabIndex={0}
+                onClick={() => deleteMod(mod.id)}
+              />
             </td>
           </tr>
         ))}
