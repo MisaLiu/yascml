@@ -1,3 +1,4 @@
+import * as S from '../storage';
 import { importMod } from '../importer';
 import { triggerEvent } from '../utils';
 
@@ -7,6 +8,7 @@ import { triggerEvent } from '../utils';
  */
 const add = async (file: string | Blob) => {
   const mod = await importMod(file);
+  S.set(mod.id, file);
   window.YASCML.mods.push(mod);
   triggerEvent('$modadded', { mod: mod });
 };
@@ -15,11 +17,12 @@ const add = async (file: string | Blob) => {
  * Remove a loaded mod.
  * @param modId 
  */
-const remove = (modId: string) => {
+const remove = async (modId: string) => {
   const index = window.YASCML.mods.findIndex(e => e.id === modId);
   if (index === -1)
     throw new Error(`Cannot find mod ID: ${modId}`);
 
+  await S.del(modId);
   const removedMod = window.YASCML.mods.splice(index, 1)[0];
   triggerEvent('$modremoved', { mod: removedMod });
 };

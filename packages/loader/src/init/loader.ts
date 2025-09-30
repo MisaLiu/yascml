@@ -1,6 +1,7 @@
+import * as S from '../storage';
 import { YASCML } from '../types';
 import api from '../api';
-import { importModFromUrl } from '../importer';
+import { importMod } from '../importer';
 
 /**
  * Initialize the loader.
@@ -20,7 +21,7 @@ export const initLoader = async () => {
     if (window.YASCMLConfig.embedModPath) {
       for (const path of window.YASCMLConfig.embedModPath) {
         try {
-          const mod = await importModFromUrl(path);
+          const mod = await importMod(path);
           mod.embedded = true;
           window.YASCML.mods.push(mod);
         } catch (e) {
@@ -28,6 +29,17 @@ export const initLoader = async () => {
           console.error(e);
         }
       }
+    }
+  }
+
+  for (const modId of await S.getKets()) {
+    try {
+      const modFile = await S.get(modId);
+      const mod = await importMod(modFile);
+      window.YASCML.mods.push(mod);
+    } catch (e) {
+      console.warn(`Error when loading mod: ${modId}, skipping...`);
+      console.error(e);
     }
   }
 };

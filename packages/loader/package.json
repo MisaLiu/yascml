@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "jszip": "~3.10.1",
-    "@yascml/utils": "workspace:*"
+    "@yascml/utils": "workspace:*",
+    "idb-keyval": "~6.2.2"
   }
 }
