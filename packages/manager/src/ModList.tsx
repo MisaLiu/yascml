@@ -1,4 +1,20 @@
+import { Fragment } from 'preact/jsx-runtime';
 import { useModList } from './useModList';
+import type { ModAuthor as TModAuthor } from '@yascml/loader';
+
+const InlineHr = () => <span class="hr">|</span>;
+
+const ModAuthor = ({ info }: { info: TModAuthor }) => {
+  return (
+    <span>
+      {typeof info === 'object' ? (
+        info.url ? (
+          <a href={info.url} target="_blank">{info.name}</a>
+        ) : info.name
+      ) : info}
+    </span>
+  );
+};
 
 export const ModList = () => {
   const { modList } = useModList();
@@ -29,7 +45,33 @@ export const ModList = () => {
             </td>
             <td>
               <div>{mod.name}</div>
-              <div class="subtitle">Author: {mod.author}</div>
+              <div class="subtitle">
+                Author: {
+                  Array.isArray(mod.author) ? (
+                    mod.author.map((author, i, a) => {
+                      const key = typeof author === 'string' ? author : author.name;
+                      return (
+                        <Fragment key={`${mod.id}-author-${key}`}>
+                          <ModAuthor info={author} />
+                          {i < a.length - 1 && <InlineHr />}
+                        </Fragment>
+                      );
+                    })
+                  ) : <ModAuthor info={mod.author} />
+                }
+                {mod.homepageURL && <>
+                  <InlineHr />
+                  <span>
+                    <a href={mod.homepageURL} target="_blank">Homepage</a>
+                  </span>
+                </>}
+                {mod.donateURL && <>
+                  <InlineHr />
+                  <span>
+                    <a href={mod.donateURL} target="_blank">Donate</a>
+                  </span>
+                </>}
+              </div>
             </td>
             <td>
               <button

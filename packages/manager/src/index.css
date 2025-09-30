@@ -29,7 +29,7 @@
 
 #ui-dialog-body.yascmanager .subtitle {
   font-size: 75%;
-  margin-left: .25em;
+  color: #999;
 }
 
 #ui-dialog-body.yascmanager td:last-child {
@@ -104,3 +104,11 @@
   content: '\f1f8';
 }
 
+#ui-dialog-body.yascmanager span.hr {
+  margin: 0 0.1em;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
