@@ -3,6 +3,7 @@ import * as Setting from '../settings/storage';
 import { YASCML } from '../types';
 import api from '../api';
 import { importMod } from '../importer';
+import { sortMods } from '../utils';
 
 /**
  * Initialize the loader.
@@ -45,6 +46,8 @@ export const initLoader = async () => {
       }
     }
   }
+
+  window.YASCML.mods.sort(sortMods);
 
   for (const modId of Setting.get('disabledMods')) {
     const index = window.YASCML.mods.findIndex(e => e.id === modId);
