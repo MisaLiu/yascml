@@ -20,6 +20,9 @@ export const importModFromFile = async (modZip: Blob) => {
     extraFiles: [],
     enabled: true,
     embedded: false,
+    new: false,
+    updated: false,
+    deleted: false,
   };
 
   if (modMeta.preloadScripts !== (void 0)) {

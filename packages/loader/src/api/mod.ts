@@ -9,8 +9,16 @@ import { triggerEvent } from '../utils';
 const add = async (file: string | Blob) => {
   const mod = await importMod(file);
   S.set(mod.id, file);
-  window.YASCML.mods.push(mod);
-  triggerEvent('$modadded', { mod: mod });
+
+  const oldModIndex = window.YASCML.mods.findIndex(e => e.id === mod.id);
+  if (oldModIndex === -1) {
+    mod.new = true;
+    window.YASCML.mods.push(mod);
+  } else {
+    window.YASCML.mods.splice(oldModIndex, 1, mod);
+  }
+
+  triggerEvent('$modadded', { mod });
 };
 
 /**
@@ -23,8 +31,9 @@ const remove = async (modId: string) => {
     throw new Error(`Cannot find mod ID: ${modId}`);
 
   await S.del(modId);
-  const removedMod = window.YASCML.mods.splice(index, 1)[0];
-  triggerEvent('$modremoved', { mod: removedMod });
+  const mod = window.YASCML.mods[index];
+  mod.deleted = true;
+  triggerEvent('$modremoved', { mod });
 };
 
 const enable = (modId: string) => {

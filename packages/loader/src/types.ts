@@ -29,6 +29,9 @@ export type ModMetaFile = ModMeta & {
 export type ModMetaFull = ModMeta & {
   enabled: boolean,
   embedded: boolean,
+  new: boolean,
+  deleted: boolean,
+  updated: boolean,
   preloadScripts: File[],
   postloadScripts: File[],
   cssFiles: File[],
