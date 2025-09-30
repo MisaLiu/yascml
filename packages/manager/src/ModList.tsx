@@ -30,62 +30,65 @@ export const ModList = () => {
   };
 
   return (
-    <table id="mods-list">
-      <tbody>
-        {modList.map((mod) => (
-          <tr key={mod.id}>
-            <td>
-              <button
-                class={mod.enabled ? 'enabled' : 'disabled'}
-                type="button"
-                role="button"
-                tabIndex={0}
-                onClick={() => toggleEnabled(mod.id)}
-              />
-            </td>
-            <td>
-              <div>{mod.name}</div>
-              <div class="subtitle">
-                Author: {
-                  Array.isArray(mod.author) ? (
-                    mod.author.map((author, i, a) => {
-                      const key = typeof author === 'string' ? author : author.name;
-                      return (
-                        <Fragment key={`${mod.id}-author-${key}`}>
-                          <ModAuthor info={author} />
-                          {i < a.length - 1 && <InlineHr />}
-                        </Fragment>
-                      );
-                    })
-                  ) : <ModAuthor info={mod.author} />
-                }
-                {mod.homepageURL && <>
-                  <InlineHr />
-                  <span>
-                    <a href={mod.homepageURL} target="_blank">Homepage</a>
-                  </span>
-                </>}
-                {mod.donateURL && <>
-                  <InlineHr />
-                  <span>
-                    <a href={mod.donateURL} target="_blank">Donate</a>
-                  </span>
-                </>}
-              </div>
-            </td>
-            <td>
-              <button
-                class="delete"
-                type="button"
-                role="button"
-                tabIndex={0}
-                disabled={mod.embedded}
-                onClick={() => deleteMod(mod.id)}
-              />
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <>
+      <h2>Mod List</h2>
+      <table id="mods-list">
+        <tbody>
+          {modList.map((mod) => (
+            <tr key={mod.id}>
+              <td>
+                <button
+                  class={mod.enabled ? 'enabled' : 'disabled'}
+                  type="button"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => toggleEnabled(mod.id)}
+                />
+              </td>
+              <td>
+                <div>{mod.name}</div>
+                <div class="subtitle">
+                  Author: {
+                    Array.isArray(mod.author) ? (
+                      mod.author.map((author, i, a) => {
+                        const key = typeof author === 'string' ? author : author.name;
+                        return (
+                          <Fragment key={`${mod.id}-author-${key}`}>
+                            <ModAuthor info={author} />
+                            {i < a.length - 1 && <InlineHr />}
+                          </Fragment>
+                        );
+                      })
+                    ) : <ModAuthor info={mod.author} />
+                  }
+                  {mod.homepageURL && <>
+                    <InlineHr />
+                    <span>
+                      <a href={mod.homepageURL} target="_blank">Homepage</a>
+                    </span>
+                  </>}
+                  {mod.donateURL && <>
+                    <InlineHr />
+                    <span>
+                      <a href={mod.donateURL} target="_blank">Donate</a>
+                    </span>
+                  </>}
+                </div>
+              </td>
+              <td>
+                <button
+                  class="delete"
+                  type="button"
+                  role="button"
+                  tabIndex={0}
+                  disabled={mod.embedded}
+                  onClick={() => deleteMod(mod.id)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };

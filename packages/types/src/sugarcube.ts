@@ -8,6 +8,11 @@ export type L10nAPI = {
   get(ids: string[], overrides?: Record<string, string>): string;
 };
 
+export type VersionAPI = {
+  short(): string;
+  long(): string;
+};
+
 export type SugarCube = {
   Config: SC.ConfigAPI,
 
@@ -66,4 +71,5 @@ export type SugarCube = {
   session: SimpleStorageAdapter | null,
   settings: SC.SettingsAPI,
   storage: SimpleStorageAdapter | null,
+  version: VersionAPI,
 };

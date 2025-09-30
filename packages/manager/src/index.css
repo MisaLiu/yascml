@@ -112,3 +112,7 @@
   -o-user-select: none;
   user-select: none;
 }
+
+#ui-dialog-body.yascmanager ul#platform-info {
+  margin: 0;
+}
