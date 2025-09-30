@@ -47,7 +47,7 @@ export const ModList = () => {
                 />
               </td>
               <td>
-                <div>{mod.name}</div>
+                <div>{mod.name} v{mod.version}</div>
                 <div class="subtitle">
                   Author: {
                     Array.isArray(mod.author) ? (
