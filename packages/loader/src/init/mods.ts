@@ -7,7 +7,7 @@ export const initPreloadMods = async () => {
   const mods = window.YASCML.mods;
 
   for (const mod of mods) {
-    if (!mod.enabled) return;
+    if (!mod.enabled) continue;
 
     mod.cssFiles.forEach((file) => loadStyle(file));
     await Promise.all(
@@ -22,7 +22,7 @@ export const initPostloadMods = async () => {
   const mods = window.YASCML.mods;
 
   for (const mod of mods) {
-    if (!mod.enabled) return;
+    if (!mod.enabled) continue;
     await Promise.all(
       mod.postloadScripts.map((file) => executeScript(file))
     );
