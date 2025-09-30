@@ -1,4 +1,5 @@
 import * as S from '../storage';
+import * as E from '../settings/storage';
 import { YASCML } from '../types';
 import api from '../api';
 import { importMod } from '../importer';
@@ -41,5 +42,12 @@ export const initLoader = async () => {
       console.warn(`Error when loading mod: ${modId}, skipping...`);
       console.error(e);
     }
+  }
+
+  for (const modId of E.get('disabledMods')) {
+    const index = window.YASCML.mods.findIndex(e => e.id === modId);
+    if (index === -1) continue;
+
+    window.YASCML.mods[index].enabled = false;
   }
 };

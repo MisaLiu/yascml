@@ -1,4 +1,5 @@
 import * as S from '../storage';
+import { addDisabledMod, removeDisabledMod } from '../settings';
 import { importMod } from '../importer';
 import { triggerEvent } from '../utils';
 
@@ -32,6 +33,7 @@ const remove = async (modId: string) => {
     throw new Error(`Cannot find mod ID: ${modId}`);
 
   await S.del(modId);
+  removeDisabledMod(modId);
   const mod = window.YASCML.mods[index];
   mod.deleted = true;
   triggerEvent('$modremoved', { mod });
@@ -42,6 +44,7 @@ const enable = (modId: string) => {
   if (index === -1)
     throw new Error(`Cannot find mod ID: ${modId}`);
 
+  removeDisabledMod(modId);
   window.YASCML.mods[index].enabled = true;
   triggerEvent('$modenabled', { mod: window.YASCML.mods[index] });
 };
@@ -51,6 +54,7 @@ const disable = (modId: string) => {
   if (index === -1)
     throw new Error(`Cannot find mod ID: ${modId}`);
 
+  addDisabledMod(modId);
   window.YASCML.mods[index].enabled = false;
   triggerEvent('$moddisabled', { mod: window.YASCML.mods[index] });
 };
