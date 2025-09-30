@@ -1,5 +1,6 @@
 import { Fragment } from 'preact/jsx-runtime';
 import { useModList } from './useModList';
+import { ModActinos } from './ModActions';
 import type { ModAuthor as TModAuthor } from '@yascml/loader';
 
 const InlineHr = () => <span class="hr">|</span>;
@@ -89,6 +90,7 @@ export const ModList = () => {
           ))}
         </tbody>
       </table>
+      <ModActinos />
     </>
   );
 };

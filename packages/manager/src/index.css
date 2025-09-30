@@ -18,6 +18,10 @@
   width: 100%;
 }
 
+#ui-dialog-body.yascmanager tr:not(:first-child) {
+  border-top: 1px solid #444;
+}
+
 #ui-dialog-body.yascmanager td {
   padding: .33em;
 }
@@ -74,6 +78,14 @@
   border-color: #d55;
 }
 
+#ui-dialog-body.yascmanager .buttons li {
+  padding: .4em;
+}
+
+#ui-dialog-body.yascmanager button.import::before {
+  content: '\f56d';
+}
+
 #ui-dialog-body.yascmanager #mods-list button::before,
 #ui-dialog-body.yascmanager .buttons button::before {
   font-family: sc-icons !important;
@@ -86,6 +98,10 @@
   text-transform: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#ui-dialog-body.yascmanager .buttons button::before {
+    margin-right: .35em;
 }
 
 #ui-dialog-body.yascmanager button.enabled::before {
