@@ -31,6 +31,23 @@
   width: 100%;
 }
 
+#ui-dialog-body.yascmanager tr.deleted {
+  color: #777;
+  text-decoration: line-through;
+}
+
+#ui-dialog-body.yascmanager .mod-label {
+  margin-left: 0.5em;
+  color: #777;
+  font-size: 0.7em;
+  vertical-align: top;
+  font-style: italic;
+}
+
+#ui-dialog-body.yascmanager .mod-label.new {
+  color: #ff3030;
+}
+
 #ui-dialog-body.yascmanager .subtitle {
   font-size: 75%;
   color: #999;

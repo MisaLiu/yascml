@@ -36,7 +36,7 @@ export const ModList = () => {
       <table id="mods-list">
         <tbody>
           {modList.map((mod) => (
-            <tr key={mod.id}>
+            <tr key={mod.id} class={mod.deleted ? 'deleted' : ''}>
               <td>
                 <button
                   class={mod.enabled ? 'enabled' : 'disabled'}
@@ -44,10 +44,15 @@ export const ModList = () => {
                   role="button"
                   tabIndex={0}
                   onClick={() => toggleEnabled(mod.id)}
+                  disabled={mod.deleted}
                 />
               </td>
               <td>
-                <div>{mod.name} v{mod.version}</div>
+                <div>
+                  {mod.name} v{mod.version}
+                  {mod.new && <span class="mod-label new">new</span>}
+                  {mod.updated && <span class="mod-label new">updated</span>}
+                </div>
                 <div class="subtitle">
                   Author: {
                     Array.isArray(mod.author) ? (
@@ -82,7 +87,7 @@ export const ModList = () => {
                   type="button"
                   role="button"
                   tabIndex={0}
-                  disabled={mod.embedded}
+                  disabled={mod.embedded || mod.deleted}
                   onClick={() => deleteMod(mod.id)}
                 />
               </td>
