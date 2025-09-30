@@ -21,6 +21,7 @@ export const ModList = () => {
   const { modList } = useModList();
 
   const toggleEnabled = (id: string) => {
+    if (id === 'yascmanager') return;
     const mod = window.YASCML.api.mod.get(id);
     if (mod.enabled) window.YASCML.api.mod.disable(id);
     else window.YASCML.api.mod.enable(id);
@@ -44,7 +45,7 @@ export const ModList = () => {
                   role="button"
                   tabIndex={0}
                   onClick={() => toggleEnabled(mod.id)}
-                  disabled={mod.deleted}
+                  disabled={mod.deleted || mod.id === 'yascmanager'}
                 />
               </td>
               <td>
