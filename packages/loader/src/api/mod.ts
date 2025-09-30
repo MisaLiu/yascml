@@ -1,4 +1,4 @@
-import * as S from '../storage';
+import * as IDB from '../storage';
 import { addDisabledMod, removeDisabledMod } from '../settings';
 import { importMod } from '../importer';
 import { triggerEvent } from '../utils';
@@ -9,7 +9,7 @@ import { triggerEvent } from '../utils';
  */
 const add = async (file: string | Blob) => {
   const mod = await importMod(file);
-  S.set(mod.id, file);
+  IDB.set(mod.id, file);
 
   const oldModIndex = window.YASCML.mods.findIndex(e => e.id === mod.id);
   if (oldModIndex === -1) {
@@ -32,7 +32,7 @@ const remove = async (modId: string) => {
   if (index === -1)
     throw new Error(`Cannot find mod ID: ${modId}`);
 
-  await S.del(modId);
+  await IDB.del(modId);
   removeDisabledMod(modId);
   const mod = window.YASCML.mods[index];
   mod.deleted = true;

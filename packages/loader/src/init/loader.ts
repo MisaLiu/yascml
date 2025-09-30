@@ -1,5 +1,5 @@
-import * as S from '../storage';
-import * as E from '../settings/storage';
+import * as IDB from '../storage';
+import * as Setting from '../settings/storage';
 import { YASCML } from '../types';
 import api from '../api';
 import { importMod } from '../importer';
@@ -33,9 +33,9 @@ export const initLoader = async () => {
     }
   }
 
-  for (const modId of await S.getKets()) {
+  for (const modId of await IDB.getKets()) {
     try {
-      const modFile = await S.get(modId);
+      const modFile = await IDB.get(modId);
       const mod = await importMod(modFile);
       window.YASCML.mods.push(mod);
     } catch (e) {
@@ -44,7 +44,7 @@ export const initLoader = async () => {
     }
   }
 
-  for (const modId of E.get('disabledMods')) {
+  for (const modId of Setting.get('disabledMods')) {
     const index = window.YASCML.mods.findIndex(e => e.id === modId);
     if (index === -1) continue;
 
