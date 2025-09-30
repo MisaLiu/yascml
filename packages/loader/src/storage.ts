@@ -9,8 +9,8 @@ export const getAll = () => IDB.values(store);
 export const getKets = () => IDB.keys(store) as Promise<string[]>;
 
 export const set = async (key: string, value: any) => {
-  if (await get(key)) return IDB.update(key, value, store);
-  return IDB.set(key, value, store);
+  if (await get(key)) return IDB.update(key, () => value, store);
+  else return IDB.set(key, value, store);
 };
 
 export const del = (key: string) => IDB.del(key, store);

@@ -15,6 +15,7 @@ const add = async (file: string | Blob) => {
     mod.new = true;
     window.YASCML.mods.push(mod);
   } else {
+    mod.updated = true;
     window.YASCML.mods.splice(oldModIndex, 1, mod);
   }
 
