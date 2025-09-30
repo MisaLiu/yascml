@@ -1,10 +1,15 @@
 import api from './api';
 
+export type ModAuthor = string | {
+  name: string,
+  url?: string,
+};
+
 // TODO
 export type ModMeta = {
   id: string,
   name: string,
-  author: string,
+  author: ModAuthor | ModAuthor[],
   version: string,
   priority?: number,
   dependencies?: Record<string, string>;
