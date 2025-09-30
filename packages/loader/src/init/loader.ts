@@ -18,21 +18,6 @@ export const initLoader = async () => {
     } as YASCML)),
   });
 
-  if (window.YASCMLConfig) {
-    if (window.YASCMLConfig.embedModPath) {
-      for (const path of window.YASCMLConfig.embedModPath) {
-        try {
-          const mod = await importMod(path);
-          mod.embedded = true;
-          window.YASCML.mods.push(mod);
-        } catch (e) {
-          console.warn(`Error when loading embed mod: ${path}, skipping...`);
-          console.error(e);
-        }
-      }
-    }
-  }
-
   for (const modId of await IDB.getKets()) {
     try {
       const modFile = await IDB.get(modId);
@@ -41,6 +26,23 @@ export const initLoader = async () => {
     } catch (e) {
       console.warn(`Error when loading mod: ${modId}, skipping...`);
       console.error(e);
+    }
+  }
+
+  if (window.YASCMLConfig) {
+    if (window.YASCMLConfig.embedModPath) {
+      for (const path of window.YASCMLConfig.embedModPath) {
+        try {
+          const mod = await importMod(path);
+          if (window.YASCML.mods.findIndex(e => e.id === mod.id) !== -1) continue;
+
+          mod.embedded = true;
+          window.YASCML.mods.push(mod);
+        } catch (e) {
+          console.warn(`Error when loading embed mod: ${path}, skipping...`);
+          console.error(e);
+        }
+      }
     }
   }
 
