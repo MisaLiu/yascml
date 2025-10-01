@@ -1,14 +1,12 @@
-import { Passage, TWPassageDataElement } from '../types';
+import { Passage } from '../types';
 
 export const createPassageDOM = ({
   name,
   tags,
   text,
 }: Omit<Passage, 'pid' | 'title'>) => {
-  const dom = document.createElement('tw-passagedata') as TWPassageDataElement;
+  const dom = document.createElement('tw-passagedata');
   const _text = document.createTextNode(text);
-  dom.name = name;
-  dom.tags = tags.join(' ');
 
   dom.setAttribute('name', name);
   dom.setAttribute('tags', tags.join(' '));
@@ -28,7 +26,7 @@ export const unescapeTweeHeader = (value: string) => (
  * @see https://github.com/klembot/twinejs/blob/179e6136b2fb9697c8eec10d048572e0b53dc0be/src/util/twee.ts#L50
  */
 export const parseTweeToDOM = (source: string) => {
-  const result: TWPassageDataElement[] = [];
+  const result: HTMLElement[] = [];
   const blocks = source.split(/(?:[\r\n]{1,2}){3}/);
 
   for (const block of blocks) {
