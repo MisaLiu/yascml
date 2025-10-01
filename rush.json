@@ -30,6 +30,11 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yascml/hook",
+      "projectFolder": "packages/hook",
+      "reviewCategory": "production"
+    },
+    {
       "packageName": "@yascml/api",
       "projectFolder": "packages/api",
       "reviewCategory": "production"
