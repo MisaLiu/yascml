@@ -28,12 +28,12 @@ export const executeScript = (script: string | Blob, config: ExecuteScriptConfig
     rej(e);
   });
 
-  setTimeout(() => {
-    if (typeof script === 'string') {
-      dom.innerHTML = script;
-      res(void 0);
-    } else dom.src = URL.createObjectURL(script);
-  }, 0);
+  if (typeof script !== 'string') {
+    dom.src = URL.createObjectURL(script);
+  } else {
+    dom.innerHTML = script;
+    setTimeout(() => res(void 0), 50);
+  }
 });
 
 export const loadStyle = (style: string | Blob) => {

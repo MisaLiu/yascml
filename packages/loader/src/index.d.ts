@@ -5,5 +5,6 @@ declare global {
   interface Window {
     YASCML: YASCML;
     YASCMLConfig?: LoaderConfig;
+    __AfterInit?: (Function | Promise<unknown>)[];
   }
 }
