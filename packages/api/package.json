@@ -1,0 +1,20 @@
+{
+  "name": "@yascml/api",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2",
+    "vite": "^7.1.5",
+    "@types/node": "~24.5.2",
+    "@types/twine-sugarcube": "~2.37.2",
+    "@yascml/types": "workspace:*",
+    "@yascml/loader": "workspace:*"
+  },
+  "dependencies": {
+    "@yascml/utils": "workspace:*"
+  }
+}

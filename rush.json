@@ -28,6 +28,11 @@
       "packageName": "@yascml/manager",
       "projectFolder": "packages/manager",
       "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yascml/api",
+      "projectFolder": "packages/api",
+      "reviewCategory": "production"
     }
   ]
 }
