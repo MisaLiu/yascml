@@ -28,14 +28,14 @@ const installLoader = async (gameFile: File, config: LoaderConfig) => {
   if (!headDOM)
     throw new Error('Cannot find <head> tag in game file');
 
-  const versionDOM = headDOM.querySelector('meta[name="version"]');
-  if (!versionDOM)
-    throw new Error('Cannot find <meta name="version"> tag in game file');
+  const viewportDOM = headDOM.querySelector('meta[name="viewport"]');
+  if (!viewportDOM)
+    throw new Error('Cannot find <meta name="viewport"> tag in game file');
 
   const configDOM = parse(`<script>window.YASCMLConfig = ${JSON.stringify(config) || '{}'};</script>`);
   const loaderDOM = parse('<script src="yascml.js"></script>');
 
-  versionDOM.after(configDOM, loaderDOM);
+  viewportDOM.after(configDOM, loaderDOM);
   return new File([textToBuffer(root.toString())], gameFile.name);
 };
 
