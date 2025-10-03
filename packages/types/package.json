@@ -11,9 +11,6 @@
   "exports": {
     "types": "./src/index.d.ts"
   },
-  "scripts": {
-    "build": ""
-  },
   "devDependencies": {
     "@types/twine-sugarcube": "~2.37.2"
   }

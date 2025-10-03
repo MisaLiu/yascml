@@ -2,6 +2,16 @@
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/command-line.schema.json",
   "commands": [
     {
+      "commandKind": "bulk",
+      "name": "build",
+      "summary": "A custom defined rush build command",
+      "enableParallelism": true,
+      "ignoreMissingScript": true,
+      "allowWarningsInSuccessfulBuild": true,
+      "incremental": true
+    },
+
+    {
       "commandKind": "global",
       "name": "extract",
       "summary": "Extract build dist files to <root>/dist/<package_name>",

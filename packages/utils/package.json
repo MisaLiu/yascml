@@ -10,8 +10,5 @@
   "module": "./src/main.ts",
   "exports": {
     "import": "./src/main.ts"
-  },
-  "scripts": {
-    "build": ""
   }
 }
