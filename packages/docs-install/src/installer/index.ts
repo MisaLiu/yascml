@@ -1,13 +1,11 @@
 import JSZip from 'jszip';
 import Worker from './worker?worker';
-import { downloadFile } from '../utils';
+import { downloadFile, readFileAsBuffer } from '../utils';
 import { AVAILABLE_MODS } from '../consts';
 import type { GlobalState } from '../state';
-import type { LoaderConfig } from '@yascml/loader';
+import type { WorkerInput } from './types';
 
-type WorkerInput = {
-  gameFile: File,
-} & LoaderConfig;
+const UrlTestReg = /^(?:https?):\/\//i;
 
 const parseGameFile = (input: WorkerInput) => new Promise<File>((res, rej) => {
   const worker = new Worker();
@@ -32,30 +30,47 @@ export const installLoaderToFile = ({
   embeddedMods,
   customExports,
   customInits,
+  singleFile,
 }: GlobalState) => new Promise<File>(async (res, rej) => {
   if (!gameFile)
     return rej('Please choose a file first!');
 
   const loaderFile = await downloadFile('resources/yascml.js', 'yascml.js');
-  const availableModFiles = await Promise.all(
-    embeddedMods
-      .filter(e => AVAILABLE_MODS.includes(e))
-      .map(e => downloadFile(`resources/${e}`, e))
-  );
+  const downloadableMods = embeddedMods.filter(e => AVAILABLE_MODS.includes(e) || UrlTestReg.test(e));
+  const unknownMods = embeddedMods.filter(e => !AVAILABLE_MODS.includes(e) && !UrlTestReg.test(e));
+  const availableModFiles: File[] = [];
+
+  for (const modPath of downloadableMods) {
+    try {
+      const _modPath = UrlTestReg.test(modPath) ? modPath : `resources/${modPath}`;
+      const modFile = await downloadFile(_modPath);
+      availableModFiles.push(modFile);
+    } catch {
+      unknownMods.push(modPath);
+    }
+  }
 
   const resultGameFile = await parseGameFile({
     gameFile,
-    embedModPath: embeddedMods,
+    loaderFile,
+    singleFile,
+    embedModPath: singleFile ? unknownMods : embeddedMods,
+    embedModFiles: availableModFiles,
     custom: {
       export: customExports,
       init: customInits,
     },
   });
-  const resultZip = new JSZip();
 
-  resultZip.file(resultGameFile.name, resultGameFile);
-  resultZip.file(loaderFile.name, loaderFile);
-  availableModFiles.forEach((file) => resultZip.file(file.name, file));
+  if (singleFile) {
+    res(new File([await readFileAsBuffer(resultGameFile)], gameFile.name));
+  } else {
+    const resultZip = new JSZip();
 
-  res(new File([await resultZip.generateAsync({ type: 'blob' })], `${gameFile.name}.zip`));
+    resultZip.file(resultGameFile.name, resultGameFile);
+    resultZip.file(loaderFile.name, loaderFile);
+    availableModFiles.forEach((file) => resultZip.file(file.name, file));
+
+    res(new File([await resultZip.generateAsync({ type: 'blob' })], `${gameFile.name}.zip`));
+  }
 });

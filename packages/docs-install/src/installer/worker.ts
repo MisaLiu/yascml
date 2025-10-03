@@ -1,5 +1,5 @@
 import { parse } from 'node-html-parser';
-import type { LoaderConfig } from '@yascml/loader';
+import type { WorkerInput } from './types';
 
 const readFileAsText = (file: Blob) => new Promise<string>((res, rej) => {
   const reader = new FileReader();
@@ -15,12 +15,27 @@ const readFileAsText = (file: Blob) => new Promise<string>((res, rej) => {
   reader.readAsText(file);
 });
 
+const readFileAsBase64 = (file: Blob) => new Promise<string>((res, rej) => {
+  const reader = new FileReader();
+
+  reader.onload = () => res(reader.result as string);
+  reader.onerror = (e) => rej(e);
+
+  reader.readAsDataURL(file);
+});
+
 const textToBuffer = (string: string) => {
   const encoder = new TextEncoder();
   return encoder.encode(string);
 };
 
-const installLoader = async (gameFile: File, config: LoaderConfig) => {
+const installLoader = async ({
+  gameFile,
+  loaderFile,
+  singleFile,
+  embedModFiles,
+  ...config
+}: WorkerInput) => {
   const gameText = await readFileAsText(gameFile);
   const root = parse(gameText);
 
@@ -32,14 +47,28 @@ const installLoader = async (gameFile: File, config: LoaderConfig) => {
   if (!viewportDOM)
     throw new Error('Cannot find <meta name="viewport"> tag in game file');
 
-  const configDOM = parse(`<script>window.YASCMLConfig = ${JSON.stringify(config) || '{}'};</script>`);
-  const loaderDOM = parse('<script src="yascml.js"></script>');
+  let configDOM, loaderDOM;
+
+  if (singleFile) {
+    const modsUrl: string[] = [
+      ...(await Promise.all(
+        embedModFiles.map(e => readFileAsBase64(e))
+      )),
+      ...config.embedModPath ?? []
+    ];
+
+    configDOM = parse(`<script>window.YASCMLConfig = ${JSON.stringify({ ...config, embedModPath: modsUrl }) || '{}'};</script>`);
+    loaderDOM = parse(`<script>${await readFileAsText(loaderFile)}</script>`);
+  } else {
+    configDOM = parse(`<script>window.YASCMLConfig = ${JSON.stringify(config) || '{}'};</script>`);
+    loaderDOM = parse('<script src="yascml.js"></script>');
+  }
 
   viewportDOM.after(configDOM, loaderDOM);
 
-  if (!headDOM.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
-    const cspDOM = parse(`<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:">`);
-    viewportDOM.before(cspDOM);
+  const cspDOM = headDOM.querySelector('meta[http-equiv="Content-Security-Policy"]');
+  if (cspDOM) {
+    headDOM.removeChild(cspDOM);
   }
 
   return new File([textToBuffer(root.toString())], gameFile.name);
@@ -50,11 +79,10 @@ const sendMsg = (type: string, data: any) => {
 };
 
 onmessage = ({ data: msg }) => {
-  const { type, data } = msg;
+  const { type, data } = msg as { type: string, data: unknown };
 
   if (type === 'start') {
-    const { gameFile } = data;
-    installLoader(gameFile, data)
+    installLoader(data as WorkerInput)
       .then((result) => sendMsg('finished', result));
   }
 };

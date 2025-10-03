@@ -5,6 +5,7 @@ export type GlobalState = {
   embeddedMods: string[],
   customExports: string[],
   customInits: Record<string, string>,
+  singleFile: boolean,
 };
 
 type $GlobalState = GlobalState & {
@@ -12,12 +13,14 @@ type $GlobalState = GlobalState & {
   readonly setEmbeddedMods: (paths: string[]) => void;
   readonly setCustomExports: (names: string[]) => void;
   readonly setCustomInits: (inits: Record<string, string>) => void;
+  readonly setSingleFile: (singleFile: boolean) => void;
 };
 
 export const useGlobalState = create<$GlobalState>((set) => ({
   embeddedMods: [ 'yascmanager.zip' ],
   customExports: [],
   customInits: {},
+  singleFile: true,
 
   setGameFile: (file) => set({
     gameFile: file,
@@ -33,5 +36,9 @@ export const useGlobalState = create<$GlobalState>((set) => ({
 
   setCustomInits: (inits) => set({
     customInits: inits,
+  }),
+
+  setSingleFile: (singleFile) => set({
+    singleFile,
   }),
 }));

@@ -16,3 +16,12 @@ export const downloadFile = (url: string, filename?: string) => (
       return new File([blob], filename ?? urlEnd);
     })
 );
+
+export const readFileAsBuffer = (file: Blob) => new Promise<ArrayBuffer>((res, rej) => {
+  const reader = new FileReader();
+
+  reader.onload = () => res(reader.result as ArrayBuffer);
+  reader.onerror = (e) => rej(e);
+
+  reader.readAsArrayBuffer(file);
+});
