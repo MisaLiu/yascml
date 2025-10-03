@@ -1,3 +1,4 @@
+import semver from 'semver';
 import { ModMetaFile, ModMetaFull } from './types';
 
 export const triggerEvent = <T extends Object>(type: string, detail: T = {} as T) => (
@@ -52,7 +53,7 @@ export const loadStyle = (style: string | Blob) => {
 };
 
 export const isValidModMeta = (obj: Partial<ModMetaFile>) => (
-  obj.id !== (void 0) && obj.name !== (void 0) && obj.author !== (void 0) && obj.version !== (void 0)
+  obj.id !== (void 0) && obj.name !== (void 0) && obj.author !== (void 0) && obj.version !== (void 0) && semver.valid(semver.clean(obj.version))
 );
 
 export const sortMods = (a: ModMetaFull, b: ModMetaFull) => {
@@ -67,4 +68,38 @@ export const sortMods = (a: ModMetaFull, b: ModMetaFull) => {
   const priorityB = b.priority ?? 1000;
 
   return priorityA - priorityB;
+};
+
+export const isModSuitable = (mod: ModMetaFull) => {
+  const { stats, mods, version } = window.YASCML;
+
+  if (mod.designedFor !== (void 0) && stats.gameName !== mod.designedFor) {
+    console.warn(`Mod "${mod.id}" is designed for "${mod.designedFor}", but it's running on "${stats.gameName}". This mod will not be loaded.`);
+    return false;
+  }
+
+  if (mod.dependencies === (void 0)) return true;
+  for (const modId in mod.dependencies) {
+    const modDep = mods.find(e => e.id === modId);
+    if (!modDep && modId !== 'yascml') {
+      console.warn(`Mod "${mod.id}" requires dependency "${modId}", but it's not installed. This mod will not be loaded.`);
+      return false;
+    }
+
+    const depVersion = modId !== 'yascml' ? modDep!.version : version;
+    const requiredVersion = mod.dependencies[modId];
+    
+    if (!semver.satisfies(depVersion, requiredVersion)) {
+      console.warn(`Mod "${mod.id}" requires dependency "${modId} v${requiredVersion}", but found ${depVersion}. This mod will not be loaded.`);
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export const unescapeHTML = (string: string) => {
+  const dom = document.createElement('div');
+  dom.innerHTML = string;
+  return dom.innerHTML;
 };

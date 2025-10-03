@@ -94,6 +94,7 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
       .then(() => initPostloadMods())
       .then(() => {
         delete window.__AfterInit;
+        window.YASCML.stats.isEngineInit = true;
         setTimeout(() => sci.LoadScreen.unlock(lockId), (sc.Engine.DOM_DELAY ?? sc.Engine.minDomActionDelay) * 2);
       })
       .catch((e) => {

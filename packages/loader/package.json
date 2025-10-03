@@ -20,11 +20,13 @@
     "@types/node": "~24.5.2",
     "@microsoft/api-extractor": "~7.52.13",
     "@types/twine-sugarcube": "~2.37.2",
-    "@yascml/types": "workspace:*"
+    "@yascml/types": "workspace:*",
+    "@types/semver": "~7.7.1"
   },
   "dependencies": {
     "jszip": "~3.10.1",
     "@yascml/utils": "workspace:*",
-    "idb-keyval": "~6.2.2"
+    "idb-keyval": "~6.2.2",
+    "semver": "~7.7.2"
   }
 }

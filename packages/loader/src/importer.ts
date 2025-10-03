@@ -20,6 +20,7 @@ export const importModFromFile = async (modZip: Blob) => {
     extraFiles: [],
     enabled: true,
     embedded: false,
+    suitable: true,
     new: false,
     updated: false,
     deleted: false,

@@ -77,6 +77,9 @@ importers:
       jszip:
         specifier: ~3.10.1
         version: 3.10.1
+      semver:
+        specifier: ~7.7.2
+        version: 7.7.2
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ~7.52.13
@@ -84,6 +87,9 @@ importers:
       '@types/node':
         specifier: ~24.5.2
         version: 24.5.2
+      '@types/semver':
+        specifier: ~7.7.1
+        version: 7.7.1
       '@types/twine-sugarcube':
         specifier: ~2.37.2
         version: 2.37.2
@@ -635,6 +641,9 @@ packages:
   '@types/node@24.6.2':
     resolution: {integrity: sha512-d2L25Y4j+W3ZlNAeMKcy7yDsK425ibcAOO2t7aPTz6gNMH0z2GThtwENCDc0d/Pw9wgyRqE5Px1wkV7naz8ang==}
 
+  '@types/semver@7.7.1':
+    resolution: {integrity: sha512-FmgJfu+MOcQ370SD0ev7EI8TlCAfKYU+B4m5T3yXc1CiRN94g/SZPtsCkk506aUDtlMnFZvasDwHHUcZUEaYuA==}
+
   '@types/sizzle@2.3.10':
     resolution: {integrity: sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==}
 
@@ -992,6 +1001,11 @@ packages:
 
   semver@7.5.4:
     resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.7.2:
+    resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -1631,6 +1645,8 @@ snapshots:
     dependencies:
       undici-types: 7.13.0
 
+  '@types/semver@7.7.1': {}
+
   '@types/sizzle@2.3.10': {}
 
   '@types/twine-sugarcube@2.37.2':
@@ -2017,6 +2033,8 @@ snapshots:
   semver@7.5.4:
     dependencies:
       lru-cache: 6.0.0
+
+  semver@7.7.2: {}
 
   setimmediate@1.0.5: {}
 

@@ -29,6 +29,7 @@ export type ModMetaFile = ModMeta & {
 export type ModMetaFull = ModMeta & {
   enabled: boolean,
   embedded: boolean,
+  suitable: boolean,
   new: boolean,
   deleted: boolean,
   updated: boolean,
@@ -46,8 +47,15 @@ export type LoaderConfig = Partial<{
   }>
 }>;
 
+export type LoaderStats = {
+  gameName: string,
+  isLoaderInit: boolean,
+  isEngineInit: boolean,
+};
+
 export type YASCML = {
   version: string,
   mods: ModMetaFull[], // TODO
   api: typeof api,
+  stats: LoaderStats,
 };

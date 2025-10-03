@@ -3,7 +3,7 @@ import * as Setting from '../settings/storage';
 import { YASCML } from '../types';
 import api from '../api';
 import { importMod } from '../importer';
-import { sortMods } from '../utils';
+import { unescapeHTML, sortMods, isModSuitable } from '../utils';
 
 /**
  * Initialize the loader.
@@ -16,6 +16,11 @@ export const initLoader = async () => {
       version: __LOADER_VERSION__,
       mods: [],
       api,
+      stats: {
+        gameName: unescapeHTML(document.querySelector<HTMLElement>('tw-storydata')!.getAttribute('name')!),
+        isLoaderInit: false,
+        isEngineInit: false,
+      },
     } as YASCML)),
   });
 
@@ -55,4 +60,10 @@ export const initLoader = async () => {
 
     window.YASCML.mods[index].enabled = false;
   }
+
+  for (const mod of window.YASCML.mods) {
+    mod.suitable = isModSuitable(mod);
+  }
+
+  window.YASCML.stats.isLoaderInit = true;
 };
