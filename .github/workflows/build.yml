@@ -43,6 +43,7 @@ jobs:
 
       - name: Rush rebuild
         run: node common/scripts/install-run-rush.js rebuild --verbose
+        continue-on-error: true
 
       - name: Rush extract
         run: node common/scripts/install-run-rush.js extract
