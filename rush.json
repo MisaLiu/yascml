@@ -43,6 +43,11 @@
       "packageName": "@yascml/api",
       "projectFolder": "packages/api",
       "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yascml/docs-install",
+      "projectFolder": "packages/docs-install",
+      "reviewCategory": "document"
     }
   ]
 }
