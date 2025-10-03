@@ -1,6 +1,10 @@
 import * as SC from 'twine-sugarcube';
 import { SimpleStorageAdapter } from './internal';
 
+export interface PassageClass extends SC.Passage {
+  new (name: string, element?: HTMLElement): this;
+};
+
 export type L10nAPI = {
   init(): void;
 
@@ -39,7 +43,7 @@ export type SugarCube = {
     init(): void;
   },
 
-  Passage: SC.Passage,
+  Passage: PassageClass,
 
   Save: SC.SaveAPI & {
     init(): void;
