@@ -1,0 +1,15 @@
+{
+  "id": "yascmanager",
+  "name": "YASCML Manager",
+  "author": {
+    "name": "MisaLiu",
+    "url": "https://misaliu.top"
+  },
+  "homepageURL": "https://github.com/MisaLiu/yascml/tree/main/packages/manager",
+  "postloadScripts": [
+    "manager.js"
+  ],
+  "cssFiles": [
+    "manager.css"
+  ]
+}

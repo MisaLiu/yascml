@@ -12,7 +12,9 @@
     "@types/node": "~24.5.2",
     "@types/twine-sugarcube": "~2.37.2",
     "@yascml/types": "workspace:*",
-    "@yascml/loader": "workspace:*"
+    "@yascml/loader": "workspace:*",
+    "vite-plugin-cp": "~6.0.3",
+    "vite-plugin-zip-pack": "~1.2.4"
   },
   "dependencies": {
     "@yascml/utils": "workspace:*"

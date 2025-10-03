@@ -1,0 +1,13 @@
+{
+  "id": "yascapi",
+  "name": "YASCML API",
+  "author": {
+    "name": "MisaLiu",
+    "url": "https://misaliu.top"
+  },
+  "priority": 10,
+  "homepageURL": "https://github.com/MisaLiu/yascml/tree/main/packages/api",
+  "preloadScripts": [
+    "yascapi.js"
+  ]
+}
