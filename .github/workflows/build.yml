@@ -33,4 +33,51 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: build-artifact
           path: dist
+  
+  docs:
+    runs-on: ubuntu-latest
+    needs: build
+    # TODO: Only deploy when release
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: 'docs'
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Download artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: build-artifact
+          path: artifact
+
+      - name: Create pages path
+        run: mkdir -p dist/install
+      
+      - name: Copy installer
+        run: cp -r artifact/docs-install dist/install/
+
+      - name: Copy installer resources
+        run: |
+          mkdir dist/install/resources
+          cp artifact/loader/yascml.js dist/install/resources/yascml.js
+          cp artifact/manager/yascmanager.zip dist/install/resources/yascmanager.zip
+          cp artifact/api/yascapi.zip dist/install/resources/yascapi.zip
+
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

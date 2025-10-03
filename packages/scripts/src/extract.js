@@ -24,7 +24,7 @@ for (const name of fs.readdirSync(packagesDir)) {
     console.warn(`Cannot find project info for package: ${name}, skipping that...`);
     continue;
   }
-  if (projectInfo.reviewCategory !== 'production') continue;
+  if (projectInfo.reviewCategory !== 'production' && projectInfo.reviewCategory !== 'document') continue;
 
   const outputDir = resolve(packageDir, './dist');
   if (!fs.existsSync(packageDir)) {
