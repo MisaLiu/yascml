@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9.15.9
+          run_install: false
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.14.0
+          cache: 'pnpm'
+          package-manager-cache: false
+          cache-dependency-path: 'common/temp/pnpm-lock.yaml'
+
+      - name: Verify Change Logs
+        run: node common/scripts/install-run-rush.js change --verify
+
+      - name: Rush Install
+        run: node common/scripts/install-run-rush.js install
+
+      - name: Rush rebuild
+        run: node common/scripts/install-run-rush.js rebuild --verbose --production
+
+      - name: Rush extract
+        run: node common/scripts/install-run-rush.js extract
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: dist
