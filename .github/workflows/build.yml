@@ -23,9 +23,17 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22.14.0
-          cache: 'pnpm'
           package-manager-cache: false
-          cache-dependency-path: 'common/temp/pnpm-lock.yaml'
+
+      - name: Cache rush temps
+        uses: actions/cache@v4
+        with:
+          path: |
+            common/temp/node_modules
+            common/temp/pnpm-lock.yaml
+          key: ${{ runner.os }}-rush-pnpm-${{ hashFiles('common/temp/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-rush-pnpm-
 
       - name: Verify Change Logs
         run: node common/scripts/install-run-rush.js change --verify
