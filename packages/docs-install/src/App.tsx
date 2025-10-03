@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { Layout, Typography, Divider, Steps } from 'antd';
+import { SelectFilePage } from './Pages/SelectFile';
+import { AdjustConfigPage } from './Pages/AdjustConfig/AdjustConfig';
+import { InstallLoaderPage } from './Pages/InstallLoader';
+import type { PageProps } from './Pages/types';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+type Page = {
+  title: string,
+  content: React.FC<PageProps>,
+};
+
+const { Content } = Layout;
+const { Title } = Typography;
+
+const pages: Page[] = [
+  {
+    title: '选择游戏文件',
+    content: SelectFilePage,
+  },
+  {
+    title: '调整加载器设置',
+    content: AdjustConfigPage,
+  },
+  {
+    title: '安装加载器',
+    content: InstallLoaderPage,
+  }
+];
+
+const App = () => {
+  const [ currentStep, setCurrentStep ] = useState(0);
+
+  const items = pages.map((e) => ({ key: e.title, title: e.title }));
+
+  const nextPage = () => setCurrentStep(e => e + 1);
+  const prevPage = () => setCurrentStep(e => e - 1);
+
+  const PageContent = pages[currentStep].content;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <Layout>
+      <Content>
+        <Typography>
+          <Title style={{ textAlign: 'center' }}>YASCML Installer</Title>
+        </Typography>
+        <Divider />
+        <Steps
+          current={currentStep}
+          items={items}
+        />
+        <Divider />
+        <div>
+          <PageContent
+            handleNextPage={nextPage}
+            handlePrevPage={prevPage}
+          />
+        </div>
+      </Content>
+    </Layout>
+  );
+};
 
-export default App
+export default App;
