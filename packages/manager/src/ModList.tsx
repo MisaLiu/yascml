@@ -51,6 +51,7 @@ export const ModList = () => {
               <td>
                 <div>
                   {mod.name} v{mod.version}
+                  {!mod.suitable && <span class="mod-label">⚠️unsuitable</span>}
                   {mod.new && <span class="mod-label new">new</span>}
                   {mod.updated && <span class="mod-label new">updated</span>}
                 </div>
