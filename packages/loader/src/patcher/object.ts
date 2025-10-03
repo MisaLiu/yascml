@@ -24,10 +24,17 @@ const CustomCreate = (proto: object | null, properties?: PropertyDescriptorMap &
 
 export const patchObject = () => {
   OrigFn.set('create', Object['create']);
+  OrigFn.set('freeze', Object['freeze']);
   OrigFn.set('preventExtensions', Object['preventExtensions']);
 
   Reflect.defineProperty(Object, 'create', {
     value: CustomCreate,
+  });
+
+  Reflect.defineProperty(Object, 'freeze', {
+    value(object: object) {
+      return object;
+    },
   });
 
   Reflect.defineProperty(Object, 'preventExtensions', {
@@ -40,6 +47,10 @@ export const patchObject = () => {
 export const unpatchObject = () => {
   Reflect.defineProperty(Object, 'create', {
     value: OrigFn.get('create')!,
+  });
+
+  Reflect.defineProperty(Object, 'freeze', {
+    value: OrigFn.get('freeze')!,
   });
 
   Reflect.defineProperty(Object, 'preventExtensions', {
