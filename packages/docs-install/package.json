@@ -17,7 +17,9 @@
     "zustand": "~5.0.8",
     "@ant-design/icons": "~6.1.0",
     "react-ace": "~14.0.1",
-    "ace-builds": "~1.43.3"
+    "ace-builds": "~1.43.3",
+    "node-html-parser": "~7.0.1",
+    "jszip": "~3.10.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

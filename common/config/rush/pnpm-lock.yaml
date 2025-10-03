@@ -52,6 +52,12 @@ importers:
       antd:
         specifier: ~5.27.4
         version: 5.27.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      jszip:
+        specifier: ~3.10.1
+        version: 3.10.1
+      node-html-parser:
+        specifier: ~7.0.1
+        version: 7.0.1
       react:
         specifier: ^19.1.1
         version: 19.2.0
@@ -1560,6 +1566,9 @@ packages:
 
   node-html-parser@6.1.13:
     resolution: {integrity: sha512-qIsTMOY4C/dAa5Q5vsobRpOOvPfC4pB61UVW2uSwZNUp0QU/jCekTal1vMmbO0DgdHeLUJpv/ARmDqErVxA3Sg==}
+
+  node-html-parser@7.0.1:
+    resolution: {integrity: sha512-KGtmPY2kS0thCWGK0VuPyOS+pBKhhe8gXztzA2ilAOhbUbxa9homF1bOyKvhGzMLXUoRds9IOmr/v5lr/lqNmA==}
 
   node-releases@2.0.21:
     resolution: {integrity: sha512-5b0pgg78U3hwXkCM8Z9b2FJdPZlr9Psr9V2gQPESdGHqbntyFJKFW4r5TeWGFzafGY3hzs1JC62VEQMbl1JFkw==}
@@ -3651,6 +3660,11 @@ snapshots:
   natural-compare@1.4.0: {}
 
   node-html-parser@6.1.13:
+    dependencies:
+      css-select: 5.2.2
+      he: 1.2.0
+
+  node-html-parser@7.0.1:
     dependencies:
       css-select: 5.2.2
       he: 1.2.0

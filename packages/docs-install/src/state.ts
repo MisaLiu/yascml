@@ -1,18 +1,20 @@
 import { create } from 'zustand';
 
-type GlobalState = {
+export type GlobalState = {
   gameFile?: File,
   embeddedMods: string[],
   customExports: string[],
   customInits: Record<string, string>,
+};
 
+type $GlobalState = GlobalState & {
   readonly setGameFile: (file: File) => void;
   readonly setEmbeddedMods: (paths: string[]) => void;
   readonly setCustomExports: (names: string[]) => void;
   readonly setCustomInits: (inits: Record<string, string>) => void;
 };
 
-export const useGlobalState = create<GlobalState>((set) => ({
+export const useGlobalState = create<$GlobalState>((set) => ({
   embeddedMods: [ 'yascmanager.zip' ],
   customExports: [],
   customInits: {},
