@@ -61,10 +61,12 @@ jobs:
           path: artifact
 
       - name: Create pages path
-        run: mkdir -p dist/install
+        run: mkdir dist
       
       - name: Copy installer
-        run: cp -r artifact/docs-install dist/install/
+        run: |
+          cp -r artifact/docs-install dist/
+          mv dist/docs-install dist/install
 
       - name: Copy installer resources
         run: |
