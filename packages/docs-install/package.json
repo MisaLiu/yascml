@@ -19,7 +19,8 @@
     "react-ace": "~14.0.1",
     "ace-builds": "~1.43.3",
     "node-html-parser": "~7.0.1",
-    "jszip": "~3.10.1"
+    "jszip": "~3.10.1",
+    "@ant-design/v5-patch-for-react-19": "~1.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
