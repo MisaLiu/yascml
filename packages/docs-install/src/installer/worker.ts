@@ -36,6 +36,12 @@ const installLoader = async (gameFile: File, config: LoaderConfig) => {
   const loaderDOM = parse('<script src="yascml.js"></script>');
 
   viewportDOM.after(configDOM, loaderDOM);
+
+  if (!headDOM.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+    const cspDOM = parse(`<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:">`);
+    viewportDOM.before(cspDOM);
+  }
+
   return new File([textToBuffer(root.toString())], gameFile.name);
 };
 
