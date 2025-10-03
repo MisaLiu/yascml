@@ -131,6 +131,19 @@ importers:
         specifier: ~1.2.4
         version: 1.2.4(vite@7.1.7(@types/node@24.5.2))
 
+  ../../packages/scripts:
+    dependencies:
+      fs-extra:
+        specifier: ~11.3.2
+        version: 11.3.2
+    devDependencies:
+      '@types/fs-extra':
+        specifier: ~11.0.4
+        version: 11.0.4
+      '@types/node':
+        specifier: ~24.6.2
+        version: 24.6.2
+
   ../../packages/types:
     devDependencies:
       '@types/twine-sugarcube':
@@ -619,6 +632,9 @@ packages:
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
 
+  '@types/node@24.6.2':
+    resolution: {integrity: sha512-d2L25Y4j+W3ZlNAeMKcy7yDsK425ibcAOO2t7aPTz6gNMH0z2GThtwENCDc0d/Pw9wgyRqE5Px1wkV7naz8ang==}
+
   '@types/sizzle@2.3.10':
     resolution: {integrity: sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==}
 
@@ -1042,6 +1058,9 @@ packages:
 
   undici-types@7.12.0:
     resolution: {integrity: sha512-goOacqME2GYyOZZfb5Lgtu+1IDmAlAEu5xnD3+xTzS10hT0vzpf0SPjkXwAw9Jm+4n/mQGDP3LO8CPbYROeBfQ==}
+
+  undici-types@7.13.0:
+    resolution: {integrity: sha512-Ov2Rr9Sx+fRgagJ5AX0qvItZG/JKKoBRAVITs1zk7IqZGTJUwgUr7qoYBpWwakpWilTZFM98rG/AFRocu10iIQ==}
 
   universalify@2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
@@ -1608,6 +1627,10 @@ snapshots:
     dependencies:
       undici-types: 7.12.0
 
+  '@types/node@24.6.2':
+    dependencies:
+      undici-types: 7.13.0
+
   '@types/sizzle@2.3.10': {}
 
   '@types/twine-sugarcube@2.37.2':
@@ -2037,6 +2060,8 @@ snapshots:
   ufo@1.6.1: {}
 
   undici-types@7.12.0: {}
+
+  undici-types@7.13.0: {}
 
   universalify@2.0.1: {}
 

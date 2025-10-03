@@ -15,6 +15,11 @@
       "reviewCategory": "devDependencies"
     },
     {
+      "packageName": "@yascml/scripts",
+      "projectFolder": "packages/scripts",
+      "reviewCategory": "devDependencies"
+    },
+    {
       "packageName": "@yascml/utils",
       "projectFolder": "packages/utils",
       "reviewCategory": "dependencies"

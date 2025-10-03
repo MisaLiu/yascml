@@ -1,0 +1,20 @@
+{
+  "name": "@yascml/scripts",
+  "description": "Custom scripts",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": ""
+  },
+  "dependencies": {
+    "fs-extra": "~11.3.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "~11.0.4",
+    "@types/node": "~24.6.2"
+  }
+}
