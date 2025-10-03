@@ -64,5 +64,14 @@ export const patchEngineScript = (
   }
   replaceInitScript += buildSugarCubeExposeScript(customExpose, Object.keys(customInit ?? {}));
 
-  return scriptMatch[1].replace(/,jQuery\(\(function\(\){(.+)}\)\)/, replaceInitScript);
+  const initMatch = scriptMatch[1].match(/,jQuery\(\((?:function\(\)|\(\)=>){(.+)}\)\)/)!;
+  const initCode = initMatch[1]!;
+  
+  const defineMatch = initCode.match(/Object\.defineProperty\(window,"SugarCube",{(.+)}\)/);
+  if (defineMatch && defineMatch.length >= 2) {
+    const defineCode = defineMatch[1];
+    replaceInitScript = `,Object.defineProperty(window,"SugarCube",{${defineCode}})${replaceInitScript}`;
+  }
+
+  return scriptMatch[1].replace(/,jQuery\(\((?:function\(\)|\(\)=>){(.+)}\)\)/, replaceInitScript);
 };
