@@ -1,4 +1,4 @@
-import { AssignmentExpression, Expression, Node, ObjectExpression, parse, Property, Statement, VariableDeclarator } from 'acorn';
+import { AssignmentExpression, Expression, FunctionDeclaration, Node, ObjectExpression, parse, Property, Statement, VariableDeclarator } from 'acorn';
 import { BlockStatement, CallExpression, ExpressionStatement, Identifier, Literal, Program } from 'acorn';
 
 type ParentNodeType = Expression | Statement | Property | VariableDeclarator | AssignmentExpression;
@@ -45,6 +45,15 @@ export const findObjFreeze = (e: CallExpression) => (
   e.callee.type === 'MemberExpression' &&
   (e.callee.object as Identifier).name === 'Object' &&
   (e.callee.property as Identifier).name === 'freeze'
+);
+
+export const findSCDefine = (e: CallExpression) => (
+  e.arguments.length === 3 &&
+  e.callee.type === 'MemberExpression' &&
+  (e.callee.object as Identifier).name === 'Object' &&
+  (e.callee.property as Identifier).name === 'defineProperty' &&
+  (e.arguments[0] as Identifier).name === 'window' &&
+  (e.arguments[1] as Literal).value === 'SugarCube'
 );
 
 export const findPromiseCatch = (e: CallExpression) => (
@@ -148,3 +157,25 @@ export const replaceFromParentNode = (parent: Node, old: Expression, replaces: E
     }
   }
 };
+
+export const createFunction = (name: string, body: Statement[] = []): FunctionDeclaration => ({
+  type: 'FunctionDeclaration',
+  id: {
+    type: 'Identifier',
+    name,
+    start: -1,
+    end: -1,
+  },
+  body: {
+    type: 'BlockStatement',
+    body,
+    start: -1,
+    end: -1
+  },
+  params: [],
+  generator: false,
+  expression: false,
+  async: false,
+  start: -1,
+  end: -1,
+});

@@ -8,8 +8,10 @@ import {
   findObjPreventExtensions,
   findObjFreeze,
   findPromiseCatch,
+  findSCDefine,
   replaceFromParentNode,
   findInitExpression,
+  createFunction,
 } from './utils';
 import {
   ArrowFunctionExpression,
@@ -20,10 +22,10 @@ import {
   FunctionDeclaration,
   FunctionExpression,
   MemberExpression,
-  Node,
   ObjectExpression,
   SequenceExpression,
-  Statement, 
+  Statement,
+  VariableDeclarator, 
 } from 'acorn';
 
 const buildCustomInitFunction = (name: string, code: string) => (
@@ -69,8 +71,6 @@ export const patchEngineScript = (
   const realAST = getRealScriptAST(ast);
   let initFuncAST: FunctionExpression | ArrowFunctionExpression | null = null;
 
-  // console.log(realAST);
-
   ancestor(realAST, {
     CallExpression: (node, _, ancestors) => {
       // Parse `Object.create(null, {...})`, make objects writable and configurable
@@ -106,29 +106,6 @@ export const patchEngineScript = (
         const index = parent.expressions.findIndex(e => e === node);
         parent.expressions.splice(index, 1);
         initFuncAST = result;
-        // console.log(result);
-        
-        // if (result.type === 'ArrowFunctionExpression') {
-        //   initFuncAST = {
-        //     type: 'VariableDeclaration',
-        //     declarations: [{
-        //       type: 'VariableDeclarator',
-        //       id: {
-        //         type: 'Identifier',
-        //         name: 'initEngine',
-        //         start: -1,
-        //         end: -1,
-        //       },
-        //       init: result,
-        //       start: -1,
-        //       end: -1
-        //     }],
-        //     kind: 'const',
-        //     start: -1,
-        //     end: -1
-        //   };
-        //   console.log(initFuncAST);
-        // }
       }
     },
   });
@@ -137,28 +114,27 @@ export const patchEngineScript = (
     throw new Error('Cannot find engine init function');
   
   // Finds the real init code
-  let initCodeAST: Node | null = null;
-  ancestor(initFuncAST, {
-    TryStatement: (node, _, ancestors) => {
-      console.log('try {} catch {}');
-      console.log(node);
-      // TODO
-    },
-
+  let initCodeAST: CallExpression | BlockStatement | null = null;
+  ancestor(initFuncAST, { // new Promise().then().catch()
     CallExpression: (node) => {
       if (!findPromiseCatch(node)) return;
-      console.log('new Promise.then().catch()');
       initCodeAST = (node.callee as MemberExpression).object as CallExpression;
     },
   });
 
-  console.log(initCodeAST);
+  if (!initCodeAST) { // try {} catch {}
+    ancestor(initFuncAST, {
+      TryStatement: (node) => {
+        initCodeAST = node.block;
+      },
+    });
+  }
+
   if (!initCodeAST)
     throw new Error('Cannot find engine init code');
 
-  // Parse init code, remove `LoadScreen` calls and, if not, convert it to promise.
-  let initFuncFinal: FunctionDeclaration | null = null;
-  ancestor(initCodeAST, {
+  // Parse init code, remove `LoadScreen` calls
+  ancestor(initCodeAST, { // new Promise().then();
     CallExpression: (node, _, ancestors) => {
       if (
         node.callee.type !== 'MemberExpression' ||
@@ -173,43 +149,113 @@ export const patchEngineScript = (
     },
   });
 
-  // Generate new init function
-  if ((initCodeAST as CallExpression).type === 'CallExpression') { // new Promise().then()
-    initFuncFinal = {
-      type: 'FunctionDeclaration',
-      id: {
-        type: 'Identifier',
-        name: 'initEngine',
-        start: -1,
-        end: -1,
+  if ((initCodeAST as BlockStatement).type === 'BlockStatement') {
+    ancestor(initCodeAST, { // try {} catch {}
+      CallExpression: (node, _, ancestors) => {
+        if (
+          node.callee.type !== 'MemberExpression' ||
+          node.callee.object.type !== 'Identifier' ||
+          node.callee.object.name !== 'LoadScreen'
+        ) return;
+
+        const parent = ancestors[ancestors.length - 2] as Expression | VariableDeclarator;
+        if (parent.type === 'VariableDeclarator') {
+          parent.init = {
+            type: 'Literal',
+            value: null,
+            start: -1,
+            end: -1,
+          };
+        } else if (parent.type === 'SequenceExpression') {
+          const index = parent.expressions.findIndex(e => e === node);
+          parent.expressions.splice(index, 1);
+        } else if (parent.type === 'ArrowFunctionExpression') {
+          // Replace `LoadScreen.unlock()` with `resolve()`
+          parent.body = {
+            type: 'CallExpression',
+            callee: {
+              type: 'Identifier',
+              name: 'resolve',
+              start: -1,
+              end: -1,
+            },
+            arguments: [],
+            optional: false,
+            start: -1,
+            end: -1,
+          };
+        }
       },
-      body: {
-        type: 'BlockStatement',
-        body: [{
-          type: 'ReturnStatement',
-          argument: initCodeAST as CallExpression,
+    });
+  }
+
+  console.log(initCodeAST);
+
+  // If we found `Object.defineProperty(window, 'SugarCube', {...})` in init code, we extract it
+  let defineCodeAST: ExpressionStatement | null = null;
+  ancestor(initCodeAST, {
+    CallExpression: (node, _, ancestors) => {
+      if (!findSCDefine(node)) return;
+
+      const _node = ancestors[ancestors.length - 2] as ExpressionStatement;
+      const parent = ancestors[ancestors.length - 3] as BlockStatement;
+      const index = parent.body.findIndex(e => e === _node);
+
+      defineCodeAST = _node;
+      parent.body.splice(index, 1);
+    }
+  });
+  if (defineCodeAST) pushToASTBody(realAST, defineCodeAST);
+
+  // Generate new init function
+  let initFuncFinal: FunctionDeclaration | null = null;
+  if ((initCodeAST as CallExpression).type === 'CallExpression') { // new Promise().then()
+    initFuncFinal = createFunction('initEngine', [{
+      type: 'ReturnStatement',
+      argument: initCodeAST,
+      start: -1,
+      end: -1,
+    }]);
+  } else if ((initCodeAST as BlockStatement).type === 'BlockStatement') { // try {} catch {}
+    initFuncFinal = createFunction('initEngine', [{
+      type: 'ReturnStatement',
+      argument: {
+        type: 'NewExpression',
+        callee: {
+          type: 'Identifier',
+          name: 'Promise',
+          start: -1,
+          end: -1,
+        },
+        arguments: [{
+          type: 'ArrowFunctionExpression',
+          params: [{
+            type: 'Identifier',
+            name: 'resolve',
+            start: -1,
+            end: -1,
+          }],
+          body: initCodeAST,
+          expression: false,
+          generator: false,
+          async: false,
           start: -1,
           end: -1,
         }],
-        start: 0,
-        end: 0
+        start: -1,
+        end: -1,
       },
-      params: [],
-      generator: false,
-      expression: false,
-      async: false,
       start: -1,
       end: -1,
-    };
+    }]);
   }
 
   // If custom `initEngine` found, we will skip this and use the custom one.
   if (
-    !initFuncFinal ||
-    !customInit ||
-    Object.keys(customInit).findIndex(e => e === 'initEngine') === -1
+    initFuncFinal &&
+    (!customInit || Object.keys(customInit).findIndex(e => e === 'initEngine') === -1)
   )
-    pushToASTBody(realAST, initFuncFinal as unknown as FunctionDeclaration);
+    pushToASTBody(realAST, initFuncFinal);
 
   // Build custom init function & exports
   let customScriptStr = '';
@@ -221,9 +267,6 @@ export const patchEngineScript = (
   customScriptStr += buildSugarCubeExposeScript(customExpose, Object.keys(customInit ?? {}));
   pushToASTBody(realAST, ...parseScript(customScriptStr).body as (Statement | FunctionDeclaration)[]);
 
-  const scriptResult = generate(realAST);
-  
-  console.log(scriptResult);
-
-  return scriptResult;
+  // finish patching
+  return generate(realAST);
 };
