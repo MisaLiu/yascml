@@ -24,6 +24,31 @@ const observer = new MutationObserver((mutations) => {
 });
 observer.observe(document.documentElement, { attributes: true, attributeFilter: [ 'data-init' ] });
 
+const showLoadingScreen = () => {
+  const dom = document.createElement('div');
+  dom.id = 'yascml-loading';
+  dom.innerText = 'YASCML loading...';
+  dom.style = [
+    'display: block',
+    'position: fixed',
+    'top: 31%',
+    'left: 50%',
+    'transform: translate(-50%, -50%)',
+    'font: 28px/1 Helmet,Freesans,sans-serif',
+    'font-weight: 700',
+    'color: #eee',
+    'text-align: center',
+    'z-index: 500000'
+  ].join(';');
+  document.body.appendChild(dom);
+};
+
+const hideLoadingScreen = () => {
+  if (document.querySelector('div#yascml-loading')) {
+    document.body.removeChild(document.querySelector('div#yascml-loading')!);
+  }
+};
+
 const _patchSCScript = () => {
   const toFirstUpperCase = (string: string) => (
     `${string.charAt(0).toUpperCase()}${string.slice(1)}`
@@ -55,6 +80,8 @@ const _patchSCScript = () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
+  showLoadingScreen();
+
   // Init loader and engine script
   await initLoader();
   await executeScript(_patchSCScript(), {
@@ -93,10 +120,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     .then(() => {
       delete window.__AfterInit;
       window.YASCML.stats.isEngineInit = true;
+      hideLoadingScreen();
       setTimeout(() => sci.LoadScreen.unlock(lockId), (sc.Engine.DOM_DELAY ?? sc.Engine.minDomActionDelay) * 2);
     })
     .catch((e) => {
       console.error(e);
+      hideLoadingScreen();
       sci.LoadScreen.clear();
       return sci.Alert.fatal(null, e.message);
     });
