@@ -1,8 +1,6 @@
 import { replace } from '@yascml/utils';
 import { initLoader } from './init/loader';
-import { initSugarCube } from './init/engine';
 import { patchEngineScript } from './patcher/engine';
-import { patchObject, unpatchObject } from './patcher/object';
 import { executeScript } from './utils';
 import { initPostloadMods, initPreloadMods } from './init/mods';
 
@@ -56,16 +54,13 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   };
 
   window.addEventListener('DOMContentLoaded', async () => {
-    // Init loader
+    // Init loader and engine script
     await initLoader();
-
-    patchObject();
     await executeScript(_patchSCScript(), {
       domProps: {
         id: 'script-sugarcube',
       },
     });
-    unpatchObject();
 
     const sc = window.SugarCube;
     const sci = window.$SugarCube!;
@@ -89,8 +84,10 @@ if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
     const lockId = sci.LoadScreen.lock();
 		sci.LoadScreen.init();
 
+    if (document.normalize) document.normalize();
+
     initPreloadMods()
-      .then(() => initSugarCube(sc, sci))
+      .then(() => Promise.resolve(sci.$init.initEngine()))
       .then(() => initPostloadMods())
       .then(() => {
         delete window.__AfterInit;

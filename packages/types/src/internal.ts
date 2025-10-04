@@ -52,6 +52,7 @@ export type SugarCubeInternal = {
   Links: LinksAPI | null;
   Alert: AlertAPI;
   $init: {
+    initEngine(): void | Promise<void>;
     initStorage(): void;
     initBeforeStory?(): void;
     initAfterL10n?(): void;

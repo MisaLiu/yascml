@@ -6,6 +6,8 @@ const OrigFn = new FnMap<ObjectConstructor>();
 const CustomCreate = (proto: object | null, properties?: PropertyDescriptorMap & ThisType<any>) => {
   const ObjCreate = (OrigFn.get('create') ?? Object.create) as ObjectConstructor['create'];
 
+  // console.log('Object.create()', proto, properties);
+
   if (proto === null && properties) {
     const _prop = { ...properties };
     for (const key in _prop) {
