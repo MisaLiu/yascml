@@ -189,8 +189,6 @@ export const patchEngineScript = (
     });
   }
 
-  console.log(initCodeAST);
-
   // If we found `Object.defineProperty(window, 'SugarCube', {...})` in init code, we extract it
   let defineCodeAST: ExpressionStatement | null = null;
   ancestor(initCodeAST, {
