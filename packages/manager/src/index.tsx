@@ -22,8 +22,19 @@ const buildManagerEntry = () => {
   return liDOM;
 };
 
+const buildManagerEntrySide = () => {
+  const dom = document.createElement('button');
+  dom.id = 'ui-bar-yascmanager';
+  dom.onclick = showManagerDialog;
+  return dom;
+}
+
 (() => {
   render(<App />, dialogContent);
 
-  document.querySelector('#menu-yascml')?.appendChild(buildManagerEntry());
+  if (document.querySelector('#menu-yascml')) {
+    document.querySelector('#menu-yascml')!.appendChild(buildManagerEntry());
+  } else {
+    document.querySelector('#ui-bar-tray')?.appendChild(buildManagerEntrySide());
+  }
 })();

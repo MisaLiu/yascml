@@ -149,3 +149,23 @@
 #ui-dialog-body.yascmanager ul#platform-info {
   margin: 0;
 }
+
+#ui-bar button#ui-bar-yascmanager {
+  display: block;
+  position: absolute;
+  top: 1.83em;
+  right: 0;
+  border-right: none;
+  padding: .3em .45em .25em;
+  z-index: 500;
+}
+
+#ui-bar button#ui-bar-yascmanager::before {
+  content: '\e82d';
+  font-family: tme-fa-icons !important;
+  color: var(--100, #eee);
+}
+
+#ui-bar.stowed button#ui-bar-yascmanager {
+  display: none;
+}
