@@ -1,3 +1,4 @@
+import '@yascml/types';
 import { LoaderConfig, YASCML } from './types';
 export * from './types';
 
