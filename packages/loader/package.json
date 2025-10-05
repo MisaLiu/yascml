@@ -28,7 +28,6 @@
     "jszip": "~3.10.1",
     "@yascml/utils": "workspace:*",
     "idb-keyval": "~6.2.2",
-    "semver": "~7.7.2",
-    "@yascml/patcher": "workspace:*"
+    "semver": "~7.7.2"
   }
 }

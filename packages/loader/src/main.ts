@@ -1,28 +1,14 @@
-import { patchEngineScript } from '@yascml/patcher';
 import { replace } from '@yascml/utils';
 import { initLoader } from './init/loader';
-import { executeScript } from './utils';
 import { initPostloadMods, initPreloadMods } from './init/mods';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
 }
 
-// Prevent initialize of SugarCube
-document.documentElement.setAttribute('data-init', 'yascml-loading');
-
-// Prevent document attribute been modified by others
-const observer = new MutationObserver((mutations) => {
-  for (const mutation of mutations) {
-    if (mutation.type === 'childList') continue;
-    if (mutation.type === 'characterData') continue;
-    if (mutation.attributeName !== 'data-init') continue;
-    if (document.documentElement.getAttribute('data-init') === 'yascml-loading') continue;
-
-    document.documentElement.setAttribute('data-init', 'yascml-loading');
-  }
-});
-observer.observe(document.documentElement, { attributes: true, attributeFilter: [ 'data-init' ] });
+if (window.YASCML != null) {
+  throw new Error('Another YASCML is running! Aborting...');
+}
 
 const showLoadingScreen = () => {
   const dom = document.createElement('div');
@@ -49,46 +35,18 @@ const hideLoadingScreen = () => {
   }
 };
 
-const _patchSCScript = () => {
-  const toFirstUpperCase = (string: string) => (
-    `${string.charAt(0).toUpperCase()}${string.slice(1)}`
-  );
-
-  const scScriptDOM = document.querySelector('#script-sugarcube') as HTMLScriptElement;
-  const scScriptRaw = scScriptDOM.innerHTML;
-  document.body.removeChild(scScriptDOM);
-  
-  let customExport: string[] = [];
-  const customInit: Record<string, string> = {};
-  const { YASCMLConfig } = window;
-
-  if (YASCMLConfig && YASCMLConfig.custom) {
-    if (YASCMLConfig.custom.export) customExport = YASCMLConfig.custom.export;
-    if (YASCMLConfig.custom.init) {
-      for (const name in YASCMLConfig.custom.init) {
-        const code = YASCMLConfig.custom.init[name];
-        if (!code) continue;
-
-        customInit[`init${toFirstUpperCase(name)}`] = code;
-      }
-    }
+window.addEventListener('DOMContentLoaded', async () => {
+  if (window.__SUGARCUBE_PATCHER) {
+    await Promise.resolve(window.__SUGARCUBE_PATCHER);
   }
 
-  const patchedScript = patchEngineScript(scScriptRaw, customExport, customInit);
-  const encoder = new TextEncoder();
-  return new Blob([encoder.encode(patchedScript)]);
-};
+  if (!window.$SugarCube) {
+    throw new Error('You are running YASCML on a original SugarCube engine! Please patch the engine first.');
+  }
 
-window.addEventListener('DOMContentLoaded', async () => {
+  // Init loader
   showLoadingScreen();
-
-  // Init loader and engine script
   await initLoader();
-  await executeScript(_patchSCScript(), {
-    domProps: {
-      id: 'script-sugarcube',
-    },
-  });
 
   const sc = window.SugarCube;
   const sci = window.$SugarCube!;
@@ -129,6 +87,4 @@ window.addEventListener('DOMContentLoaded', async () => {
       sci.LoadScreen.clear();
       return sci.Alert.fatal(null, e.message);
     });
-
-  observer.disconnect();
 });
