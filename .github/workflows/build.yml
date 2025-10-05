@@ -26,7 +26,7 @@ jobs:
         run: node common/scripts/install-run-rush.js install
 
       - name: Rush rebuild
-        run: node common/scripts/install-run-rush.js rebuild --verbose
+        run: node common/scripts/install-run-rush.js build:prod --verbose
 
       - name: Rush extract
         run: node common/scripts/install-run-rush.js extract

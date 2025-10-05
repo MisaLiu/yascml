@@ -6,8 +6,9 @@ import zipPack from 'vite-plugin-zip-pack'
 import { version } from './package.json';
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   build: {
+    minify: mode === 'production' ? 'esbuild' : false,
     lib: {
       entry: resolve(__dirname, './src/index.tsx'),
       name: 'YASCManager',
@@ -37,4 +38,4 @@ export default defineConfig({
       outFileName: 'yascmanager.zip',
     }),
   ],
-})
+}))

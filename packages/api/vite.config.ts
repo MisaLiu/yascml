@@ -4,8 +4,9 @@ import cp from 'vite-plugin-cp';
 import zipPack from 'vite-plugin-zip-pack';
 import { version } from './package.json';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   build: {
+    minify: mode === 'production' ? 'esbuild' : false,
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
       name: 'YASCAPI',
@@ -34,4 +35,4 @@ export default defineConfig({
       outFileName: 'yascapi.zip',
     }),
   ],
-});
+}));

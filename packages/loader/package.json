@@ -11,7 +11,8 @@
     "types": "./dist/index.d.ts"
   },
   "scripts": {
-    "build": "tsc && vite build"
+    "build": "vite build",
+    "build:prod": "tsc && vite build --mode production"
   },
   "devDependencies": {
     "typescript": "~5.9.2",

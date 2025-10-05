@@ -15,8 +15,8 @@
     "require": "./dist/patcher.cjs"
   },
   "scripts": {
-    "build": "vite build --mode development",
-    "build:prod": "tsc && vite build"
+    "build": "vite build",
+    "build:prod": "tsc && vite build --mode production"
   },
   "devDependencies": {
     "typescript": "~5.9.2",

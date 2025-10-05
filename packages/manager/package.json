@@ -4,7 +4,8 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "scripts": {
-    "build": "tsc -b && vite build"
+    "build": "vite build",
+    "build:prod": "tsc -b && vite build --mode production"
   },
   "dependencies": {
     "preact": "^10.27.2"

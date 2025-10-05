@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build --base /yascml/install/",
+    "build": "vite build",
+    "build:prod": "tsc -b && vite build --mode production --base /yascml/install/",
     "lint": "eslint .",
     "preview": "vite preview"
   },

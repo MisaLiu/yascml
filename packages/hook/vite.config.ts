@@ -1,8 +1,9 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   build: {
+    minify: mode === 'production' ? 'esbuild' : false,
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
       name: 'YASCHook',
@@ -10,4 +11,4 @@ export default defineConfig({
       formats: [ 'umd', 'iife' ],
     },
   },
-});
+}));
