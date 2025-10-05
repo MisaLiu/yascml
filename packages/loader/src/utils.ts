@@ -1,11 +1,12 @@
 import semver from 'semver';
-import { ModMetaFile, ModMetaFull } from './types';
+import { ModMetaFile, ModMetaFull, ModFileMeta } from './types';
 
 export const triggerEvent = <T extends Object>(type: string, detail: T = {} as T) => (
   document.dispatchEvent(new CustomEvent(type, { detail }))
 );
 
 type ExecuteScriptConfig = Partial<{
+  meta: Partial<ModFileMeta>,
   domProps: Partial<Record<keyof HTMLScriptElement & string, string>>;
 }>;
 
@@ -17,6 +18,9 @@ export const executeScript = (script: string | Blob, config: ExecuteScriptConfig
   dom.type = 'text/javascript';
   if (config.domProps) {
     Object.assign(dom, config.domProps);
+  }
+  if (config.meta) {
+    Object.assign(dom.dataset, config.meta);
   }
   document.body.appendChild(dom);
 
@@ -37,16 +41,18 @@ export const executeScript = (script: string | Blob, config: ExecuteScriptConfig
   }
 });
 
-export const loadStyle = (style: string | Blob) => {
+export const loadStyle = (style: string | Blob, meta?: Partial<Omit<ModFileMeta, 'timing'>>) => {
   if (typeof style === 'string') {
     const dom = document.createElement('style');
     dom.innerHTML = style;
+    Object.assign(dom.dataset, meta);
     const headDOM = document.head ?? document.getElementsByTagName('head');
     headDOM.appendChild(dom);
   } else {
     const dom = document.createElement('link');
     dom.rel = 'stylesheet';
     dom.href = URL.createObjectURL(style);
+    Object.assign(dom.dataset, meta);
     const headDOM = document.head ?? document.getElementsByTagName('head');
     headDOM.appendChild(dom);
   }

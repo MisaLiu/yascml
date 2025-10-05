@@ -10,9 +10,23 @@ export const initPreloadMods = async () => {
     if (!mod.enabled || !mod.suitable) continue;
     window.__AfterInit = [];
 
-    mod.cssFiles.forEach((file) => loadStyle(file));
+    mod.cssFiles.forEach((file) =>
+      loadStyle(file, {
+        id: mod.id,
+        filename: file.name,
+      })
+    );
+
     await Promise.all(
-      mod.preloadScripts.map((file) => executeScript(file))
+      mod.preloadScripts.map((file) => 
+        executeScript(file, {
+          meta: {
+            id: mod.id,
+            filename: file.name,
+            timing: 'preload',
+          }
+        })
+      )
     );
 
     if (window.__AfterInit.length > 0) {
@@ -35,7 +49,15 @@ export const initPostloadMods = async () => {
     window.__AfterInit = [];
 
     await Promise.all(
-      mod.postloadScripts.map((file) => executeScript(file))
+      mod.postloadScripts.map((file) => 
+        executeScript(file, {
+          meta: {
+            id: mod.id,
+            filename: file.name,
+            timing: 'postload',
+          }
+        })
+      )
     );
 
     if (window.__AfterInit.length > 0) {

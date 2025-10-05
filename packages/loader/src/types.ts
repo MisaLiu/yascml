@@ -39,6 +39,12 @@ export type ModMetaFull = ModMeta & {
   extraFiles: File[],
 };
 
+export type ModFileMeta = {
+  id: string,
+  filename: string,
+  timing?: 'preload' | 'postload',
+};
+
 export type LoaderConfig = Partial<{
   embedModPath: string[],
   custom: Partial<{
