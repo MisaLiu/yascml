@@ -2,9 +2,12 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import dts from 'unplugin-dts/vite';
 import { prependShebang } from 'vite-plugin-shebang';
-import { dependencies } from './package.json';
+import { version, dependencies } from './package.json';
 
 export default defineConfig(({ mode }) => ({
+  define: {
+    '__PATCHER_VERSION__': JSON.stringify(version),
+  },
   build: {
     minify: mode === 'production' ? 'esbuild' : false,
     lib: {
