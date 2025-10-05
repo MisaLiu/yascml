@@ -10,6 +10,10 @@ if (window.YASCML != null) {
   throw new Error('Another YASCML is running! Aborting...');
 }
 
+if (window.Reflect == null) {
+  throw new Error('Your browser is too old! Upgrade your browser to use YASCML');
+}
+
 const showLoadingScreen = () => {
   const dom = document.createElement('div');
   dom.id = 'yascml-loading';

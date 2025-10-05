@@ -12,10 +12,11 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     minify: mode === 'production' ? 'esbuild' : false,
+    target: 'es6',
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
       name: 'YASCML',
-      fileName: (format) => `yascml${format !== 'iife' ? `.${format}` : ''}.js`,
+      fileName: (format) => `yascml${format !== 'umd' ? `.${format}` : ''}.js`,
       formats: [ 'umd', 'iife' ],
     },
   },
