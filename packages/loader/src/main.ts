@@ -1,6 +1,6 @@
+import { patchEngineScript } from '@yascml/patcher';
 import { replace } from '@yascml/utils';
 import { initLoader } from './init/loader';
-import { patchEngineScript } from './patcher/engine';
 import { executeScript } from './utils';
 import { initPostloadMods, initPreloadMods } from './init/mods';
 

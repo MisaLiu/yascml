@@ -141,18 +141,12 @@ importers:
 
   ../../packages/loader:
     dependencies:
+      '@yascml/patcher':
+        specifier: workspace:*
+        version: link:../patcher
       '@yascml/utils':
         specifier: workspace:*
         version: link:../utils
-      acorn:
-        specifier: ~8.15.0
-        version: 8.15.0
-      acorn-walk:
-        specifier: ~8.3.4
-        version: 8.3.4
-      astring:
-        specifier: ~1.9.0
-        version: 1.9.0
       idb-keyval:
         specifier: ~6.2.2
         version: 6.2.2

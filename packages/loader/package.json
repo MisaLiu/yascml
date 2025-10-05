@@ -29,8 +29,6 @@
     "@yascml/utils": "workspace:*",
     "idb-keyval": "~6.2.2",
     "semver": "~7.7.2",
-    "acorn": "~8.15.0",
-    "acorn-walk": "~8.3.4",
-    "astring": "~1.9.0"
+    "@yascml/patcher": "workspace:*"
   }
 }
