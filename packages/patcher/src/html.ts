@@ -1,30 +1,25 @@
 import { parse } from 'node-html-parser';
 import { patchEngineScript } from './engine';
-import {
-  readFileAsText,
-  readFileAsBase64,
-  textToBuffer
-} from './reader';
 import type { LoaderConfig } from '@yascml/loader';
 /**
  * Patch the game file, injects loader config, loader itself and embedded mods.
  * 
- * @param {File} gameFile - The game file
- * @param {Blob} loaderFile - The loader file
- * @param {Blob[]} [embeddedMods = []] - Embedded mods, this is used for {@link singleFile} mode.
+ * @param {string} gameFileString - The game file string
+ * @param {string} loaderFileString - The loader file string
+ * @param {string[]} [embeddedMods = []] - Embedded mods, this is used for {@link singleFile} mode.
  * @param {LoaderConfig} [loaderConfig = {}] - Loader config.
  * @param {boolean} [singleFile = true] - Write loader and embedded mods data into HTML, 
  * this is better for single/offline distribution, but will increase the file size of
  * the game, depends on embedded mods.
- * @returns {Promise<File>} Patched game file
+ * @returns {Promise<string>} Patched game file string
  */
 export const patchGameHTML = (
-  gameFile: File,
-  loaderFile: Blob,
-  embeddedMods: Blob[] = [],
+  gameFileString: string,
+  loaderFileString: string,
+  embeddedMods: string[] = [],
   loaderConfig: LoaderConfig = {},
   singleFile: boolean = true
-) => new Promise<File>(async (res, rej) => {
+) => new Promise<string>(async (res, rej) => {
   const _loaderConfig = {
     embedModPath: [],
     custom: {
@@ -34,8 +29,7 @@ export const patchGameHTML = (
     ...loaderConfig,
   };
 
-  const gameText = await readFileAsText(gameFile);
-  const root = parse(gameText);
+  const root = parse(gameFileString);
 
   const headDOM = root.querySelector('head');
   if (!headDOM)
@@ -60,14 +54,12 @@ export const patchGameHTML = (
   let configDOM, loaderDOM;
   if (singleFile) {
     _loaderConfig.embedModPath = [
-      ...(await Promise.all(
-        embeddedMods.map(e => readFileAsBase64(e))
-      )),
+      ...embeddedMods,
       ...loaderConfig.embedModPath ?? []
     ];
 
     configDOM = parse(`<script id="yascml-config">window.YASCMLConfig = ${JSON.stringify(_loaderConfig) || '{}'};</script>`);
-    loaderDOM = parse(`<script id="yascml">${await readFileAsText(loaderFile)}</script>`);
+    loaderDOM = parse(`<script id="yascml">${loaderFileString}</script>`);
   } else {
     configDOM = parse(`<script id="yascml-config">window.YASCMLConfig = ${JSON.stringify(_loaderConfig) || '{}'};</script>`);
     loaderDOM = parse('<script id="yascml" src="yascml.js"></script>');
@@ -89,5 +81,5 @@ export const patchGameHTML = (
   engineScriptDOM.innerHTML = '';
   engineScriptDOM.append(patchedScript);
 
-  res(new File([textToBuffer(root.toString())], gameFile.name));
+  res(root.toString());
 });

@@ -6,13 +6,16 @@
   "files": [
     "dist"
   ],
-  "module": "./dist/patcher.js",
-  "main": "./dist/patcher.cjs",
+  "module": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "import": "./dist/patcher.js",
-    "require": "./dist/patcher.cjs"
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "bin": {
+    "yascpatcher": "./dist/cli.js"
   },
   "scripts": {
     "build": "vite build",
@@ -24,12 +27,17 @@
     "unplugin-dts": "~1.0.0-beta.6",
     "@types/node": "~24.5.2",
     "@microsoft/api-extractor": "~7.52.13",
-    "@yascml/loader": "workspace:*"
+    "@yascml/loader": "workspace:*",
+    "vite-plugin-shebang": "~0.1.6",
+    "@types/fs-extra": "~11.0.4"
   },
   "dependencies": {
     "acorn": "~8.15.0",
     "acorn-walk": "~8.3.4",
     "astring": "~1.9.0",
-    "node-html-parser": "~7.0.1"
+    "node-html-parser": "~7.0.1",
+    "inquirer": "~12.9.6",
+    "fs-extra": "~11.3.2",
+    "ora": "~9.0.0"
   }
 }
