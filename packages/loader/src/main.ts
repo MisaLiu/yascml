@@ -37,7 +37,7 @@ const hideLoadingScreen = () => {
 
 window.addEventListener('DOMContentLoaded', async () => {
   if (window.__SUGARCUBE_PATCHER) {
-    await Promise.resolve(window.__SUGARCUBE_PATCHER);
+    await Promise.resolve(window.__SUGARCUBE_PATCHER());
   }
 
   if (!window.$SugarCube) {
