@@ -5,14 +5,14 @@ import {
   readFileAsBase64,
   textToBuffer
 } from './reader';
-
+import type { LoaderConfig } from '@yascml/loader';
 /**
  * Patch the game file, injects loader config, loader itself and embedded mods.
  * 
  * @param {File} gameFile - The game file
  * @param {Blob} loaderFile - The loader file
  * @param {Blob[]} [embeddedMods = []] - Embedded mods, this is used for {@link singleFile} mode.
- * @param {any} [loaderConfig = {}] - Loader config.
+ * @param {LoaderConfig} [loaderConfig = {}] - Loader config.
  * @param {boolean} [singleFile = true] - Write loader and embedded mods data into HTML, 
  * this is better for single/offline distribution, but will increase the file size of
  * the game, depends on embedded mods.
@@ -22,14 +22,14 @@ export const patchGameHTML = (
   gameFile: File,
   loaderFile: Blob,
   embeddedMods: Blob[] = [],
-  loaderConfig: any = {},
+  loaderConfig: LoaderConfig = {},
   singleFile: boolean = true
 ) => new Promise<File>(async (res, rej) => {
   const _loaderConfig = {
     embedModPath: [],
     custom: {
       export: [],
-      init: [],
+      init: {},
     },
     ...loaderConfig,
   };
