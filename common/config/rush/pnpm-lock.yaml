@@ -49,6 +49,9 @@ importers:
       '@ant-design/v5-patch-for-react-19':
         specifier: ~1.0.3
         version: 1.0.3(antd@5.27.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@yascml/patcher':
+        specifier: workspace:*
+        version: link:../patcher
       ace-builds:
         specifier: ~1.43.3
         version: 1.43.3
@@ -58,9 +61,6 @@ importers:
       jszip:
         specifier: ~3.10.1
         version: 3.10.1
-      node-html-parser:
-        specifier: ~7.0.1
-        version: 7.0.1
       react:
         specifier: ^19.1.1
         version: 19.2.0
