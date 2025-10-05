@@ -27,10 +27,6 @@ export const patchGame = async (args: Anify<CommandInput>) => {
     );
 
     spinner.text = 'Writing game file...';
-
-    if (await fs.stat(resultPath)) {
-      await fs.unlink(resultPath);
-    }
     await fs.writeFile(resultPath, result);
 
     spinner.succeed(`Patch finished! Patched game files are: ${resultPath}`);
