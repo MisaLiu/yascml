@@ -1,67 +1,62 @@
 import { parse } from 'node-html-parser';
-import type { WorkerInput } from './types';
+import {
+  readFileAsText,
+  readFileAsBase64,
+  textToBuffer
+} from './reader';
 
-const readFileAsText = (file: Blob) => new Promise<string>((res, rej) => {
-  const reader = new FileReader();
-
-  reader.onload = () => {
-    res(reader.result as string);
-  };
-
-  reader.onerror = (e) => {
-    rej(e);
-  };
-
-  reader.readAsText(file);
-});
-
-const readFileAsBase64 = (file: Blob) => new Promise<string>((res, rej) => {
-  const reader = new FileReader();
-
-  reader.onload = () => res(reader.result as string);
-  reader.onerror = (e) => rej(e);
-
-  reader.readAsDataURL(file);
-});
-
-const textToBuffer = (string: string) => {
-  const encoder = new TextEncoder();
-  return encoder.encode(string);
-};
-
-const installLoader = async ({
-  gameFile,
-  loaderFile,
-  singleFile,
-  embedModFiles,
-  ...config
-}: WorkerInput) => {
+/**
+ * Patch the game file, injects loader config, loader itself and embedded mods.
+ * 
+ * @param {File} gameFile - The game file
+ * @param {Blob} loaderFile - The loader file
+ * @param {Blob[]} [embeddedMods = []] - Embedded mods, this is used for {@link singleFile} mode.
+ * @param {any} [loaderConfig = {}] - Loader config.
+ * @param {boolean} [singleFile = true] - Write loader and embedded mods data into HTML, 
+ * this is better for single/offline distribution, but will increase the file size of
+ * the game, depends on embedded mods.
+ * @returns {Promise<File>} Patched game file
+ */
+export const patchGameHTML = (
+  gameFile: File,
+  loaderFile: Blob,
+  embeddedMods: Blob[] = [],
+  loaderConfig: any = {},
+  singleFile: boolean = true
+) => new Promise<File>(async (res, rej) => {
   const gameText = await readFileAsText(gameFile);
   const root = parse(gameText);
 
   const headDOM = root.querySelector('head');
   if (!headDOM)
-    throw new Error('Cannot find <head> tag in game file');
+    return rej('Cannot find <head> tag in game file');
+
+  if (headDOM.querySelector('script#yascml-config')) {
+    headDOM.removeChild(headDOM.querySelector('script#yascml-config')!);
+  }
+
+  if (headDOM.querySelector('script#yascml')) {
+    headDOM.removeChild(headDOM.querySelector('script#yascml')!);
+  }
 
   const viewportDOM = headDOM.querySelector('meta[name="viewport"]');
   if (!viewportDOM)
-    throw new Error('Cannot find <meta name="viewport"> tag in game file');
+    return rej('Cannot find <meta name="viewport"> tag in game file');
 
   let configDOM, loaderDOM;
-
   if (singleFile) {
     const modsUrl: string[] = [
       ...(await Promise.all(
-        embedModFiles.map(e => readFileAsBase64(e))
+        embeddedMods.map(e => readFileAsBase64(e))
       )),
-      ...config.embedModPath ?? []
+      ...loaderConfig.embedModPath ?? []
     ];
 
-    configDOM = parse(`<script>window.YASCMLConfig = ${JSON.stringify({ ...config, embedModPath: modsUrl }) || '{}'};</script>`);
-    loaderDOM = parse(`<script>${await readFileAsText(loaderFile)}</script>`);
+    configDOM = parse(`<script id="yascml-config">window.YASCMLConfig = ${JSON.stringify({ ...loaderConfig, embedModPath: modsUrl }) || '{}'};</script>`);
+    loaderDOM = parse(`<script id="yascml">${await readFileAsText(loaderFile)}</script>`);
   } else {
-    configDOM = parse(`<script>window.YASCMLConfig = ${JSON.stringify(config) || '{}'};</script>`);
-    loaderDOM = parse('<script src="yascml.js"></script>');
+    configDOM = parse(`<script id="yascml-config">window.YASCMLConfig = ${JSON.stringify(loaderConfig) || '{}'};</script>`);
+    loaderDOM = parse('<script id="yascml" src="yascml.js"></script>');
   }
 
   viewportDOM.after(configDOM, loaderDOM);
@@ -71,18 +66,5 @@ const installLoader = async ({
     headDOM.removeChild(cspDOM);
   }
 
-  return new File([textToBuffer(root.toString())], gameFile.name);
-};
-
-const sendMsg = (type: string, data: any) => {
-  postMessage({ type, data });
-};
-
-onmessage = ({ data: msg }) => {
-  const { type, data } = msg as { type: string, data: unknown };
-
-  if (type === 'start') {
-    installLoader(data as WorkerInput)
-      .then((result) => sendMsg('finished', result));
-  }
-};
+  res(new File([textToBuffer(root.toString())], gameFile.name));
+});

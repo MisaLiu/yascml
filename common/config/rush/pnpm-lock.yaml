@@ -224,6 +224,9 @@ importers:
       astring:
         specifier: ~1.9.0
         version: 1.9.0
+      node-html-parser:
+        specifier: ~7.0.1
+        version: 7.0.1
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ~7.52.13
