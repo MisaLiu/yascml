@@ -45,6 +45,11 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yascml/patcher",
+      "projectFolder": "packages/patcher",
+      "reviewCategory": "production"
+    },
+    {
       "packageName": "@yascml/docs-install",
       "projectFolder": "packages/docs-install",
       "reviewCategory": "document"
