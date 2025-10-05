@@ -31,6 +31,14 @@ jobs:
       - name: Rush extract
         run: node common/scripts/install-run-rush.js extract
 
+      - name: Copy resources
+        run: |
+          # Online installer
+          mkdir dist/docs-install/resources
+          cp dist/loader/yascml.js dist/docs-install/resources/yascml.js
+          cp dist/manager/yascmanager.zip dist/docs-install/resources/yascmanager.zip
+          cp dist/api/yascapi.zip dist/docs-install/resources/yascapi.zip
+
       - uses: actions/upload-artifact@v4
         with:
           name: build-artifact
@@ -60,25 +68,10 @@ jobs:
           name: build-artifact
           path: artifact
 
-      - name: Create pages path
-        run: mkdir dist
-      
-      - name: Copy installer
-        run: |
-          cp -r artifact/docs-install dist/
-          mv dist/docs-install dist/install
-
-      - name: Copy installer resources
-        run: |
-          mkdir dist/install/resources
-          cp artifact/loader/yascml.js dist/install/resources/yascml.js
-          cp artifact/manager/yascmanager.zip dist/install/resources/yascmanager.zip
-          cp artifact/api/yascapi.zip dist/install/resources/yascapi.zip
-
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: dist
+          path: artifact/docs-install
       
       - name: Deploy to GitHub Pages
         id: deployment
