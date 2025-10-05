@@ -5,7 +5,7 @@ import { Passages } from './passages';
 {
   const $src = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src')!;
   Reflect.defineProperty(HTMLImageElement.prototype, 'src', {
-    get() { $src.get!.call(this) },
+    get() { return $src.get!.call(this) },
     set(source: string) {
       // yay let's do something here
       $src.set!.call(this, source);
