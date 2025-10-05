@@ -1,4 +1,5 @@
 import { parse } from 'node-html-parser';
+import { patchEngineScript } from './engine';
 import {
   readFileAsText,
   readFileAsBase64,
@@ -24,6 +25,15 @@ export const patchGameHTML = (
   loaderConfig: any = {},
   singleFile: boolean = true
 ) => new Promise<File>(async (res, rej) => {
+  const _loaderConfig = {
+    embedModPath: [],
+    custom: {
+      export: [],
+      init: [],
+    },
+    ...loaderConfig,
+  };
+
   const gameText = await readFileAsText(gameFile);
   const root = parse(gameText);
 
@@ -43,19 +53,23 @@ export const patchGameHTML = (
   if (!viewportDOM)
     return rej('Cannot find <meta name="viewport"> tag in game file');
 
+  const engineScriptDOM = root.querySelector('script#script-sugarcube');
+  if (!engineScriptDOM)
+    return rej('Cannot find game engine script in game file');
+
   let configDOM, loaderDOM;
   if (singleFile) {
-    const modsUrl: string[] = [
+    _loaderConfig.embedModPath = [
       ...(await Promise.all(
         embeddedMods.map(e => readFileAsBase64(e))
       )),
       ...loaderConfig.embedModPath ?? []
     ];
 
-    configDOM = parse(`<script id="yascml-config">window.YASCMLConfig = ${JSON.stringify({ ...loaderConfig, embedModPath: modsUrl }) || '{}'};</script>`);
+    configDOM = parse(`<script id="yascml-config">window.YASCMLConfig = ${JSON.stringify(_loaderConfig) || '{}'};</script>`);
     loaderDOM = parse(`<script id="yascml">${await readFileAsText(loaderFile)}</script>`);
   } else {
-    configDOM = parse(`<script id="yascml-config">window.YASCMLConfig = ${JSON.stringify(loaderConfig) || '{}'};</script>`);
+    configDOM = parse(`<script id="yascml-config">window.YASCMLConfig = ${JSON.stringify(_loaderConfig) || '{}'};</script>`);
     loaderDOM = parse('<script id="yascml" src="yascml.js"></script>');
   }
 
@@ -65,6 +79,12 @@ export const patchGameHTML = (
   if (cspDOM) {
     headDOM.removeChild(cspDOM);
   }
+
+  engineScriptDOM.innerHTML = patchEngineScript(
+    engineScriptDOM.innerHTML,
+    _loaderConfig.custom.export,
+    _loaderConfig.custom.init
+  );
 
   res(new File([textToBuffer(root.toString())], gameFile.name));
 });
