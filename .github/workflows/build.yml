@@ -68,10 +68,18 @@ jobs:
           name: build-artifact
           path: artifact
 
+      - name: Create pages path
+        run: mkdir dist
+      
+      - name: Copy installer
+        run: |
+          cp -r artifact/docs-install dist/
+          mv dist/docs-install dist/install
+
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: artifact/docs-install
+          path: dist
       
       - name: Deploy to GitHub Pages
         id: deployment
