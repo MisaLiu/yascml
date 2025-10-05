@@ -6,9 +6,13 @@
   "files": [
     "dist"
   ],
+  "module": "./dist/patcher.js",
+  "main": "./dist/patcher.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "import": "./dist/patcher.js",
+    "require": "./dist/patcher.cjs"
   },
   "scripts": {
     "build": "vite build --mode development",

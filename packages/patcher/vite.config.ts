@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import dts from 'unplugin-dts/vite';
+import { dependencies } from './package.json';
 
 const packageJsonPath = resolve(__dirname, './package.json');
 const packageJson = JSON.parse(readFileSync(packageJsonPath, { encoding: 'utf-8' })) as { version: string };
@@ -14,9 +15,12 @@ export default defineConfig(({ mode }) => ({
     minify: mode === 'production' ? 'esbuild' : false,
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
-      name: 'YASCML',
-      fileName: (format) => `yascml${format !== 'iife' ? `.${format}` : ''}.js`,
-      formats: [ 'umd', 'iife' ],
+      name: 'YASCPatcher',
+      fileName: 'patcher',
+      formats: [ 'es', 'cjs' ],
+    },
+    rollupOptions: {
+      external: Object.keys(dependencies),
     },
   },
   plugins: [

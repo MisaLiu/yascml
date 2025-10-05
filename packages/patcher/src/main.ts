@@ -27,6 +27,12 @@ import {
   Statement,
   VariableDeclarator, 
 } from 'acorn';
+import { Options } from 'astring';
+
+const DefaultGenerateOptions: Options = {
+  indent: '',
+  lineEnd: '',
+};
 
 const buildCustomInitFunction = (name: string, code: string) => (
 `function ${name}() {
@@ -48,16 +54,19 @@ Object.defineProperty(window, '$SugarCube', {
 
 /**
  * Patch the original SugarCube script, expose some internal variables and the initial function.
+ * All exports will be defined at `window.$SugarCube`.
  * 
- * @param script 
- * @param customExpose 
- * @param customInit 
- * @returns 
+ * @param {string} script - The original engine script
+ * @param {string[]} [customExpose] - Custom exports to `window.$SugarCube`, exporting undefined name will throw an error
+ * @param {Record<string, string>} [customInit] - Custom initial functions, this will be exposed to `window.$SugarCube.$init`
+ * @param {Options} [generateOptions] - Generate options for [astring](https://github.com/davidbonnet/astring#generatenode-object-options-object-string--object)
+ * @returns {string} Patched engine script.
  */
 export const patchEngineScript = (
   script: string,
   customExpose?: string[],
-  customInit?: { [name: string]: string }
+  customInit?: { [name: string]: string },
+  generateOptions: Options = {}
 ) => {
   const pushToASTBody = (ast: ExpressionStatement, ...statements: Statement[]) => (
     (
@@ -266,5 +275,8 @@ export const patchEngineScript = (
   pushToASTBody(realAST, ...parseScript(customScriptStr).body as (Statement | FunctionDeclaration)[]);
 
   // finish patching
-  return generate(realAST);
+  return generate(realAST, {
+    ...DefaultGenerateOptions,
+    ...generateOptions
+  });
 };

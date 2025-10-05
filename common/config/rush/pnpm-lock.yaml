@@ -219,6 +219,34 @@ importers:
         specifier: ~1.2.4
         version: 1.2.4(vite@7.1.7(@types/node@24.5.2))
 
+  ../../packages/patcher:
+    dependencies:
+      acorn:
+        specifier: ~8.15.0
+        version: 8.15.0
+      acorn-walk:
+        specifier: ~8.3.4
+        version: 8.3.4
+      astring:
+        specifier: ~1.9.0
+        version: 1.9.0
+    devDependencies:
+      '@microsoft/api-extractor':
+        specifier: ~7.52.13
+        version: 7.52.13(@types/node@24.5.2)
+      '@types/node':
+        specifier: ~24.5.2
+        version: 24.5.2
+      typescript:
+        specifier: ~5.9.2
+        version: 5.9.2
+      unplugin-dts:
+        specifier: ~1.0.0-beta.6
+        version: 1.0.0-beta.6(@microsoft/api-extractor@7.52.13(@types/node@24.5.2))(esbuild@0.25.10)(rollup@4.52.2)(typescript@5.9.2)(vite@7.1.7(@types/node@24.5.2))
+      vite:
+        specifier: ^7.1.5
+        version: 7.1.7(@types/node@24.5.2)
+
   ../../packages/scripts:
     dependencies:
       fs-extra:
