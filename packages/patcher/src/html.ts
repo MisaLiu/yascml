@@ -80,11 +80,14 @@ export const patchGameHTML = (
     headDOM.removeChild(cspDOM);
   }
 
-  engineScriptDOM.innerHTML = patchEngineScript(
+  const patchedScript = patchEngineScript(
     engineScriptDOM.innerHTML,
     _loaderConfig.custom.export,
     _loaderConfig.custom.init
   );
+
+  engineScriptDOM.innerHTML = '';
+  engineScriptDOM.append(patchedScript);
 
   res(new File([textToBuffer(root.toString())], gameFile.name));
 });
