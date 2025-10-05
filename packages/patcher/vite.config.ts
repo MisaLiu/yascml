@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => ({
         cli: resolve(__dirname, 'src/bin/cli.ts'),
       },
       name: 'YASCPatcher',
-      formats: [ 'es', 'cjs' ],
+      formats: [ 'es' ],
     },
     rollupOptions: {
       external: [
