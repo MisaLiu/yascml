@@ -1,4 +1,5 @@
 import { patchGameHTML } from '@yascml/patcher';
+import { readFileAsText, readFileAsBase64, textToBuffer } from './reader';
 import type { WorkerInput } from './types';
 
 const installLoader = async ({
@@ -8,7 +9,18 @@ const installLoader = async ({
   embedModFiles,
   ...config
 }: WorkerInput) => {
-  return patchGameHTML(gameFile, loaderFile, embedModFiles, config, singleFile);
+  const gameFileStr = await readFileAsText(gameFile);
+  const loaderFileStr = await readFileAsText(loaderFile);
+  const embeddedModsStr: string[] = [];
+
+  if (embedModFiles) {
+    for (const mod of embedModFiles) {
+      embeddedModsStr.push(await readFileAsBase64(mod));
+    }
+  }
+
+  const patchResult = await patchGameHTML(gameFileStr, loaderFileStr, embeddedModsStr, config, singleFile);
+  return new File([textToBuffer(patchResult)], gameFile.name);
 };
 
 const sendMsg = (type: string, data: any) => {
