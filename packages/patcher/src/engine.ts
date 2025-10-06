@@ -5,6 +5,7 @@ import {
   getRealScriptAST,
   modifyObjProps,
   findObjCreateNull,
+  findObjDefineProperties,
   findObjPreventExtensions,
   findObjFreeze,
   findPromiseCatch,
@@ -91,6 +92,11 @@ export const patchEngineScript = (
           start: -1,
           end: -1,
         };
+      }
+
+      // Parse `Object.defineProperties({}, {...})`, make objects writable and configurable
+      if (findObjDefineProperties(node)) {
+        modifyObjProps(node.arguments[1] as ObjectExpression);
       }
       
       // Replace `Object.preventExtensions({...})`

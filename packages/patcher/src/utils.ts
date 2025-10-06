@@ -33,6 +33,15 @@ export const findObjCreateNull = (e: CallExpression) => (
   e.arguments[1].type === 'ObjectExpression'
 );
 
+export const findObjDefineProperties = (e: CallExpression) => (
+  e.arguments.length === 2 &&
+  e.callee.type === 'MemberExpression' &&
+  (e.callee.object as Identifier).name === 'Object' &&
+  (e.callee.property as Identifier).name === 'defineProperties' &&
+  e.arguments[0].type === 'ObjectExpression' &&
+  e.arguments[1].type === 'ObjectExpression'
+);
+
 export const findObjPreventExtensions = (e: CallExpression) => (
   e.arguments.length !== 0 &&
   e.callee.type === 'MemberExpression' &&
