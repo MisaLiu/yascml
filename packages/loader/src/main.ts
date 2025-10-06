@@ -59,15 +59,18 @@ window.addEventListener('DOMContentLoaded', async () => {
     throw new Error('You are running YASCML on a original SugarCube engine! Please patch the engine first.');
   }
 
-  // Init loader
-  showLoadingScreen();
-  await initLoader();
-
   const sc = window.SugarCube;
   const sci = window.$SugarCube!;
   if (!sc) {
     throw new Error('SugarCube not loaded properly!');
   }
+
+  showLoadingScreen();
+  const lockId = sci.LoadScreen.lock();
+  sci.LoadScreen.init();
+
+  // Init loader
+  await initLoader();
 
   // Add mod menu list to sidebar
   replace(sc.UIBar, 'init', {
@@ -81,9 +84,6 @@ window.addEventListener('DOMContentLoaded', async () => {
       navDOM.appendChild(menuListDOM);
     },
   });
-
-  const lockId = sci.LoadScreen.lock();
-  sci.LoadScreen.init();
 
   if (document.normalize) document.normalize();
 
