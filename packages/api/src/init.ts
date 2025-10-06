@@ -18,6 +18,7 @@ import { Passages } from './passages';
 }
 
 // Hook `<image>` in SVG
+// XXX: This is designed for DoL
 replace(Element.prototype, 'setAttributeNS', {
   value(ns: string | null, name: string, value: string) {
     if (
@@ -33,6 +34,14 @@ replace(Element.prototype, 'setAttributeNS', {
         this.$setAttributeNS(ns, name, context.src);
       });
   },
+});
+
+// Hook SugarCube.Story.has()
+replace(window.SugarCube!.Story, 'has', {
+  value(name: string) {
+    if (Passages.has(name)) return true;
+    return this.$has(name);
+  }
 });
 
 // Hook SugarCube.Story.get()
