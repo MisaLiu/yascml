@@ -1,4 +1,5 @@
 import { replace } from '@yascml/utils';
+import resources from './resources';
 import { Passages } from './passages';
 
 // Hook `<image>`
@@ -7,8 +8,11 @@ import { Passages } from './passages';
   Reflect.defineProperty(HTMLImageElement.prototype, 'src', {
     get() { return $src.get!.call(this) },
     set(source: string) {
-      // yay let's do something here
-      $src.set!.call(this, source);
+      const context = { src: source };
+      resources.image.run(context)
+        .then(() => {
+          $src.set!.call(this, context.src);
+        });
     },
   });
 }

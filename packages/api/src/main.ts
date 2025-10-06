@@ -1,4 +1,5 @@
 import passages from './passages';
+import resources from './resources';
 import './init';
 
 Object.defineProperty(window, 'YASCAPI', {
@@ -6,5 +7,6 @@ Object.defineProperty(window, 'YASCAPI', {
 
   value: Object.seal(Object.assign(Object.create(null), {
     passages,
+    resources,
   })),
 });
