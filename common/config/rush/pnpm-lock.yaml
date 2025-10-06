@@ -237,6 +237,37 @@ importers:
         specifier: ~0.1.6
         version: 0.1.6
 
+  ../../packages/sc2ml-compact:
+    dependencies:
+      '@yascml/utils':
+        specifier: workspace:*
+        version: link:../utils
+    devDependencies:
+      '@types/node':
+        specifier: ~24.5.2
+        version: 24.5.2
+      '@types/twine-sugarcube':
+        specifier: ~2.37.2
+        version: 2.37.2
+      '@yascml/loader':
+        specifier: workspace:*
+        version: link:../loader
+      '@yascml/types':
+        specifier: workspace:*
+        version: link:../types
+      typescript:
+        specifier: ~5.9.2
+        version: 5.9.2
+      vite:
+        specifier: ^7.1.5
+        version: 7.1.7(@types/node@24.5.2)
+      vite-plugin-cp:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vite-plugin-zip-pack:
+        specifier: ~1.2.4
+        version: 1.2.4(vite@7.1.7(@types/node@24.5.2))
+
   ../../packages/scripts:
     dependencies:
       fs-extra:

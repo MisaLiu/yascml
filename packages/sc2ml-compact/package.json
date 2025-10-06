@@ -1,0 +1,23 @@
+{
+  "name": "@yascml/sc2ml-compact",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "build:prod": "tsc && vite build --mode production"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2",
+    "vite": "^7.1.5",
+    "@types/node": "~24.5.2",
+    "@types/twine-sugarcube": "~2.37.2",
+    "@yascml/types": "workspace:*",
+    "@yascml/loader": "workspace:*",
+    "vite-plugin-cp": "~6.0.3",
+    "vite-plugin-zip-pack": "~1.2.4"
+  },
+  "dependencies": {
+    "@yascml/utils": "workspace:*"
+  }
+}

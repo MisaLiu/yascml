@@ -40,6 +40,11 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yascml/sc2ml-compact",
+      "projectFolder": "packages/sc2ml-compact",
+      "reviewCategory": "production"
+    },
+    {
       "packageName": "@yascml/patcher",
       "projectFolder": "packages/patcher",
       "reviewCategory": "production"
