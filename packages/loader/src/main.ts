@@ -1,6 +1,7 @@
 import { replace } from '@yascml/utils';
 import { initLoader } from './init/loader';
 import { initPostloadMods, initPreloadMods } from './init/mods';
+import { loadStyle } from './utils';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
@@ -14,21 +15,31 @@ if (window.Reflect == null) {
   throw new Error('Your browser is too old! Upgrade your browser to use YASCML');
 }
 
+loadStyle([
+  '@keyframes _YASCML_BLINK_ {',
+  'from { opacity: 1; }',
+  'to { opacity: 0; }',
+  '}',
+].join('\n'));
+
 const showLoadingScreen = () => {
   const dom = document.createElement('div');
   dom.id = 'yascml-loading';
-  dom.innerText = 'YASCML loading...';
+  dom.innerText = `YASCML v${__LOADER_VERSION__} Loading...`;
   dom.style = [
     'display: block',
     'position: fixed',
-    'top: 31%',
-    'left: 50%',
-    'transform: translate(-50%, -50%)',
-    'font: 28px/1 Helmet,Freesans,sans-serif',
-    'font-weight: 700',
+    'top: 0',
+    'left: 0',
+    'font: 1em Helmet,Freesans,sans-serif',
     'color: #eee',
-    'text-align: center',
-    'z-index: 500000'
+    'text-align: left',
+    'z-index: 500000',
+    'animation-name: _YASCML_BLINK_',
+    'animation-duration: 1s',
+    'animation-iteration-count: infinite',
+    'animation-timing-function: linear',
+    'animation-direction: alternate'
   ].join(';');
   document.body.appendChild(dom);
 };
@@ -82,8 +93,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     .then(() => {
       delete window.__AfterInit;
       window.YASCML.stats.isEngineInit = true;
-      hideLoadingScreen();
-      setTimeout(() => sci.LoadScreen.unlock(lockId), (sc.Engine.DOM_DELAY ?? sc.Engine.minDomActionDelay) * 2);
+
+      setTimeout(() => {
+        hideLoadingScreen();
+        sci.LoadScreen.unlock(lockId);
+      }, (sc.Engine.DOM_DELAY ?? sc.Engine.minDomActionDelay) * 2);
     })
     .catch((e) => {
       console.error(e);
