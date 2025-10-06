@@ -2,7 +2,7 @@ import { replace } from '@yascml/utils';
 import resources from './resources';
 import { Passages } from './passages';
 
-// Hook `<image>`
+// Hook `<img>`
 {
   const $src = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src')!;
   Reflect.defineProperty(HTMLImageElement.prototype, 'src', {
@@ -16,6 +16,24 @@ import { Passages } from './passages';
     },
   });
 }
+
+// Hook `<image>` in SVG
+replace(Element.prototype, 'setAttributeNS', {
+  value(ns: string | null, name: string, value: string) {
+    if (
+      !(this instanceof SVGImageElement) ||
+      (name !== 'href' && name !== 'xlink:href') ||
+      !value
+    ) return this.$setAttributeNS(ns, name, value);
+
+    this.$setAttributeNS(ns, name, value);
+    const context = { src: value };
+    resources.image.run(context)
+      .then(() => {
+        this.$setAttributeNS(ns, name, context.src);
+      });
+  },
+});
 
 // Hook SugarCube.Story.get()
 replace(window.SugarCube!.Story, 'get', {
