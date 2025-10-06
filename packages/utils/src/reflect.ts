@@ -45,9 +45,10 @@ export const replace = <
   }))
     throw new Error('Cannot define property on this target, is this target protected?');
 
-  return Reflect.defineProperty(target, p, {
+  if (!Reflect.defineProperty(target, p, {
     configurable: true,
     enumerable: true,
     ...attributes,
-  });
+  }))
+    throw new Error('Cannot relace property on this target, is this target unconfigurable?');
 };
