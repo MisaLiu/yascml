@@ -32,8 +32,18 @@ const buildManagerEntrySide = () => {
 (() => {
   render(<App />, dialogContent);
 
-  if (document.querySelector('#menu-yascml')) {
-    document.querySelector('#menu-yascml')!.appendChild(buildManagerEntry());
+  const menuDOM = document.querySelector<HTMLDivElement>('#menu-yascml');
+  const isMenuVisible = ((dom) => {
+    if (!dom) return false;
+
+    const bounding = dom.getBoundingClientRect();
+    if (bounding.width === 0 || bounding.height === 0) return false;
+
+    return true;
+  })(menuDOM);
+
+  if (isMenuVisible) {
+    menuDOM!.appendChild(buildManagerEntry());
   } else {
     document.querySelector('#ui-bar-tray')?.appendChild(buildManagerEntrySide());
   }
