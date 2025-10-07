@@ -242,7 +242,19 @@ importers:
       '@yascml/utils':
         specifier: workspace:*
         version: link:../utils
+      idb:
+        specifier: ~8.0.3
+        version: 8.0.3
+      idb-keyval:
+        specifier: ~6.2.2
+        version: 6.2.2
+      lodash:
+        specifier: ~4.17.21
+        version: 4.17.21
     devDependencies:
+      '@types/lodash':
+        specifier: ~4.17.20
+        version: 4.17.20
       '@types/node':
         specifier: ~24.5.2
         version: 24.5.2
@@ -1120,6 +1132,9 @@ packages:
   '@types/jsonfile@6.1.4':
     resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
 
+  '@types/lodash@4.17.20':
+    resolution: {integrity: sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==}
+
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
@@ -1636,6 +1651,9 @@ packages:
 
   idb-keyval@6.2.2:
     resolution: {integrity: sha512-yjD9nARJ/jb1g+CvD0tlhUHOrJ9Sy0P8T9MF3YaLlHnSRpwPfpTX0XIvpmw3gAJUmEu3FiICLBDPXVwyEvrleg==}
+
+  idb@8.0.3:
+    resolution: {integrity: sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -3392,6 +3410,8 @@ snapshots:
     dependencies:
       '@types/node': 24.5.2
 
+  '@types/lodash@4.17.20': {}
+
   '@types/ms@2.1.0': {}
 
   '@types/node@24.5.2':
@@ -4006,6 +4026,8 @@ snapshots:
       safer-buffer: 2.1.2
 
   idb-keyval@6.2.2: {}
+
+  idb@8.0.3: {}
 
   ignore@5.3.2: {}
 
