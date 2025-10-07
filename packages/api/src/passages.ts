@@ -15,30 +15,39 @@ const addReplacedElement = (name: string, content: string, tags: string[]) => {
 };
 
 /**
- * Add a new passage to the game.
+ * Add a passage with given name. Could be used to replace a passage too.
+ * If passage with a same name exists, this will replace it.
  * 
  * @param {string} name 
  * @param {PassageContent} content 
  */
 const add = async (name: string, content: PassageContent, tags: string[] = []) => {
-  if (typeof content === 'string') return Passages.set(name, createPassageDOM({ name, tags, text: content }));
-  else if (typeof content === 'function') return Passages.set(name, createPassageDOM({ name, tags, text: await Promise.resolve(content(name)) }));
-  return Passages.set(name, createPassageDOM({ name, tags, text: await Promise.resolve(content) }));
-};
-
-/**
- * Replace a passage with given name and new content.
- * 
- * @param {string} name 
- * @param {PassageContent} content 
- */
-const replace = async (name: string, content: PassageContent, tags: string[] = []) => {
   if (typeof content === 'string') return addReplacedElement(name, content, tags);
   else if (typeof content === 'function') return addReplacedElement(name, await Promise.resolve(content(name)), tags);
   return addReplacedElement(name, await Promise.resolve(content), tags);
 };
 
+/**
+ * Get replaced passage DOM with given name
+ * 
+ * @param {string} name 
+ */
+const get = (name: string) => {
+  if (!Passages.has(name)) return null;
+  return Passages.get(name)!;
+};
+
+/**
+ * Remove a replaced passage with given name
+ * 
+ * @param {string} name 
+ */
+const remove = (name: string) => {
+  return Passages.delete(name);
+};
+
 export default {
   add,
-  replace,
+  get,
+  remove,
 };
