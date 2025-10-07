@@ -6,7 +6,7 @@
     "url": "https://misaliu.top"
   },
   "priority": 10,
-  "homepageURL": "https://github.com/yascml/yascml/tree/main/packages/api",
+  "homepageURL": "https://github.com/yascml/yascml/tree/main/packages/hook",
   "preloadScripts": [
     "yaschook.js"
   ]
