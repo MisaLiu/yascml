@@ -15,6 +15,9 @@ importers:
       '@yascml/utils':
         specifier: workspace:*
         version: link:../utils
+      quick-lru:
+        specifier: ~7.2.0
+        version: 7.2.0
     devDependencies:
       '@types/node':
         specifier: ~24.5.2
@@ -1977,6 +1980,10 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  quick-lru@7.2.0:
+    resolution: {integrity: sha512-fG4L8TlD1CacJiGMGPxM1/K8l/GaKL2eFQZ6DWAjxZYxSf07DkumbC/Mhh+u/NHvxkfQVL25By0pxBS8QE9ZrQ==}
+    engines: {node: '>=18'}
 
   rc-cascader@3.34.0:
     resolution: {integrity: sha512-KpXypcvju9ptjW9FaN2NFcA2QH9E9LHKq169Y0eWtH4e/wHQ5Wh5qZakAgvb8EKZ736WZ3B0zLLOBsrsja5Dag==}
@@ -4333,6 +4340,8 @@ snapshots:
   quansync@0.2.11: {}
 
   queue-microtask@1.2.3: {}
+
+  quick-lru@7.2.0: {}
 
   rc-cascader@3.34.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:

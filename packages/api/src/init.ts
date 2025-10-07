@@ -1,6 +1,7 @@
 import { replace } from '@yascml/utils';
 import resources from './resources';
-import { Passages } from './passages';
+import PassageMiddleware, { PassageDOMCache } from './passages';
+import { createPassageDOM } from './utils/twee';
 
 // Hook `<img>`
 {
@@ -36,20 +37,27 @@ replace(Element.prototype, 'setAttributeNS', {
   },
 });
 
-// Hook SugarCube.Story.has()
-replace(window.SugarCube!.Story, 'has', {
-  value(name: string) {
-    if (Passages.has(name)) return true;
-    return this.$has(name);
-  }
-});
-
 // Hook SugarCube.Story.get()
 replace(window.SugarCube!.Story, 'get', {
   value(name: string) {
-    if (Passages.has(name)) {
-      return new window.SugarCube!.Passage(name, Passages.get(name));
+    const origStory = this.$get(name);
+    const context = { name, tags: origStory.tags, text: this.has(name) ? origStory.text : '' };
+
+    PassageMiddleware.run(context);
+    if (
+      context.tags === origStory.tags &&
+      context.text === origStory.text
+    ) return origStory;
+
+    let destDOM = PassageDOMCache.get(name);
+    if (destDOM) {
+      destDOM.setAttribute('tags', context.tags.join(' '));
+      destDOM.innerText = context.text;
+    } else {
+      destDOM = createPassageDOM(context);
+      PassageDOMCache.set(name, destDOM);
     }
-    return this.$get(name);
+
+    return new window.SugarCube!.Passage(name, destDOM);
   },
 });
