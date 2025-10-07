@@ -67,10 +67,16 @@ const get = (modId: string) => {
   return window.YASCML.mods[index];
 };
 
+const releaseFiles = (modId: string) => {
+  const mod = get(modId);
+  if (mod.zip) delete mod.zip;
+};
+
 export default {
   add,
   remove,
   enable,
   disable,
   get,
+  releaseFiles,
 };

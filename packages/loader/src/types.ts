@@ -1,3 +1,4 @@
+import JSZip from 'jszip';
 import api from './api';
 
 export type ModAuthor = string | {
@@ -23,10 +24,9 @@ export type ModMetaFile = ModMeta & {
   preloadScripts?: string[],
   postloadScripts?: string[],
   cssFiles?: string[],
-  extraFiles?: string[],
 };
 
-export type ModMetaFull = ModMeta & {
+export type ModMetaFull = ModMetaFile & {
   enabled: boolean,
   embedded: boolean,
   suitable: boolean,
@@ -34,10 +34,7 @@ export type ModMetaFull = ModMeta & {
   deleted: boolean,
   updated: boolean,
   md5: string,
-  preloadScripts: File[],
-  postloadScripts: File[],
-  cssFiles: File[],
-  extraFiles: File[],
+  zip?: JSZip,
 };
 
 export type ModFileMeta = {

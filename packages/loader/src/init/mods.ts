@@ -15,31 +15,57 @@ export const initPreloadMods = async () => {
     if (!mod.enabled || !mod.suitable) continue;
     window.__AfterInit = [];
 
-    mod.cssFiles.forEach((file) =>
-      loadStyle(file, {
-        modId: mod.id,
-        filename: file.name,
-      })
-    );
-
-    await Promise.all(
-      mod.preloadScripts.map((file) => 
-        executeScript(file, {
-          meta: {
-            modId: mod.id,
-            filename: file.name,
-            timing: 'preload',
-          }
-        })
-      )
-    );
-
-    if (window.__AfterInit.length > 0) {
+    if (mod.cssFiles) {
       await Promise.all(
-        window.__AfterInit.map(e => 
-          Promise.resolve(e)
-        )
+        mod.cssFiles.map((path) => {
+          const blob = mod.zip!.file(path);
+          if (!blob) {
+            console.warn(`Cannot find file "${path}", skipping...`);
+            return;
+          }
+
+          return (
+            blob
+              .async('blob')
+              .then((e) => loadStyle(e, {
+                modId: mod.id,
+                filename: path,
+              }))
+          );
+        })
       );
+    }
+
+    if (mod.preloadScripts) {
+      await Promise.all(
+        mod.preloadScripts.map((path) => {
+          const blob = mod.zip!.file(path);
+          if (!blob) {
+            console.warn(`Cannot find file "${path}", skipping...`);
+            return;
+          }
+
+          return (
+            blob
+              .async('blob')
+              .then((e) => executeScript(e, {
+                meta: {
+                  modId: mod.id,
+                  filename: path,
+                  timing: 'preload',
+                }
+              }))
+          );
+        })
+      );
+
+      if (window.__AfterInit.length > 0) {
+        await Promise.all(
+          window.__AfterInit.map(e => 
+            Promise.resolve(e)
+          )
+        );
+      }
     }
   }
 };
@@ -57,24 +83,36 @@ export const initPostloadMods = async () => {
     if (!mod.enabled || !mod.suitable) continue;
     window.__AfterInit = [];
 
-    await Promise.all(
-      mod.postloadScripts.map((file) => 
-        executeScript(file, {
-          meta: {
-            modId: mod.id,
-            filename: file.name,
-            timing: 'postload',
-          }
-        })
-      )
-    );
-
-    if (window.__AfterInit.length > 0) {
+    if (mod.postloadScripts) {
       await Promise.all(
-        window.__AfterInit.map(e => 
-          Promise.resolve(e)
-        )
+        mod.postloadScripts.map((path) => {
+          const blob = mod.zip!.file(path);
+          if (!blob) {
+            console.warn(`Cannot find file "${path}", skipping...`);
+            return;
+          }
+
+          return (
+            blob
+              .async('blob')
+              .then((e) => executeScript(e, {
+                meta: {
+                  modId: mod.id,
+                  filename: path,
+                  timing: 'postload',
+                }
+              }))
+          );
+        })
       );
+
+      if (window.__AfterInit.length > 0) {
+        await Promise.all(
+          window.__AfterInit.map(e => 
+            Promise.resolve(e)
+          )
+        );
+      }
     }
   }
 };

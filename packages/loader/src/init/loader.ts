@@ -42,7 +42,7 @@ export const initLoader = async () => {
 
       try {
         const modFile = await IDB.get(modId);
-        const mod = await importMod(modFile);
+        const mod = await importMod(modFile, true);
         window.YASCML.mods.push(mod);
       } catch (e) {
         console.warn(`Error when loading mod: ${modId}, skipping...`);
@@ -61,7 +61,7 @@ export const initLoader = async () => {
         changeSplashText(`Loading embedded mods... (${i + 1}/${modPaths.length})${path.length <= 200 ? `[${path}]` : ''}`);
 
         try {
-          const mod = await importMod(path);
+          const mod = await importMod(path, true);
           if (window.YASCML.mods.findIndex(e => e.id === mod.id) !== -1) continue;
 
           mod.embedded = true;
