@@ -40,7 +40,7 @@ export type ModMetaFull = ModMeta & {
 };
 
 export type ModFileMeta = {
-  id: string,
+  modId: string,
   filename: string,
   timing?: 'preload' | 'postload',
 };

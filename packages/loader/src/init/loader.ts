@@ -1,14 +1,17 @@
 import * as IDB from '../storage';
 import * as Setting from '../settings/storage';
-import { YASCML } from '../types';
+import { changeSplashText } from '../splash';
 import api from '../api';
 import { importMod } from '../importer';
 import { unescapeHTML, sortMods, isModSuitable } from '../utils';
+import { YASCML } from '../types';
 
 /**
  * Initialize the loader.
  */
 export const initLoader = async () => {
+  changeSplashText('Preparing loader...');
+
   Object.defineProperty(window, 'YASCML', {
     configurable: false,
 
@@ -24,20 +27,34 @@ export const initLoader = async () => {
     } as YASCML)),
   });
 
-  for (const modId of await IDB.getKets()) {
-    try {
-      const modFile = await IDB.get(modId);
-      const mod = await importMod(modFile);
-      window.YASCML.mods.push(mod);
-    } catch (e) {
-      console.warn(`Error when loading mod: ${modId}, skipping...`);
-      console.error(e);
+  {
+    changeSplashText('Loading imported mods...');
+
+    const modIDs = await IDB.getKets();
+    for (let i = 0; i < modIDs.length; i ++) {
+      const modId = modIDs[i];
+      changeSplashText(`Loading imported mods... (${i + 1}/${modIDs.length})[${modId}]`);
+
+      try {
+        const modFile = await IDB.get(modId);
+        const mod = await importMod(modFile);
+        window.YASCML.mods.push(mod);
+      } catch (e) {
+        console.warn(`Error when loading mod: ${modId}, skipping...`);
+        console.error(e);
+      }
     }
   }
 
   if (window.YASCMLConfig) {
     if (window.YASCMLConfig.embedModPath) {
-      for (const path of window.YASCMLConfig.embedModPath) {
+      changeSplashText('Loading embedded mods...');
+
+      const modPaths = window.YASCMLConfig.embedModPath;
+      for (let i = 0; i < modPaths.length; i++) {
+        const path = modPaths[i];
+        changeSplashText(`Loading embedded mods... (${i + 1}/${modPaths.length})${path.length <= 200 ? `[${path}]` : ''}`);
+
         try {
           const mod = await importMod(path);
           if (window.YASCML.mods.findIndex(e => e.id === mod.id) !== -1) continue;

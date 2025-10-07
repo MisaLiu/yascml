@@ -1,18 +1,23 @@
 import * as Setting from '../settings/storage';
+import { changeSplashText } from '../splash';
 import { executeScript, loadStyle } from '../utils';
 
 export const initPreloadMods = async () => {
   if (Setting.get('saveMode')) return;
 
-  const mods = window.YASCML.mods;
+  changeSplashText('Loading preload scripts...');
 
-  for (const mod of mods) {
+  const mods = window.YASCML.mods;
+  for (let i = 0; i < mods.length; i++) {
+    const mod = mods[i];
+    changeSplashText(`Loading preload scripts... (${i + 1}/${mods.length})[${mod.id}]`);
+
     if (!mod.enabled || !mod.suitable) continue;
     window.__AfterInit = [];
 
     mod.cssFiles.forEach((file) =>
       loadStyle(file, {
-        id: mod.id,
+        modId: mod.id,
         filename: file.name,
       })
     );
@@ -21,7 +26,7 @@ export const initPreloadMods = async () => {
       mod.preloadScripts.map((file) => 
         executeScript(file, {
           meta: {
-            id: mod.id,
+            modId: mod.id,
             filename: file.name,
             timing: 'preload',
           }
@@ -42,9 +47,13 @@ export const initPreloadMods = async () => {
 export const initPostloadMods = async () => {
   if (Setting.get('saveMode')) return;
 
-  const mods = window.YASCML.mods;
+  changeSplashText('Loading postload scripts...');
 
-  for (const mod of mods) {
+  const mods = window.YASCML.mods;
+  for (let i = 0; i < mods.length; i++) {
+    const mod = mods[i];
+    changeSplashText(`Loading postload scripts... (${i + 1}/${mods.length})[${mod.id}]`);
+
     if (!mod.enabled || !mod.suitable) continue;
     window.__AfterInit = [];
 
@@ -52,7 +61,7 @@ export const initPostloadMods = async () => {
       mod.postloadScripts.map((file) => 
         executeScript(file, {
           meta: {
-            id: mod.id,
+            modId: mod.id,
             filename: file.name,
             timing: 'postload',
           }
