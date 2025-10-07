@@ -118,17 +118,32 @@ export const isModSuitable = (mod: ModMetaFull) => {
 
   if (mod.dependencies === (void 0)) return true;
   for (const modId in mod.dependencies) {
+    if (modId === 'yascml') {
+      if (!semver.satisfies(version, mod.dependencies[modId])) {
+        console.warn(`Mod "${mod.id}" requires loader v${version}, but found v${version}. This mod will not be loaded.`);
+        return false;
+      } else continue;
+    }
+
     const modDep = mods.find(e => e.id === modId);
-    if (!modDep && modId !== 'yascml') {
+    if (!modDep) {
       console.warn(`Mod "${mod.id}" requires dependency "${modId}", but it's not installed. This mod will not be loaded.`);
       return false;
     }
 
-    const depVersion = modId !== 'yascml' ? modDep!.version : version;
+    if (!modDep.enabled) {
+      console.warn(`Mod "${mod.id}" requires dependency "${modId}", but it's not enabled. This mod will not be loaded.`);
+      return false;
+    }
+
+    if (!modDep.suitable) {
+      console.warn(`Mod "${mod.id}" requires dependency "${modId}", but it's not suitable for now. This mod will not be loaded.`);
+      return false;
+    }
+
     const requiredVersion = mod.dependencies[modId];
-    
-    if (!semver.satisfies(depVersion, requiredVersion)) {
-      console.warn(`Mod "${mod.id}" requires dependency "${modId} v${requiredVersion}", but found ${depVersion}. This mod will not be loaded.`);
+    if (!semver.satisfies(modDep.version, requiredVersion)) {
+      console.warn(`Mod "${mod.id}" requires dependency "${modId} v${requiredVersion}", but found v${modDep.version}. This mod will not be loaded.`);
       return false;
     }
   }
