@@ -4,7 +4,7 @@
   "pnpmVersion": "9.15.9",
   "nodeSupportedVersionRange": ">=22.14.0",
   "repository": {
-    "url": "https://github.com/MisaLiu/yascml",
+    "url": "https://github.com/yascml/yascml",
     "defaultBranch": "main",
     "defaultRemote": "origin"
   },

@@ -6,7 +6,7 @@
     "url": "https://misaliu.top"
   },
   "priority": 10,
-  "homepageURL": "https://github.com/MisaLiu/yascml/tree/main/packages/sc2ml-compact",
+  "homepageURL": "https://github.com/yascml/yascml/tree/main/packages/sc2ml-compact",
   "dependencies": {
     "yascapi": "^1.0.0"
   },

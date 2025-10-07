@@ -7,7 +7,7 @@
 
 ## 2. Prepare develop environments
 
-1. Clone this repository: `git clone https://github.com/MisaLiu/yascml.git` and `cd yascml`
+1. Clone this repository: `git clone https://github.com/yascml/yascml.git` and `cd yascml`
 2. Install dependencies: `rush update`
 
 ## 3. Build artifacts
@@ -20,7 +20,7 @@
 
 * [loader](packages/loader): The YASCML itself
 * [manager](packages/manager): Graphical mod manager
-* [api](packages/api): Provides ability to modify SugarCube game data
+* [hook](packages/hook): Provides ability to modify SugarCube game data
 * [patcher](packages/patcher): SugarCube game/engine patching utilities, also provides CLI
 * [docs-install](packages/docs-install): Online YASCML installer
 * [types](packages/types): Types used in this repo

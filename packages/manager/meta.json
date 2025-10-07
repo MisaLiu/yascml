@@ -5,7 +5,7 @@
     "name": "MisaLiu",
     "url": "https://misaliu.top"
   },
-  "homepageURL": "https://github.com/MisaLiu/yascml/tree/main/packages/manager",
+  "homepageURL": "https://github.com/yascml/yascml/tree/main/packages/manager",
   "postloadScripts": [
     "manager.js"
   ],
