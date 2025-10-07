@@ -14,4 +14,9 @@ declare global {
     __SUGARCUBE_PATCHER?: () => (void | Promise<void>);
     __AfterInit?: (Function | Promise<unknown>)[];
   }
+
+  interface Blob {
+    mozSlice?: typeof Blob.prototype.slice,
+    webkitSlice?: typeof Blob.prototype.slice,
+  }
 }

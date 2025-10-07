@@ -33,6 +33,7 @@ export type ModMetaFull = ModMeta & {
   new: boolean,
   deleted: boolean,
   updated: boolean,
+  md5: string,
   preloadScripts: File[],
   postloadScripts: File[],
   cssFiles: File[],

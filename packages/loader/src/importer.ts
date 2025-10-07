@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import { isValidModMeta } from './utils';
+import { isValidModMeta, getFileMD5 } from './utils';
 import { ModMetaFile, ModMetaFull } from './types';
 
 export const importModFromFile = async (modZip: Blob) => {
@@ -24,7 +24,15 @@ export const importModFromFile = async (modZip: Blob) => {
     new: false,
     updated: false,
     deleted: false,
+    md5: '',
   };
+
+  try {
+    result.md5 = await getFileMD5(modZip);
+  } catch (e) {
+    console.warn(`Failed to get MD5 for mod: ${result.id}, using empty string`);
+    console.error(e);
+  }
 
   if (modMeta.preloadScripts !== (void 0)) {
     for (const path of modMeta.preloadScripts) {

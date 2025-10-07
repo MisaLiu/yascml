@@ -128,6 +128,9 @@ importers:
       semver:
         specifier: ~7.7.2
         version: 7.7.2
+      spark-md5:
+        specifier: ~3.0.2
+        version: 3.0.2
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ~7.52.13
@@ -138,6 +141,9 @@ importers:
       '@types/semver':
         specifier: ~7.7.1
         version: 7.7.1
+      '@types/spark-md5':
+        specifier: ~3.0.5
+        version: 3.0.5
       '@types/twine-sugarcube':
         specifier: ~2.37.2
         version: 2.37.2
@@ -1154,6 +1160,9 @@ packages:
 
   '@types/sizzle@2.3.10':
     resolution: {integrity: sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==}
+
+  '@types/spark-md5@3.0.5':
+    resolution: {integrity: sha512-lWf05dnD42DLVKQJZrDHtWFidcLrHuip01CtnC2/S6AMhX4t9ZlEUj4iuRlAnts0PQk7KESOqKxeGE/b6sIPGg==}
 
   '@types/twine-sugarcube@2.37.2':
     resolution: {integrity: sha512-ta3swJxlp3YUxo9hElYhar+MC5mG+TirKhmBr8+67nU5DfgqJK7SrIF05W54yaIRei9KNZDwAvgg/mu8PyTa4Q==}
@@ -2320,6 +2329,9 @@ packages:
     resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
     engines: {node: '>= 12'}
 
+  spark-md5@3.0.2:
+    resolution: {integrity: sha512-wcFzz9cDfbuqe0FZzfi2or1sgyIrsDwmPwfZC4hiNidPdPINjeUwNfv5kldczoEAcjl9Y1L3SM7Uz2PUEQzxQw==}
+
   sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
 
@@ -3429,6 +3441,8 @@ snapshots:
   '@types/semver@7.7.1': {}
 
   '@types/sizzle@2.3.10': {}
+
+  '@types/spark-md5@3.0.5': {}
 
   '@types/twine-sugarcube@2.37.2':
     dependencies:
@@ -4766,6 +4780,8 @@ snapshots:
   source-map@0.6.1: {}
 
   source-map@0.7.6: {}
+
+  spark-md5@3.0.2: {}
 
   sprintf-js@1.0.3: {}
 

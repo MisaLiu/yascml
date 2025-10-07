@@ -1,4 +1,5 @@
 import semver from 'semver';
+import SparkMD5 from 'spark-md5';
 import { ModMetaFile, ModMetaFull, ModFileMeta } from './types';
 
 export const triggerEvent = <T extends Object>(type: string, detail: T = {} as T) => (
@@ -75,6 +76,37 @@ export const sortMods = (a: ModMetaFull, b: ModMetaFull) => {
 
   return priorityA - priorityB;
 };
+
+export const getFileMD5 = (file: Blob, chunkSize = 2097152): Promise<string> => new Promise((res, rej) => {
+  const fileSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+  const chunks = Math.ceil(file.size / chunkSize);
+  const spark = new SparkMD5.ArrayBuffer();
+  const reader = new FileReader();
+  let currentChunk = 0;
+
+  reader.onload = (e) => {
+    spark.append((e.target as FileReader).result as ArrayBuffer);
+    currentChunk++;
+
+    if (currentChunk < chunks) loadChunk();
+    else {
+      res(spark.end());
+      spark.destroy();
+    }
+  };
+
+  reader.onerror = (e) => {
+    rej(e);
+  };
+
+  function loadChunk() {
+    const start = currentChunk * chunkSize;
+    const end = (start + chunkSize) < file.size ? start + chunkSize : file.size;
+    reader.readAsArrayBuffer(fileSlice.call(file, start, end));
+  }
+
+  loadChunk();
+});
 
 export const isModSuitable = (mod: ModMetaFull) => {
   const { stats, mods, version } = window.YASCML;
