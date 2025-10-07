@@ -37,7 +37,7 @@ jobs:
           mkdir dist/docs-install/resources
           cp dist/loader/yascml.js dist/docs-install/resources/yascml.js
           cp dist/manager/yascmanager.zip dist/docs-install/resources/yascmanager.zip
-          cp dist/api/yaschook.zip dist/docs-install/resources/yaschook.zip
+          cp dist/hook/yaschook.zip dist/docs-install/resources/yaschook.zip
 
       - uses: actions/upload-artifact@v4
         with:
