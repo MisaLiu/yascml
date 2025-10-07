@@ -1,3 +1,5 @@
+import * as idbKeyval from 'idb-keyval';
+import JSZip from 'jszip';
 import * as IDB from '../storage';
 import * as Setting from '../settings/storage';
 import { changeSplashText } from '../splash';
@@ -11,6 +13,9 @@ import { YASCML } from '../types';
  */
 export const initLoader = async () => {
   changeSplashText('Preparing loader...');
+
+  if (!window.JSZip) window.JSZip = JSZip;
+  if (!window.idbKeyval) window.idbKeyval = idbKeyval;
 
   Object.defineProperty(window, 'YASCML', {
     configurable: false,

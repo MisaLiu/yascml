@@ -19,6 +19,14 @@ export default defineConfig(({ mode }) => ({
       fileName: (format) => `yascml${format !== 'umd' ? `.${format}` : ''}.js`,
       formats: [ 'umd', 'iife' ],
     },
+    rollupOptions: {
+      output: {
+        globals: {
+          'jszip': 'JSZip',
+          'idb-keyval': 'idbKeyval',
+        },
+      }
+    },
   },
   plugins: [
     dts({
