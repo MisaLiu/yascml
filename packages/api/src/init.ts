@@ -1,6 +1,6 @@
 import { replace } from '@yascml/utils';
 import resources from './resources';
-import PassageMiddleware, { PassageDOMCache } from './passages';
+import PassageMiddleware, { PassageDOMCache } from './passage';
 import { createPassageDOM } from './utils/twee';
 
 // Hook `<img>`

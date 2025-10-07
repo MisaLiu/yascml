@@ -1,4 +1,4 @@
-import passage from './passages';
+import passage from './passage';
 import resources from './resources';
 import './init';
 
