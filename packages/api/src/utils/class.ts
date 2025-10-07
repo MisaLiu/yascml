@@ -4,19 +4,24 @@ export interface Middleware<C extends object> {
   (context: C): void;
 }
 
+export interface MiddlewareAsync<C extends object> extends Middleware<C> {
+  (context: C, next: () => void): Promise<void>;
+  (context: C): Promise<void>;
+}
+
 /**
  * An express-like middleware.
  */
 export class OnionModel<C extends object> {
-  private middlewares: Middleware<C>[] = [];
+  protected readonly middlewares: Middleware<C>[] = [];
 
   /**
    * Add a middleware to current hook.
    * 
    * ```js
-   * middleware.hook(async (context, next) => {
+   * middleware.hook((context, next) => {
    *   if (!isMatchedSource(context.source)) return next();
-   *   const replacedSource = await sourceReplacer(context.source);
+   *   const replacedSource = sourceReplacer(context.source);
    *   context.source = replacedSource;
    * });
    * ```
@@ -40,6 +45,31 @@ export class OnionModel<C extends object> {
 
   /**
    * Waking through current hook with given context. This should not be called manually.
+   * 
+   * @param context 
+   * @returns {void}
+   */
+  run(context: C): void {
+    const dispatch = (i: number) => {
+      if (i >= this.middlewares.length) return;
+      const middleware = this.middlewares[i];
+      
+      return middleware(context, () => dispatch(i + 1));
+    };
+    return dispatch(0);
+  }
+}
+
+/**
+ * An express-like middleware, with async support
+ * 
+ * @see {@link OnionModel}
+ */
+export class OnionModelAsync<C extends object> extends OnionModel<C> {
+  protected readonly middlewares: (Middleware<C> | MiddlewareAsync<C>)[] = [];
+
+  /**
+   * Waking through current hook with given context, with async support. This should not be called manually.
    * 
    * @param context 
    * @returns {Promise<void>}

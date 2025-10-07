@@ -1,11 +1,11 @@
-import { OnionModel } from './utils/class';
+import { OnionModelAsync } from './utils/class';
 
 /**
  * Hooks all image loaded in this game
  * 
- * @see {@link OnionModel}
+ * @see {@link OnionModelAsync}
  */
-const image = new OnionModel<{ src: string }>();
+const image = new OnionModelAsync<{ src: string }>();
 
 export default {
   image
