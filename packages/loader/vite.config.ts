@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => ({
       entry: resolve(__dirname, 'src/main.ts'),
       name: 'YASCML',
       fileName: (format) => `yascml${format !== 'umd' ? `.${format}` : ''}.js`,
-      formats: [ 'umd', 'iife' ],
+      formats: [ 'umd' ],
     },
     rollupOptions: {
       output: {
