@@ -12,7 +12,7 @@ declare global {
     YASCML: YASCML;
     YASCMLConfig?: LoaderConfig;
     __SUGARCUBE_PATCHER?: () => (void | Promise<void>);
-    __AfterInit?: (Function | Promise<unknown>)[];
+    __AfterInit?: (() => unknown | Promise<unknown>)[];
   }
 
   interface Blob {
