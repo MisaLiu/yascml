@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => ({
     minify: mode === 'production' ? 'esbuild' : false,
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
-      name: 'YASCAPI',
-      fileName: (format) => `yascapi${format !== 'iife' ? `.${format}` : ''}.js`,
+      name: 'YASCHook',
+      fileName: (format) => `yaschook${format !== 'iife' ? `.${format}` : ''}.js`,
       formats: [ 'iife' ],
     },
   },
@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => ({
     zipPack({
       inDir: resolve(__dirname, './dist'),
       outDir: resolve(__dirname, './dist'),
-      outFileName: 'yascapi.zip',
+      outFileName: 'yaschook.zip',
     }),
   ],
 }));

@@ -1,6 +1,6 @@
 {
-  "id": "yascapi",
-  "name": "YASCML API",
+  "id": "yaschook",
+  "name": "YASCML Hook",
   "author": {
     "name": "MisaLiu",
     "url": "https://misaliu.top"
@@ -8,6 +8,6 @@
   "priority": 10,
   "homepageURL": "https://github.com/MisaLiu/yascml/tree/main/packages/api",
   "preloadScripts": [
-    "yascapi.js"
+    "yaschook.js"
   ]
 }
