@@ -61,9 +61,10 @@ export const initPreloadMods = async () => {
 
       if (window.__AfterInit.length > 0) {
         await Promise.all(
-          window.__AfterInit.map(e => 
-            Promise.resolve(e)
-          )
+          window.__AfterInit.map(e => {
+            if (typeof e === 'function') return Promise.resolve(e());
+            else Promise.resolve(e);
+          })
         );
       }
     }
@@ -108,9 +109,10 @@ export const initPostloadMods = async () => {
 
       if (window.__AfterInit.length > 0) {
         await Promise.all(
-          window.__AfterInit.map(e => 
-            Promise.resolve(e)
-          )
+          window.__AfterInit.map(e => {
+            if (typeof e === 'function') return Promise.resolve(e());
+            else Promise.resolve(e);
+          })
         );
       }
     }
