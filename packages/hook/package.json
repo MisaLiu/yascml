@@ -18,7 +18,6 @@
     "vite-plugin-zip-pack": "~1.2.4"
   },
   "dependencies": {
-    "@yascml/utils": "workspace:*",
-    "quick-lru": "~7.2.0"
+    "@yascml/utils": "workspace:*"
   }
 }

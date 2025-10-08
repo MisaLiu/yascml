@@ -1,7 +1,6 @@
 import { replace } from '@yascml/utils';
 import resources from './resources';
-import PassageMiddleware, { PassageDOMCache } from './passage';
-import { createPassageDOM } from './utils/twee';
+import PassageMiddleware from './passage';
 
 // Hook `<img>`
 {
@@ -37,27 +36,19 @@ replace(Element.prototype, 'setAttributeNS', {
   },
 });
 
-// Hook SugarCube.Story.get()
-replace(window.SugarCube!.Story, 'get', {
-  value(name: string) {
-    const origStory = this.$get(name);
-    const context = { name, tags: origStory.tags, text: this.has(name) ? origStory.text : '' };
+// Hook SugarCube.Passage
+{
+  const $text = Object.getOwnPropertyDescriptor(window.SugarCube!.Passage.prototype, 'text')!;
+  Reflect.defineProperty(window.SugarCube!.Passage.prototype, 'text', {
+    get() {
+      const context = {
+        text: $text.get!.call(this),
+        name: this.name ?? this.title,
+        tags: this.tags,
+      };
 
-    PassageMiddleware.run(context);
-    if (
-      context.tags === origStory.tags &&
-      context.text === origStory.text
-    ) return origStory;
-
-    let destDOM = PassageDOMCache.get(name);
-    if (destDOM) {
-      destDOM.setAttribute('tags', context.tags.join(' '));
-      destDOM.innerText = context.text;
-    } else {
-      destDOM = createPassageDOM(context);
-      PassageDOMCache.set(name, destDOM);
-    }
-
-    return new window.SugarCube!.Passage(name, destDOM);
-  },
-});
+      PassageMiddleware.run(context);
+      return context.text;
+    },
+  });
+}
