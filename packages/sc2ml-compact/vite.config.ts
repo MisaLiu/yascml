@@ -11,14 +11,18 @@ export default defineConfig(({ mode }) => ({
   build: {
     minify: mode === 'production' ? 'esbuild' : false,
     lib: {
-      entry: resolve(__dirname, 'src/main.ts'),
+      entry: {
+        preload: resolve(__dirname, 'src/main.ts'),
+        postload: resolve(__dirname, 'src/postload.ts'),
+      },
       name: 'SC2MLCompact',
-      fileName: (format) => `sc2ml-compact${format !== 'umd' ? `.${format}` : ''}.js`,
-      formats: [ 'umd' ],
+      fileName: (format, name) => `${name}${format !== 'cjs' ? `.${format}` : ''}.js`,
+      formats: [ 'cjs' ],
     },
     rollupOptions: {
       external: [ 'idb-keyval' ],
       output: {
+        exports: 'named',
         globals: {
           'idb': 'idb',
           'idb-keyval': 'idbKeyval',
@@ -28,6 +32,17 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
+    {
+      name: 'wrap-cjs-iife',
+      generateBundle(options, bundle) {
+        if (options.format !== 'cjs') return;
+        for (const [, chunk ] of Object.entries(bundle)) {
+          if (chunk.type === 'chunk') {
+            chunk.code = `(function(){${chunk.code}})();`;
+          }
+        }
+      }
+    },
     cp({
       targets: [
         {
