@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import cp from 'vite-plugin-cp';
 import zipPack from 'vite-plugin-zip-pack';
+import dts from 'unplugin-dts/vite';
 import { version } from './package.json';
 
 export default defineConfig(({ mode }) => ({
@@ -33,6 +34,12 @@ export default defineConfig(({ mode }) => ({
       inDir: resolve(__dirname, './dist'),
       outDir: resolve(__dirname, './dist'),
       outFileName: 'yaschook.zip',
+    }),
+    dts({
+      tsconfigPath: './tsconfig.json',
+      insertTypesEntry: true,
+      copyDtsFiles: true,
+      bundleTypes: true
     }),
   ],
 }));

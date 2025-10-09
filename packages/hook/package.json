@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "license": "AGPL-3.0-only",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts"
+  },
   "scripts": {
     "build": "vite build",
     "build:prod": "tsc && vite build --mode production"
@@ -15,7 +22,9 @@
     "@yascml/types": "workspace:*",
     "@yascml/loader": "workspace:*",
     "vite-plugin-cp": "~6.0.3",
-    "vite-plugin-zip-pack": "~1.2.4"
+    "vite-plugin-zip-pack": "~1.2.4",
+    "unplugin-dts": "~1.0.0-beta.6",
+    "@microsoft/api-extractor": "~7.53.1"
   },
   "dependencies": {
     "@yascml/utils": "workspace:*"
