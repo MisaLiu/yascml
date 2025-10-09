@@ -31,9 +31,8 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     dts({
       tsconfigPath: './tsconfig.json',
-      insertTypesEntry: true,
       copyDtsFiles: true,
-      bundleTypes: true
+      insertTypesEntry: true,
     }),
   ],
 }));

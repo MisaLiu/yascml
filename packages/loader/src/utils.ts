@@ -2,6 +2,13 @@ import semver from 'semver';
 import SparkMD5 from 'spark-md5';
 import { ModMetaFile, ModMetaFull, ModFileMeta } from './types';
 
+declare global {
+  interface Blob {
+    mozSlice?: typeof Blob.prototype.slice,
+    webkitSlice?: typeof Blob.prototype.slice,
+  }
+}
+
 export const triggerEvent = <T extends Object>(type: string, detail: T = {} as T) => (
   document.dispatchEvent(new CustomEvent(type, { detail }))
 );

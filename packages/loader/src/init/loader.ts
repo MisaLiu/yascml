@@ -8,6 +8,13 @@ import { importMod } from '../importer';
 import { unescapeHTML, sortMods, isModSuitable } from '../utils';
 import { YASCML } from '../types';
 
+declare global {
+  interface Window {
+    JSZip?: JSZip;
+    idbKeyval?: typeof idbKeyval;
+  }
+}
+
 /**
  * Initialize the loader.
  */
