@@ -5,7 +5,7 @@ import { OnionModelAsync } from './utils/class';
  * 
  * @see {@link OnionModelAsync}
  */
-const image = new OnionModelAsync<{ src: string }>();
+const image = new OnionModelAsync<{ src: string, element: HTMLImageElement | SVGImageElement }>();
 
 export default {
   image

@@ -8,7 +8,7 @@ import PassageMiddleware from './passage';
   Reflect.defineProperty(HTMLImageElement.prototype, 'src', {
     get() { return $src.get!.call(this) },
     set(source: string) {
-      const context = { src: source };
+      const context = { src: source, element: this };
       resources.image.run(context)
         .then(() => {
           $src.set!.call(this, context.src);
@@ -28,7 +28,7 @@ replace(Element.prototype, 'setAttributeNS', {
     ) return this.$setAttributeNS(ns, name, value);
 
     this.$setAttributeNS(ns, name, value);
-    const context = { src: value };
+    const context = { src: value, element: this };
     resources.image.run(context)
       .then(() => {
         this.$setAttributeNS(ns, name, context.src);
