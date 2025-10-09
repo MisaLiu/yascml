@@ -33,6 +33,7 @@ export default defineConfig(({ mode }) => ({
     zipPack({
       inDir: resolve(__dirname, './dist'),
       outDir: resolve(__dirname, './dist'),
+      filter: (fileName) => !/\.d\.ts$/.test(fileName),
       outFileName: 'yaschook.zip',
     }),
     dts({
