@@ -5,10 +5,10 @@
     "name": "MisaLiu",
     "url": "https://misaliu.top"
   },
-  "priority": 10,
+  "priority": 20,
   "homepageURL": "https://github.com/yascml/yascml/tree/main/packages/sc2ml-compact",
   "dependencies": {
-    "yascapi": "^1.0.0"
+    "yaschook": "^1.0.0"
   },
   "preloadScripts": [
     "sc2ml-compact.js"

@@ -16,7 +16,8 @@
     "@yascml/loader": "workspace:*",
     "vite-plugin-cp": "~6.0.3",
     "vite-plugin-zip-pack": "~1.2.4",
-    "@types/lodash": "~4.17.20"
+    "@types/lodash": "~4.17.20",
+    "@yascml/hook": "workspace:*"
   },
   "dependencies": {
     "@yascml/utils": "workspace:*",
