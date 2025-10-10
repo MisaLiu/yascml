@@ -1,13 +1,4 @@
-
-export interface Middleware<C extends object> {
-  (context: C, next: () => void): void;
-  (context: C): void;
-}
-
-export interface MiddlewareAsync<C extends object> extends Middleware<C> {
-  (context: C, next: () => void): Promise<void>;
-  (context: C): Promise<void>;
-}
+import { Middleware, MiddlewareAsync } from '../types';
 
 /**
  * An express-like middleware.
@@ -47,9 +38,9 @@ export class OnionModel<C extends object> {
    * Waking through current hook with given context. This should not be called manually.
    * 
    * @param context 
-   * @returns {void}
+   * @returns {unknown}
    */
-  run(context: C): void {
+  run(context: C): unknown {
     const dispatch = (i: number) => {
       if (i >= this.middlewares.length) return;
       const middleware = this.middlewares[i];
@@ -72,9 +63,9 @@ export class OnionModelAsync<C extends object> extends OnionModel<C> {
    * Waking through current hook with given context, with async support. This should not be called manually.
    * 
    * @param context 
-   * @returns {Promise<void>}
+   * @returns {Promise<unknown>}
    */
-  async run(context: C): Promise<void> {
+  async run(context: C): Promise<unknown> {
     const dispatch = (i: number) => {
       if (i >= this.middlewares.length) return;
       const middleware = this.middlewares[i];
