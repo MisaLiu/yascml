@@ -12,6 +12,8 @@ export class HtmlTagSrcHook {
 
   constructor(dataManager: SC2DataManager) {
     this.pSC2DataManager = dataManager;
+
+    window.YASCHook.resources.image.hook(this.handleHook.bind(this));
   }
 
   addHook(key: string, fn: HookFnFull) {
@@ -56,5 +58,33 @@ export class HtmlTagSrcHook {
     const context = { src, element: new Image };
     await window.YASCHook.resources.image.run(context);
     return context.src;
+  }
+
+  private async handleHook(context: { src: string, element: HTMLImageElement | SVGImageElement }, next: () => void) {
+    const src = context.src;
+    const el = document.createElement('');
+    const field = context.element instanceof HTMLImageElement ? 'src' : 'href';
+    Object.assign(el, context.element);
+
+    for (const [, hookFn ] of this.hooksReturned) {
+      try {
+        const r = await hookFn(src);
+        if (r[0]) {
+          context.src = r[1];
+          return;
+        }
+      } catch {}
+    }
+
+    for (const [, hookFn ] of this.hooks) {
+      try {
+        if (await hookFn(el, context.src, field)) {
+          context.src = el.getAttribute(field) ?? src;
+          return;
+        }
+      } catch {}
+    }
+
+    next();
   }
 }
