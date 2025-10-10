@@ -62,7 +62,7 @@ export class HtmlTagSrcHook {
 
   private async handleHook(context: { src: string, element: HTMLImageElement | SVGImageElement }, next: () => void) {
     const src = context.src;
-    const el = document.createElement('');
+    const el = document.createElement('null');
     const field = context.element instanceof HTMLImageElement ? 'src' : 'href';
     Object.assign(el, context.element);
 
