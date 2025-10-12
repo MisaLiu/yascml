@@ -26,7 +26,7 @@ for (const name of fs.readdirSync(packagesDir)) {
   }
   if (projectInfo.reviewCategory !== 'production' && projectInfo.reviewCategory !== 'document') continue;
 
-  const outputDir = resolve(packageDir, './dist');
+  const outputDir = resolve(packageDir, name !== 'docs' ? './dist' : './src/.vuepress/dist');
   if (!fs.existsSync(packageDir)) {
     console.warn(`Cannot find build result path for package: ${name}, skipping that...`);
     continue;
