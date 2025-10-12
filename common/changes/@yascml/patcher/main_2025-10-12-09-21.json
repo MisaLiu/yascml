@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@yascml/patcher",
+      "comment": "First release",
+      "type": "major"
+    }
+  ],
+  "packageName": "@yascml/patcher"
+}

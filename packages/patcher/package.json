@@ -1,6 +1,6 @@
 {
   "name": "@yascml/patcher",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "SugarCube game/engine patcher for YASCML",
   "repository": {
     "type": "git",
