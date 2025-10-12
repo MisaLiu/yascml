@@ -1,0 +1,17 @@
+{
+  "name": "@yascml/patcher",
+  "entries": [
+    {
+      "version": "1.0.0",
+      "tag": "@yascml/patcher_v1.0.0",
+      "date": "Sun, 12 Oct 2025 09:32:55 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "First release"
+          }
+        ]
+      }
+    }
+  ]
+}
