@@ -51,6 +51,11 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@yascml/docs",
+      "projectFolder": "packages/docs",
+      "reviewCategory": "document"
+    },
+    {
       "packageName": "@yascml/docs-install",
       "projectFolder": "packages/docs-install",
       "reviewCategory": "document"
