@@ -68,19 +68,20 @@ jobs:
           name: build-artifact
           path: artifact
 
-      - name: Create pages path
-        run: mkdir dist
-      
+      - name: Move homepage files
+        run: mv artifact/docs dist
+
       - name: Copy installer
         run: |
           cp -r artifact/docs-install dist/
           mv dist/docs-install dist/install
 
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: dist
-      
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.GH_PACKAGES_REG_TOKEN }}
+          publish_dir: ./dist
+          external_repository: yascml/yascml.github.io
+          publish_branch: main
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
