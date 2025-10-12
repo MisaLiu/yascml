@@ -11,6 +11,9 @@
     "yaschook": "^1.0.0"
   },
   "preloadScripts": [
-    "sc2ml-compact.js"
+    "preload.js"
+  ],
+  "postloadScripts": [
+    "postload.js"
   ]
 }
