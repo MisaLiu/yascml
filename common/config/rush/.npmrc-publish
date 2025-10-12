@@ -20,7 +20,7 @@
 #
 
 # Explicitly specify the NPM registry that "rush publish" will use by default:
-registry=https://registry.npmjs.org/
+registry=https://npm.pkg.github.com/:_authToken=${GH_PACKAGES_REG_TOKEN}
 
 # Provide an authentication token for the above registry URL:
 # //registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}

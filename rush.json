@@ -47,7 +47,8 @@
     {
       "packageName": "@yascml/patcher",
       "projectFolder": "packages/patcher",
-      "reviewCategory": "production"
+      "reviewCategory": "production",
+      "shouldPublish": true
     },
     {
       "packageName": "@yascml/docs-install",

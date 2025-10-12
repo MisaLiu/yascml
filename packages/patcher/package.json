@@ -1,10 +1,26 @@
 {
   "name": "@yascml/patcher",
   "version": "1.0.0",
+  "description": "SugarCube game/engine patcher for YASCML",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yascml/yascml.git",
+    "directory": "packages/patcher"
+  },
+  "author": {
+    "name": "Misa Liu",
+    "email": "misaliu@misaliu.top",
+    "url": "https://misaliu.top"
+  },
   "license": "AGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/yascml/yascml/issues"
+  },
+  "homepage": "https://github.com/yascml/yascml",
   "type": "module",
   "files": [
-    "dist"
+    "dist/*.js",
+    "dist/*.d.ts"
   ],
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
