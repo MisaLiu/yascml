@@ -11,9 +11,9 @@ export default hopeTheme({
     url: "https://misaliu.top",
   },
 
-  repo: "yascml/yascml/blob/main/packages/docs",
+  repo: "yascml/yascml",
 
-  docsDir: "src",
+  docsDir: "packages/docs/src",
 
   locales: {
     "/": {
