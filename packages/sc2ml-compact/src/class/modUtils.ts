@@ -1,5 +1,6 @@
 import lodash from 'lodash';
 import { buildIdbRef, buildIdbKeyvalRef } from '../ref';
+import { buildLogger } from '../utils';
 import type { SC2DataManager } from './dataManager';
 import { _Window } from '../types';
 
@@ -33,11 +34,7 @@ export class ModUtils {
   }
 
   getLogger() {
-    return {
-      log: (...args: string[]) => console.log(...args),
-      warn: (...args: string[]) => console.warn(...args),
-      error: (...args: string[]) => console.error(...args),
-    };
+    return buildLogger();
   }
 
   getIdbRef() {

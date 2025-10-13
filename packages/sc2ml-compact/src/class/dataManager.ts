@@ -1,6 +1,7 @@
 import { ModLoader } from './loader';
 import { SC2DataInfoCache } from './dataInfo';
 import { HtmlTagSrcHook } from './htmlSrcHook';
+import { buildLogger } from '../utils';
 import { _Window } from '../types';
 
 export class SC2DataManager {
@@ -60,7 +61,7 @@ export class SC2DataManager {
    */
   createNewSC2DataInfoFromNow() {
     return new SC2DataInfoCache(
-      {},
+      buildLogger(),
       'orgin', // https://github.com/Lyoko-Jeremie/sugarcube-2-ModLoader/blob/8a858233f30eaa0617454cf7c14448643c06d2b6/src/BeforeSC2/SC2DataManager.ts#L121
       Array.from(this.scriptNode!),
       Array.from(this.styleNode!),
@@ -116,7 +117,7 @@ export class SC2DataManager {
     this.initSC2DataInfoCache();
     if (!this.cSC2DataInfoAfterPatchCache) {
       this.cSC2DataInfoAfterPatchCache = new SC2DataInfoCache(
-        {},
+        buildLogger(),
         'orgin',
         Array.from(this.scriptNode!),
         Array.from(this.styleNode!),
@@ -145,7 +146,7 @@ export class SC2DataManager {
   initSC2DataInfoCache() {
     if (!this.originSC2DataInfoCache) {
       this.originSC2DataInfoCache = new SC2DataInfoCache(
-        {},
+        buildLogger(),
         'orgin',
         Array.from(this.scriptNode!),
         Array.from(this.styleNode!),

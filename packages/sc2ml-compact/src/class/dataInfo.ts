@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { CacheRecord } from './cacheRecord';
+import { Logger } from '../types';
 
 export type StyleTextFileItem = {
   id: number;
@@ -38,7 +39,7 @@ export class SC2DataInfo {
   passageDataItems: CacheRecord<PassageDataItem>;
 
   constructor(
-    public log: any,
+    public log: Logger,
     public dataSource: string,
   ) {
     this.styleFileItems = new CacheRecord<StyleTextFileItem>(this.log, this.dataSource, 'styleFileItems');
@@ -72,7 +73,7 @@ export class SC2DataInfoCache extends SC2DataInfo {
    * @see https://github.com/Lyoko-Jeremie/sugarcube-2-ModLoader/blob/8a858233f30eaa0617454cf7c14448643c06d2b6/src/BeforeSC2/SC2DataInfoCache.ts#L221
    */
   constructor(
-    public log: any,
+    public log: Logger,
     public dataSource: string,
     public scriptNode: HTMLScriptElement[],
     public styleNode: HTMLStyleElement[],

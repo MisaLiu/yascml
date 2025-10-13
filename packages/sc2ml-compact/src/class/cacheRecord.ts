@@ -1,3 +1,4 @@
+import { Logger } from '../types';
 
 const FilePathSliptReg = /[\\\/]{1,2}/;
 
@@ -11,7 +12,7 @@ export class CacheRecord<T extends { name: string, content: string }> {
   noPathCache?: Map<string, string[]> = new Map();
 
   constructor(
-    public log: any,
+    public log: Logger,
     public dataSource: string,
     public cacheRecordName: string,
     public needBuildNoPathCache: boolean = false,
