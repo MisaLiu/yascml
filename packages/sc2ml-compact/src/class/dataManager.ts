@@ -1,12 +1,19 @@
 import { ModLoader } from './loader';
 import { SC2DataInfoCache } from './dataInfo';
 import { HtmlTagSrcHook } from './htmlSrcHook';
+import { ModLoaderController } from './modLoadController';
 import { buildLogger } from '../utils';
 import { _Window } from '../types';
 
+/**
+ * The main entry of SugarCube-2-ModLoader
+ * 
+ * @see https://github.com/Lyoko-Jeremie/sugarcube-2-ModLoader/blob/8a858233f30eaa0617454cf7c14448643c06d2b6/src/BeforeSC2/SC2DataManager.ts#L23
+ */
 export class SC2DataManager {
   readonly thisWin: _Window;
   readonly modLoader: ModLoader;
+  readonly modLoadController: ModLoaderController;
   readonly htmlTagSrcHook: HtmlTagSrcHook;
 
   /**
@@ -33,6 +40,7 @@ export class SC2DataManager {
   constructor(window: _Window) {
     this.thisWin = window;
     this.modLoader = new ModLoader(this.thisWin);
+    this.modLoadController = new ModLoaderController(this);
     this.htmlTagSrcHook = new HtmlTagSrcHook(this);
   }
 
@@ -97,6 +105,15 @@ export class SC2DataManager {
    */
   getHtmlTagSrcHook() {
     return this.htmlTagSrcHook;
+  }
+
+  /**
+   * Get {@link modLoadController|SC2DataManager.modLoadController}.
+   * 
+   * @see https://github.com/Lyoko-Jeremie/sugarcube-2-ModLoader/blob/8a858233f30eaa0617454cf7c14448643c06d2b6/src/BeforeSC2/SC2DataManager.ts#L52
+   */
+  getModLoadController() {
+    return this.modLoadController;
   }
 
   /**
