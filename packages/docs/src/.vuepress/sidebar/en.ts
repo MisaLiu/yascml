@@ -8,7 +8,9 @@ export const enSidebar = sidebar({
       text: 'Reference',
       icon: 'book',
       children: [
-        "reference/meta.json"
+        "reference/meta.json",
+        "reference/life-cycle",
+        "reference/hot-patching"
       ]
     }
   ],

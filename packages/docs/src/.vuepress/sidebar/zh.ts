@@ -8,7 +8,9 @@ export const zhSidebar = sidebar({
       text: '参考',
       icon: 'book',
       children: [
-        "reference/meta.json"
+        "reference/meta.json",
+        "reference/life-cycle",
+        "reference/hot-patching"
       ]
     }
   ],
