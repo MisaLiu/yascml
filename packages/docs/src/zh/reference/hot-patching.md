@@ -62,10 +62,11 @@ observer.observe(document.documentElement, { attributes: true, attributeFilter: 
 您可以参考 [`@yascml/patcher`](https://github.com/yascml/yascml/blob/90bfa8700ddf5b8e8310aaa7a862d8a5bfccd15a/packages/patcher/src/engine.ts#L66) 的处理流程。简单来讲，大致可以分为如下几步：
 
 1. 去掉引擎代码最外围的 `if` 判断逻辑
-2. 提取引擎的 [初始化方法](https://github.com/tmedwards/sugarcube-2/blob/b40136c17b9e45d0532a92fe8086c58816fc1909/src/sugarcube.js#L180)
-3. 如果引擎的初始化方法中包括对 `window.SugarCube` 全局对象的 [定义逻辑](https://github.com/tmedwards/sugarcube-2/blob/b40136c17b9e45d0532a92fe8086c58816fc1909/src/sugarcube.js#L125)，则将其拆出并与初始化代码同级
-4. 如果引擎的初始化方法没有被 `Promise` 包裹，则将其用 `Promise` 包起来
-5. 定义 `window.$SugarCube` 全局对象，该对象将用于导出 SugarCube 引擎的内部方法（例如 `Alert` 与 `LockScreen`），并将引擎的初始化方法定义到 `window.$SugarCube.$init.initEngine` 中
+2. 处理 `Object.preventExtensions`、`Object.freeze` 等调用，使其无效
+3. 提取引擎的 [初始化方法](https://github.com/tmedwards/sugarcube-2/blob/b40136c17b9e45d0532a92fe8086c58816fc1909/src/sugarcube.js#L180)
+4. 如果引擎的初始化方法中包括对 `window.SugarCube` 全局对象的 [定义逻辑](https://github.com/tmedwards/sugarcube-2/blob/b40136c17b9e45d0532a92fe8086c58816fc1909/src/sugarcube.js#L125)，则将其拆出并与初始化代码同级
+5. 如果引擎的初始化方法没有被 `Promise` 包裹，则将其用 `Promise` 包起来
+6. 定义 `window.$SugarCube` 全局对象，该对象将用于导出 SugarCube 引擎的内部方法（例如 `Alert` 与 `LockScreen`），并将引擎的初始化方法定义到 `window.$SugarCube.$init.initEngine` 中
 
 以上操作处理完成后，将处理好的 SugarCube 引擎代码写回 `script#script-sugarcube`（或删除并重新创建该标签）即可。
 
