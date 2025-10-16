@@ -88,10 +88,12 @@ export const initLoader = async () => {
     if (index === -1) continue;
 
     window.YASCML.mods[index].enabled = false;
+    window.YASCML.mods[index].zip = (void 0);
   }
 
   for (const mod of window.YASCML.mods) {
     mod.suitable = isModSuitable(mod);
+    mod.zip = (void 0);
   }
 
   window.YASCML.stats.isLoaderInit = true;
