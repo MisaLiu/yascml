@@ -10,6 +10,9 @@ actions:
     link: /zh/installation
     icon: floppy-disk
     type: primary
+  - text: 制作模组
+    link: /zh/guide/create-a-mod
+    icon: ruler-combined
 
 copyright: false
 footer: false

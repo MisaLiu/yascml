@@ -5,6 +5,13 @@ export const enSidebar = sidebar({
     "",
     "installation",
     {
+      text: 'Guide',
+      icon: 'swatchbook',
+      children: [
+        "guide/create-a-mod"
+      ]
+    },
+    {
       text: 'Reference',
       icon: 'book',
       children: [

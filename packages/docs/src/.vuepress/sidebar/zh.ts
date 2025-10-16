@@ -5,6 +5,13 @@ export const zhSidebar = sidebar({
     "",
     "installation",
     {
+      text: '导引',
+      icon: 'swatchbook',
+      children: [
+        "guide/create-a-mod"
+      ]
+    },
+    {
       text: '参考',
       icon: 'book',
       children: [

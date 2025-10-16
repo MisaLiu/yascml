@@ -10,6 +10,9 @@ actions:
     link: /installation
     icon: floppy-disk
     type: primary
+  - text: Create a Mod
+    link: /guide/create-a-mod
+    icon: ruler-combined
 
 copyright: false
 footer: false
