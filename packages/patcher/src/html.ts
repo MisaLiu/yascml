@@ -28,6 +28,7 @@ export const patchGameHTML = (
     },
     ...loaderConfig,
   };
+  let engineAlreadyPatched = false;
 
   const root = parse(gameFileString);
 
@@ -36,10 +37,12 @@ export const patchGameHTML = (
     return rej('Cannot find <head> tag in game file');
 
   if (headDOM.querySelector('script#yascml-config')) {
+    engineAlreadyPatched = true;
     headDOM.removeChild(headDOM.querySelector('script#yascml-config')!);
   }
 
   if (headDOM.querySelector('script#yascml')) {
+    engineAlreadyPatched = true;
     headDOM.removeChild(headDOM.querySelector('script#yascml')!);
   }
 
@@ -72,14 +75,16 @@ export const patchGameHTML = (
     headDOM.removeChild(cspDOM);
   }
 
-  const patchedScript = patchEngineScript(
-    engineScriptDOM.innerHTML,
-    _loaderConfig.custom.export,
-    _loaderConfig.custom.init
-  );
+  if (!engineAlreadyPatched) {
+    const patchedScript = patchEngineScript(
+      engineScriptDOM.innerHTML,
+      _loaderConfig.custom.export,
+      _loaderConfig.custom.init
+    );
 
-  engineScriptDOM.innerHTML = '';
-  engineScriptDOM.append(patchedScript);
+    engineScriptDOM.innerHTML = '';
+    engineScriptDOM.append(patchedScript);
+  }
 
   res(root.toString());
 });
