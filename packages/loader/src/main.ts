@@ -16,21 +16,25 @@ if (window.Reflect == null) {
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
+  showSplash();
+
   if (window.__SUGARCUBE_PATCHER) {
+    changeSplashText('Patching engine...');
     await Promise.resolve(window.__SUGARCUBE_PATCHER());
   }
 
   if (!window.$SugarCube) {
+    hideSplash();
     throw new Error('You are running YASCML on a original SugarCube engine! Please patch the engine first.');
   }
 
   const sc = window.SugarCube;
   const sci = window.$SugarCube!;
   if (!sc) {
+    hideSplash();
     throw new Error('SugarCube not loaded properly!');
   }
 
-  showSplash();
   const lockId = sci.LoadScreen.lock();
   sci.LoadScreen.init();
 

@@ -16,7 +16,9 @@ export const showSplash = () => {
     'position: fixed',
     'top: 0',
     'left: 0',
-    'font: 1em Helmet,Freesans,sans-serif',
+    'padding: 0.25em',
+    "font-family: 'Courier New', 'Lucida Console', 'Monaco', 'Consolas', 'DejaVu Sans Mono', 'Liberation Mono', monospace",
+    'font-size: 1em',
     'color: #eee',
     'text-align: left',
     'z-index: 500000',
@@ -24,7 +26,8 @@ export const showSplash = () => {
     'animation-duration: 1s',
     'animation-iteration-count: infinite',
     'animation-timing-function: linear',
-    'animation-direction: alternate'
+    'animation-direction: alternate',
+    'box-sizing: border-box'
   ].join(';');
   document.body.appendChild(dom);
 };
@@ -32,7 +35,7 @@ export const showSplash = () => {
 export const changeSplashText = (text: string) => {
   const dom = document.querySelector<HTMLDivElement>('div#yascml-loading');
   if (!dom) return;
-  dom.innerText = `[YASCML] ${text}`;
+  dom.innerText = `[YASCML v${__LOADER_VERSION__}] ${text}`;
 };
 
 export const hideSplash = () => {

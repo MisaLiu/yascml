@@ -93,7 +93,7 @@ export const initLoader = async () => {
 
   for (const mod of window.YASCML.mods) {
     mod.suitable = isModSuitable(mod);
-    mod.zip = (void 0);
+    if (!mod.suitable) mod.zip = (void 0);
   }
 
   window.YASCML.stats.isLoaderInit = true;
