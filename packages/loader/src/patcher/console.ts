@@ -20,14 +20,13 @@ for (const key of FnNames) {
 }
 
 const customLog = (level: LogLevel, ...data: any[]) => { 
-  if (!__DEVELOPMENT__ && level === 'info') return;
-
   const ConsoleFn = OrigConsole.get(level);
   if (!ConsoleFn) return;
 
   Logs.unshift({ time: performance.now(), level, data });
   if (Logs.length > 200) Logs.length = 200;
 
+  if (!__DEVELOPMENT__ && level === 'info') return;
   return Reflect.apply(ConsoleFn, window.console, data);
 };
 
