@@ -32,20 +32,28 @@ export const executeScript = (script: string | Blob, config: ExecuteScriptConfig
   }
   document.body.appendChild(dom);
 
+  const errorHandler = (e: ErrorEvent) => {
+    window.removeEventListener('error', errorHandler);
+    rej(e.error);
+  };
+
   // Inline scripts won't trigger this event.
   dom.addEventListener('load', () => {
+    window.removeEventListener('error', errorHandler);
     res(void 0);
   });
 
-  dom.addEventListener('error', (e) => {
-    rej(e);
-  });
+  window.addEventListener('error', errorHandler);
+  dom.addEventListener('error', errorHandler);
 
   if (typeof script !== 'string') {
     dom.src = URL.createObjectURL(script);
   } else {
     dom.innerHTML = script;
-    setTimeout(() => res(void 0), 50);
+    setTimeout(() => {
+      window.removeEventListener('error', errorHandler);
+      res(void 0);
+    }, 50);
   }
 });
 

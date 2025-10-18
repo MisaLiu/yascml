@@ -12,7 +12,7 @@ export const initPreloadMods = async () => {
     const mod = mods[i];
     changeSplashText(`Loading preload scripts... (${i + 1}/${mods.length})[${mod.id}]`);
 
-    if (!mod.enabled || !mod.suitable) continue;
+    if (!mod.enabled || !mod.suitable || mod.errored) continue;
     window.__AfterInit = [];
 
     if (mod.cssFiles) {
@@ -31,26 +31,32 @@ export const initPreloadMods = async () => {
     }
 
     if (mod.preloadScripts) {
-      for (const path of mod.preloadScripts) {
-        const blob = mod.zip!.file(path);
-        if (!blob) {
-          console.warn(`Cannot find file "${path}", skipping...`);
-          return;
-        }
-
-        await executeScript(await blob.async('blob'), {
-          meta: {
-            modId: mod.id,
-            filename: path,
-            timing: 'preload',
+      try {
+        for (const path of mod.preloadScripts) {
+          const blob = mod.zip!.file(path);
+          if (!blob) {
+            console.warn(`Cannot find file "${path}", skipping...`);
+            return;
           }
-        });
-      }
 
-      if (window.__AfterInit.length > 0) {
-        for (const fn of window.__AfterInit) {
-          await Promise.resolve(fn());
+          await executeScript(await blob.async('blob'), {
+            meta: {
+              modId: mod.id,
+              filename: path,
+              timing: 'preload',
+            }
+          });
         }
+
+        if (window.__AfterInit.length > 0) {
+          for (const fn of window.__AfterInit) {
+            await Promise.resolve(fn());
+          }
+        }
+      } catch (e) {
+        mod.errored = true;
+        console.error(`Error when loading preload scripts for mod "${mod.id}"`);
+        console.error(e);
       }
     }
   }
@@ -66,30 +72,36 @@ export const initPostloadMods = async () => {
     const mod = mods[i];
     changeSplashText(`Loading postload scripts... (${i + 1}/${mods.length})[${mod.id}]`);
 
-    if (!mod.enabled || !mod.suitable) continue;
+    if (!mod.enabled || !mod.suitable || mod.errored) continue;
     window.__AfterInit = [];
 
     if (mod.postloadScripts) {
-      for (const path of mod.postloadScripts) {
-        const blob = mod.zip!.file(path);
-        if (!blob) {
-          console.warn(`Cannot find file "${path}", skipping...`);
-          return;
-        }
-
-        await executeScript(await blob.async('blob'), {
-          meta: {
-            modId: mod.id,
-            filename: path,
-            timing: 'preload',
+      try {
+        for (const path of mod.postloadScripts) {
+          const blob = mod.zip!.file(path);
+          if (!blob) {
+            console.warn(`Cannot find file "${path}", skipping...`);
+            return;
           }
-        });
-      }
 
-      if (window.__AfterInit.length > 0) {
-        for (const fn of window.__AfterInit) {
-          await Promise.resolve(fn());
+          await executeScript(await blob.async('blob'), {
+            meta: {
+              modId: mod.id,
+              filename: path,
+              timing: 'preload',
+            }
+          });
         }
+
+        if (window.__AfterInit.length > 0) {
+          for (const fn of window.__AfterInit) {
+            await Promise.resolve(fn());
+          }
+        }
+      } catch (e) {
+        mod.errored = true;
+        console.error(`Error when loading postload scripts for mod "${mod.id}"`);
+        console.error(e);
       }
     }
   }

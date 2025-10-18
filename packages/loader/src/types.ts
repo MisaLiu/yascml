@@ -30,6 +30,7 @@ export type ModMetaFull = ModMetaFile & {
   enabled: boolean,
   embedded: boolean,
   suitable: boolean,
+  errored: boolean,
   new: boolean,
   deleted: boolean,
   updated: boolean,
