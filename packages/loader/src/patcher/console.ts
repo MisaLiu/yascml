@@ -20,6 +20,8 @@ for (const key of FnNames) {
 }
 
 const customLog = (level: LogLevel, ...data: any[]) => { 
+  if (data.length === 0) return;
+
   const ConsoleFn = OrigConsole.get(level);
   if (!ConsoleFn) return;
 
