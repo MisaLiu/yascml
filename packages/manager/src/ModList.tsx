@@ -52,6 +52,7 @@ export const ModList = () => {
                 <div>
                   {mod.name} v{mod.version}
                   {!mod.suitable && <span class="mod-label">⚠️unsuitable</span>}
+                  {mod.errored && <span class="mod-label">❌error</span>}
                   {mod.new && <span class="mod-label new">new</span>}
                   {mod.updated && <span class="mod-label new">updated</span>}
                 </div>
