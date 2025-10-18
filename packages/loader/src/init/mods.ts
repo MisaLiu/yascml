@@ -88,7 +88,7 @@ export const initPostloadMods = async () => {
             meta: {
               modId: mod.id,
               filename: path,
-              timing: 'preload',
+              timing: 'postload',
             }
           });
         }
