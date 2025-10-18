@@ -27,24 +27,29 @@ const buildManagerEntrySide = () => {
   dom.id = 'ui-bar-yascmanager';
   dom.onclick = showManagerDialog;
   return dom;
-}
+};
 
 (() => {
   render(<App />, dialogContent);
+  
+  document.addEventListener('$gamestarted', () => {
+    const menuDOM = document.querySelector<HTMLDivElement>('#menu-yascml');
+    const isMenuVisible = ((dom) => {
+      if (!dom) return false;
+    
+      const parent = dom.parentElement;
+      if (!parent) return false;
+    
+      const bounding = parent.getBoundingClientRect();
+      if (bounding.width === 0 || bounding.height === 0) return false;
 
-  const menuDOM = document.querySelector<HTMLDivElement>('#menu-yascml');
-  const isMenuVisible = ((dom) => {
-    if (!dom) return false;
+      return true;
+    })(menuDOM);
 
-    const bounding = dom.getBoundingClientRect();
-    if (bounding.width === 0 || bounding.height === 0) return false;
-
-    return true;
-  })(menuDOM);
-
-  if (isMenuVisible) {
-    menuDOM!.appendChild(buildManagerEntry());
-  } else {
-    document.querySelector('#ui-bar-tray')?.appendChild(buildManagerEntrySide());
-  }
+    if (isMenuVisible) {
+      menuDOM!.appendChild(buildManagerEntry());
+    } else {
+      document.querySelector('#ui-bar-tray')?.appendChild(buildManagerEntrySide());
+    }
+  });
 })();
