@@ -1,6 +1,14 @@
 import JSZip from 'jszip';
 import api from './api';
 
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+
+export interface LogEntry {
+  time: number,
+  level: LogLevel,
+  data: any[],
+};
+
 export type ModAuthor = string | {
   name: string,
   url?: string,
@@ -56,6 +64,7 @@ export type LoaderStats = {
   gameName: string,
   isLoaderInit: boolean,
   isEngineInit: boolean,
+  logs: LogEntry[],
 };
 
 export type YASCML = {

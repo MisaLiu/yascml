@@ -9,6 +9,7 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath, { encoding: 'utf-8'
 export default defineConfig(({ mode }) => ({
   define: {
     '__LOADER_VERSION__': JSON.stringify(packageJson.version),
+    '__DEVELOPMENT__': JSON.stringify(mode !== 'production'),
   },
   build: {
     minify: mode === 'production' ? 'esbuild' : false,

@@ -4,6 +4,7 @@ import * as IDB from '../storage';
 import * as Setting from '../settings/storage';
 import { changeSplashText } from '../splash';
 import api from '../api';
+import { Logs } from '../patcher/console';
 import { importMod } from '../importer';
 import { unescapeHTML, sortMods, isModSuitable } from '../utils';
 import { YASCML } from '../types';
@@ -35,6 +36,7 @@ export const initLoader = async () => {
         gameName: unescapeHTML(document.querySelector<HTMLElement>('tw-storydata')!.getAttribute('name')!),
         isLoaderInit: false,
         isEngineInit: false,
+        logs: Logs,
       },
     } as YASCML)),
   });

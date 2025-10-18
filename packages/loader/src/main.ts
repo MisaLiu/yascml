@@ -1,3 +1,4 @@
+import './patcher/console';
 import { replace } from '@yascml/utils';
 import { showSplash, changeSplashText, hideSplash } from './splash';
 import { initLoader } from './init/loader';
