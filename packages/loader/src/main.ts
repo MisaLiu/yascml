@@ -2,6 +2,7 @@ import { replace } from '@yascml/utils';
 import { showSplash, changeSplashText, hideSplash } from './splash';
 import { initLoader } from './init/loader';
 import { initPostloadMods, initPreloadMods } from './init/mods';
+import { triggerEvent } from './utils';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
@@ -70,6 +71,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       setTimeout(() => {
         hideSplash();
         sci.LoadScreen.unlock(lockId);
+        triggerEvent('$gamestarted');
       }, (sc.Engine.DOM_DELAY ?? sc.Engine.minDomActionDelay) * 2);
     })
     .catch((e) => {
