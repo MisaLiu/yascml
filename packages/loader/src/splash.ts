@@ -1,11 +1,3 @@
-import { loadStyle } from './utils';
-
-loadStyle([
-  '@keyframes _YASCML_BLINK_ {',
-  'from { opacity: 1; }',
-  'to { opacity: 0; }',
-  '}',
-].join('\n'));
 
 export const showSplash = () => {
   const dom = document.createElement('div');

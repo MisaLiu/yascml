@@ -3,7 +3,7 @@ import { replace } from '@yascml/utils';
 import { showSplash, changeSplashText, hideSplash } from './splash';
 import { initLoader } from './init/loader';
 import { initPostloadMods, initPreloadMods } from './init/mods';
-import { triggerEvent } from './utils';
+import { loadStyle, triggerEvent } from './utils';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
@@ -18,6 +18,13 @@ if (window.Reflect == null) {
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
+  loadStyle([
+    '@keyframes _YASCML_BLINK_ {',
+    'from { opacity: 1; }',
+    'to { opacity: 0; }',
+    '}',
+  ].join('\n'));
+
   showSplash();
 
   if (window.__SUGARCUBE_PATCHER) {
