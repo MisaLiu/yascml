@@ -29,6 +29,13 @@ const buildManagerEntrySide = () => {
   dom.id = 'ui-bar-yascmanager';
   dom.title = 'YASCML Manager';
   dom.onclick = showManagerDialog;
+
+  const toggleDOM = document.querySelector<HTMLButtonElement>('#ui-bar-toggle');
+  if (toggleDOM) {
+    const clientRect = toggleDOM.getBoundingClientRect();
+    dom.style.setProperty('--top', `${clientRect.height - 1}px`);
+  }
+
   return dom;
 };
 

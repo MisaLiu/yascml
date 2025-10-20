@@ -190,22 +190,35 @@
   margin-right: .35em;
 }
 
-#ui-bar button#ui-bar-yascmanager {
+#ui-bar-tray button#ui-bar-yascmanager {
+  --top: calc(100% - 1px);
+
   display: block;
   position: absolute;
-  top: 1.771em;
+  top: var(--top);
   right: 0;
+  padding: .3em .45em .25em;
+  font-size: 1.2em;
+  line-height: inherit;
+  color: #eee;
+  background-color: transparent;
+  border: 1px solid var(--600, #444);
+  border-top-color: transparent;
   border-right: none;
-  padding: .25em .45em;
   z-index: 500;
 }
 
-#ui-bar button#ui-bar-yascmanager::before {
-  width: 0.861em;
+#ui-bar-tray button#ui-bar-yascmanager:hover {
+  background-color: var(--800, #444);
+  border-color: var(--000, #eee);
+}
+
+#ui-bar-tray button#ui-bar-yascmanager::before {
+  width: 0.743em;
   height: 0.861em;
   color: var(--100, #eee);
 }
 
-#ui-bar.stowed button#ui-bar-yascmanager {
+#ui-bar.stowed #ui-bar-tray button#ui-bar-yascmanager {
   display: none;
 }
