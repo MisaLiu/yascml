@@ -39,6 +39,17 @@ export default defineConfig(({ mode }) => ({
         'sandbox': 'raw',
         'grant': 'none',
       },
+      generate: ({ userscript }) => ([
+          userscript,
+          '',
+          '// You need to define websites you want to run',
+          '// Add/remove/change the `@match` section above!',
+          '',
+          '// You can define your custom YASCML config here:',
+          'window.YASCMLConfig = {};',
+          '',
+          '// For full sources please go: https://github.com/yascml/yascml/blob/main/packages/userscript',
+        ].join('\n')),
       build: {
         fileName: 'yascml.user.js',
         externalGlobals: {
