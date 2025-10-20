@@ -4,7 +4,12 @@ import { App } from './app';
 const dialogContent = document.createElement('div');
 
 const showManagerDialog = () => {
-  const dialog = window.SugarCube!.Dialog.create('YASCML Manager', 'yascmanager');
+  const dialog = ((title, className) => {
+    if (!!window.SugarCube!.Dialog.create) return window.SugarCube!.Dialog.create(title, className);
+    window.SugarCube!.Dialog.setup(title, className);
+    return window.SugarCube!.Dialog;
+  })('YASCML Manager', 'yascmanager');
+
   dialog.body().appendChild(dialogContent);
   dialog.open();
 };
