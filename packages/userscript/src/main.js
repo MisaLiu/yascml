@@ -1,4 +1,5 @@
 import { patchEngineScript } from '@yascml/patcher';
+import { fileSelect } from './file';
 import '../../loader/dist/yascml'; // LOL
 
 // Prevent SugarCube from initializing
@@ -80,4 +81,53 @@ Reflect.defineProperty(window, '__SUGARCUBE_PATCHER', {
   configurable: false,
   writable: false,
   value: patchEngine,
+});
+
+const importMods = () => {
+  fileSelect({
+    accept: 'application/zip',
+    multiple: true,
+  }).then(async (files) => {
+    let successCount = 0, failedCount = 0;
+
+    for (const file of files) {
+      try {
+        await window.YASCML.api.mod.add(file);
+        successCount++;
+      } catch (e) {
+        console.error(`Failed loading mod "${file.name}"`);
+        console.error(e);
+        failedCount++;
+      }
+    }
+
+    alert(`Import finished, succeeded: ${successCount}, failed: ${failedCount}`);
+  });
+};
+
+Reflect.defineProperty(window, '__ImportMods', {
+  configurable: false,
+  writable: false,
+  value: importMods,
+});
+
+// Build an entry to import mods
+document.addEventListener('$gamestarted', () => {
+  const entryDOM = document.createElement('div');
+
+  entryDOM.style = [
+    'display: block',
+    'position: fixed',
+    'right: 0',
+    'bottom: 0',
+    'font-size: 0.75em',
+    'color: #FFF',
+    'text-shadow: 0 0 4px black',
+    'opacity: 0.5',
+    'cursor: pointer'
+  ].join(';');
+  entryDOM.innerText = '[Import Mods]';
+  entryDOM.onclick = importMods;
+
+  document.body.appendChild(entryDOM);
 });
