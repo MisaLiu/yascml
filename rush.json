@@ -51,6 +51,11 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@yascml/userscript",
+      "projectFolder": "packages/userscript",
+      "reviewCategory": "production"
+    },
+    {
       "packageName": "@yascml/docs",
       "projectFolder": "packages/docs",
       "reviewCategory": "document"
