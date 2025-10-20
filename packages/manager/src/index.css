@@ -214,7 +214,7 @@
 }
 
 #ui-bar-tray button#ui-bar-yascmanager::before {
-  width: 0.743em;
+  width: 0.72em;
   height: 0.861em;
   color: var(--100, #eee);
 }
