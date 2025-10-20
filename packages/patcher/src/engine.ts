@@ -24,6 +24,7 @@ import {
   FunctionExpression,
   MemberExpression,
   ObjectExpression,
+  ReturnStatement,
   SequenceExpression,
   Statement,
   VariableDeclarator, 
@@ -148,24 +149,9 @@ export const patchEngineScript = (
   if (!initCodeAST)
     throw new Error('Cannot find engine init code');
 
-  // Parse init code, remove `LoadScreen` calls
-  ancestor(initCodeAST, { // new Promise().then();
-    CallExpression: (node, _, ancestors) => {
-      if (
-        node.callee.type !== 'MemberExpression' ||
-        node.callee.object.type !== 'Identifier' ||
-        node.callee.object.name !== 'LoadScreen'
-      ) return;
-
-      const parent = ancestors[ancestors.length - 2] as Statement;
-      if (parent.type === 'ReturnStatement') {
-        parent.argument = null;
-      }
-    },
-  });
-
-  if ((initCodeAST as BlockStatement).type === 'BlockStatement') {
-    ancestor(initCodeAST, { // try {} catch {}
+  { // Parse init code, remove `LoadScreen` calls
+    let resolveInjected = false;
+    ancestor(initCodeAST, {
       CallExpression: (node, _, ancestors) => {
         if (
           node.callee.type !== 'MemberExpression' ||
@@ -173,19 +159,10 @@ export const patchEngineScript = (
           node.callee.object.name !== 'LoadScreen'
         ) return;
 
-        const parent = ancestors[ancestors.length - 2] as Expression | VariableDeclarator;
-        if (parent.type === 'VariableDeclarator') {
-          parent.init = {
-            type: 'Literal',
-            value: null,
-            start: -1,
-            end: -1,
-          };
-        } else if (parent.type === 'SequenceExpression') {
-          const index = parent.expressions.findIndex(e => e === node);
-          parent.expressions.splice(index, 1);
-        } else if (parent.type === 'ArrowFunctionExpression') {
+        const parent = ancestors[ancestors.length - 2] as Expression | VariableDeclarator | ReturnStatement;
+        if (parent.type === 'ArrowFunctionExpression' && !resolveInjected) {
           // Replace `LoadScreen.unlock()` with `resolve()`
+          // in `setTimeout(() => LoadScreen.unlock())`
           parent.body = {
             type: 'CallExpression',
             callee: {
@@ -199,6 +176,38 @@ export const patchEngineScript = (
             start: -1,
             end: -1,
           };
+          resolveInjected = true;
+        } else if (parent.type === 'ReturnStatement') {
+          if (!resolveInjected) {
+            // Replace `LoadScreen.unlock()` with `resolve()`
+            // in `setTimeout(function () { return LoadScreen.unlock() })`
+            parent.argument = {
+              type: 'CallExpression',
+              callee: {
+                type: 'Identifier',
+                name: 'resolve',
+                start: -1,
+                end: -1,
+              },
+              arguments: [],
+              optional: false,
+              start: -1,
+              end: -1,
+            };
+            resolveInjected = true;
+          } else {
+            parent.argument = null;
+          }
+        } else if (parent.type === 'VariableDeclarator') {
+          parent.init = {
+            type: 'Literal',
+            value: null,
+            start: -1,
+            end: -1,
+          };
+        } else if (parent.type === 'SequenceExpression') {
+          const index = parent.expressions.findIndex(e => e === node);
+          parent.expressions.splice(index, 1);
         }
       },
     });
