@@ -10,6 +10,10 @@ YASCML 提供多种安装方式，您可以根据需求选择合适的安装方�
 
 访问 [在线安装工具](https://yascml.github.io/install/)，跟随安装向导即可。
 
+## 使用油猴脚本
+
+TODO
+
 ## 使用 CLI 安装
 
 ### 从 GitHub Packages Registry 安装 CLI

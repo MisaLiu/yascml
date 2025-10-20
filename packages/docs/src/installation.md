@@ -10,6 +10,10 @@ YASCML provides multiple installation methods. You can choose the best way based
 
 Visit [online installer](https://yascml.github.io/install/) and follow the instructions.
 
+## Using UserScript
+
+TODO
+
 ## Using CLI
 
 ### Install CLI from GitHub Packages Registry
