@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@yascml/patcher",
+      "comment": "Better LoadScreen call remove",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@yascml/patcher"
+}

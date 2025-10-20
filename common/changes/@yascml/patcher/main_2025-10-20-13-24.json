@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@yascml/patcher",
+      "comment": "Better engine code finder",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@yascml/patcher"
+}
