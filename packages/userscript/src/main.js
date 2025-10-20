@@ -1,41 +1,64 @@
 import { patchEngineScript } from '@yascml/patcher';
 import '../../loader/dist/yascml'; // LOL
 
-(() => {
-  const _config = {
-    embedModPath: [],
-    custom: {
-      export: [],
-      init: {},
-    },
-    ...window.YASCMLConfig,
+// Prevent SugarCube from initializing
+document.documentElement.setAttribute('data-init', 'yascml-loading');
+
+// Prevent the `data-init` attribute from being modified by others
+const observer = new MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    if (mutation.type === 'childList') continue;
+    if (mutation.type === 'characterData') continue;
+    if (mutation.attributeName !== 'data-init') continue;
+    if (document.documentElement.getAttribute('data-init') === 'yascml-loading') continue;
+
+    document.documentElement.setAttribute('data-init', 'yascml-loading');
+  }
+});
+observer.observe(document.documentElement, { attributes: true, attributeFilter: [ 'data-init' ] });
+
+const waitElement = (selector, waitCount = 25) => new Promise((res, rej) => {
+  const _query = () => {
+    const dom = document.querySelector(selector);
+    if (dom) {
+      res(dom);
+      return true;
+    } else return false;
   };
 
-  // Prevent SugarCube from initializing
-  document.documentElement.setAttribute('data-init', 'yascml-loading');
+  if (_query()) return;
 
-  // Prevent the `data-init` attribute from being modified by others
-  const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      if (mutation.type === 'childList') continue;
-      if (mutation.type === 'characterData') continue;
-      if (mutation.attributeName !== 'data-init') continue;
-      if (document.documentElement.getAttribute('data-init') === 'yascml-loading') continue;
-
-      document.documentElement.setAttribute('data-init', 'yascml-loading');
+  let clockCount = 0;
+  const clockId = setInterval(() => {
+    clockCount++;
+    if (clockCount > waitCount) {
+      rej(`Failed to find element: "${selector}"`);
+      return clearInterval(clockId);
     }
-  });
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: [ 'data-init' ] });
 
-  window.__SUGARCUBE_PATCHER = () => {
-    observer.disconnect();
+    if (!_query()) return;
+    return clearInterval(clockId);
+  }, 200);
+});
 
-    const scriptDOM = document.querySelector('script#script-sugarcube');
+const patchEngine = async () => {
+  try {
+    const scriptDOM = await waitElement('script#script-sugarcube');
     if (!scriptDOM)
       throw new ReferenceError('<script id="script-sugarcube"> not found!');
+    observer.disconnect();
 
     const engineScriptRaw = scriptDOM.firstChild.data;
     scriptDOM.parentElement.removeChild(scriptDOM);
+
+    const _config = {
+      embedModPath: [],
+      custom: {
+        export: [],
+        init: {},
+      },
+      ...window.YASCMLConfig,
+    };
 
     const engineScriptPatched = patchEngineScript(
       engineScriptRaw,
@@ -48,5 +71,13 @@ import '../../loader/dist/yascml'; // LOL
     resultDOM.innerText = engineScriptPatched;
 
     document.body.appendChild(resultDOM);
-  };
-})();
+  } finally {
+    observer.disconnect();
+  }
+};
+
+Reflect.defineProperty(window, '__SUGARCUBE_PATCHER', {
+  configurable: false,
+  writable: false,
+  value: patchEngine,
+});

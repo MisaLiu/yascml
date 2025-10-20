@@ -4,7 +4,7 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build --mode development",
     "build:prod": "vite build --mode production"
   },
   "devDependencies": {

@@ -23,17 +23,6 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
-    {
-      name: 'wrap-cjs-iife',
-      generateBundle(options, bundle) {
-        if (options.format !== 'cjs') return;
-        for (const [, chunk ] of Object.entries(bundle)) {
-          if (chunk.type === 'chunk') {
-            chunk.code = `(function(window){${chunk.code}})(unsafeWindow ?? window);`;
-          }
-        }
-      }
-    },
     monkey({
       entry: resolve(__dirname, 'src/main.js'),
       userscript: {
@@ -42,16 +31,13 @@ export default defineConfig(({ mode }) => ({
         'description': 'Yet Another SugarCube Mod Loader',
         'author': 'Misa Liu',
         'match': [
-          'https://twinery.org/2*'
+          // Note that we can't load this into editor's test/preview game,
+          // this is just for a demonstration
+          'https://twinery.org/2*',
         ],
         'run-at': 'document-start',
         'sandbox': 'raw',
-        'grant': [
-          'unsafeWindow',
-        ],
-        '$extra': {
-          'early-start': '',
-        },
+        'grant': 'none',
       },
       build: {
         fileName: 'yascml.user.js',
@@ -60,7 +46,6 @@ export default defineConfig(({ mode }) => ({
           'acorn-walk': cdn.jsdelivr('acorn-walk', 'dist/walk.js'),
           astring: cdn.jsdelivr('astring', 'dist/astring.min.js'),
         },
-        autoGrant: true,
       },
     })
   ],
