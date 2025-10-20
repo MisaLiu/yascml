@@ -13,9 +13,11 @@ const buildManagerEntry = () => {
   const liDOM = document.createElement('li');
   const triggerDOM = document.createElement('a');
 
+  liDOM.id = 'menu-item-yascmanager';
+
   triggerDOM.tabIndex = 0;
   triggerDOM.role = 'button';
-  triggerDOM.innerText = 'Manager';
+  triggerDOM.innerText = 'YASCML Manager';
   triggerDOM.onclick = showManagerDialog;
 
   liDOM.appendChild(triggerDOM);
@@ -25,6 +27,7 @@ const buildManagerEntry = () => {
 const buildManagerEntrySide = () => {
   const dom = document.createElement('button');
   dom.id = 'ui-bar-yascmanager';
+  dom.title = 'YASCML Manager';
   dom.onclick = showManagerDialog;
   return dom;
 };
