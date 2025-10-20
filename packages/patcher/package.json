@@ -32,7 +32,7 @@
     "yascpatcher": "./dist/cli.js"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build --mode development",
     "build:prod": "tsc && vite build --mode production"
   },
   "devDependencies": {

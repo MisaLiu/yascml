@@ -1,4 +1,5 @@
 import { AssignmentExpression, Expression, FunctionDeclaration, Node, ObjectExpression, parse, Property, Statement, VariableDeclarator } from 'acorn';
+import { simple } from 'acorn-walk';
 import { BlockStatement, CallExpression, ExpressionStatement, Identifier, Literal, Program } from 'acorn';
 
 type ParentNodeType = Expression | Statement | Property | VariableDeclarator | AssignmentExpression;
@@ -14,14 +15,40 @@ export const getRealScriptAST = (root: Program) => {
   const initTest = root.body[0];
   if (initTest.type !== 'IfStatement')
     throw new Error('Failed to find real script');
-  
+
   if (
     initTest.test.type !== 'BinaryExpression' ||
     initTest.test.operator !== '===' ||
     (initTest.test.right.type !== 'Literal' || initTest.test.right.value !== 'loading')
   ) throw new Error('Invalid init test stamement');
 
-  return (initTest.consequent as BlockStatement).body[0] as ExpressionStatement;
+  const ifThenCode = (initTest.consequent as BlockStatement).body[0] as ExpressionStatement;
+  let engineCode: CallExpression | null = null;
+
+  simple(ifThenCode, {
+    CallExpression(e) {
+      if (e.arguments.length < 3) return;
+      if ((e.arguments[0] as Identifier).name !== 'window') return;
+      if (e.arguments[1].type !== 'MemberExpression') return;
+      if ((e.arguments[2] as Identifier).name !== 'jQuery') return;
+      if (e.callee.type !== 'FunctionExpression') return;
+      if (e.callee.params.length < 3) return;
+      if ((e.callee.params[0] as Identifier).name !== 'window') return;
+      if ((e.callee.params[1] as Identifier).name !== 'document') return;
+      if ((e.callee.params[2] as Identifier).name !== 'jQuery') return;
+
+      engineCode = e;
+    },
+  });
+  if (!engineCode)
+    throw new Error('Cannot find engine code');
+
+  return {
+    type: 'ExpressionStatement',
+    expression: engineCode,
+    start: -1,
+    end: -1
+  } as ExpressionStatement;
 };
 
 export const findObjCreateNull = (e: CallExpression) => (
