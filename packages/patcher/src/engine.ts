@@ -150,6 +150,7 @@ export const patchEngineScript = (
     throw new Error('Cannot find engine init code');
 
   { // Parse init code, remove `LoadScreen` calls
+    const isPromise = (initCodeAST as Statement).type !== 'BlockStatement';
     let resolveInjected = false;
     ancestor(initCodeAST, {
       CallExpression: (node, _, ancestors) => {
@@ -178,7 +179,7 @@ export const patchEngineScript = (
           };
           resolveInjected = true;
         } else if (parent.type === 'ReturnStatement') {
-          if (!resolveInjected) {
+          if (!resolveInjected && !isPromise) {
             // Replace `LoadScreen.unlock()` with `resolve()`
             // in `setTimeout(function () { return LoadScreen.unlock() })`
             parent.argument = {
