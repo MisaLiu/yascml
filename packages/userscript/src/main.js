@@ -111,6 +111,31 @@ Reflect.defineProperty(window, '__ImportMods', {
   value: importMods,
 });
 
+waitElement('head')
+  .then((dom) => {
+    const style = document.createElement('style');
+    style.innerHTML = /*css*/`
+html[data-init=yascml-loading] #init-screen {
+  display: block;
+}
+html[data-init=yascml-loading] #init-loading {
+  display: block;
+  border: 24px solid transparent;
+  border-radius: 50%;
+  border-top-color: #7f7f7f;
+  border-bottom-color: #7f7f7f;
+  width: 100px;
+  height: 100px;
+  animation: init-loading-spin 2s linear infinite;
+}
+html[data-init=yascml-loading] #init-loading>div {
+  text-indent: 9999em;
+  overflow: hidden;
+  white-space: nowrap;
+}`;
+    dom.appendChild(style);
+  });
+
 // Build an entry to import mods
 document.addEventListener('$gamestarted', () => {
   try {
