@@ -41,7 +41,11 @@ export default defineConfig(({ mode }) => {
           'name': 'YASCML',
           'namespace': 'yascml',
           'description': 'Yet Another SugarCube Mod Loader',
-          'author': 'Misa Liu',
+          'author': 'Misa Liu (https://misaliu.top)',
+          'homepage': 'https://yascml.github.io/',
+          'homepageURL': 'https://yascml.github.io/',
+          'supportURL': 'https://github.com/yascml/yascml/issues',
+          'source': 'https://github.com/yascml/yascml',
           'match': [
             // Note that we can't load this into editor's test/preview game,
             // this is just for a demonstration
@@ -55,13 +59,14 @@ export default defineConfig(({ mode }) => {
         generate: ({ userscript }) => ([
             userscript,
             '',
+            '// This is a compressed version of YASCML, include loader and patcher',
+            '// You can view the source code at: https://github.com/yascml/yascml',
+            '',
             '// You need to define websites you want to run',
             '// Add/remove/change the `@match` section above!',
             '',
             '// You can define your custom YASCML config here:',
-            'window.YASCMLConfig = {};',
-            '',
-            '// For full sources please go: https://github.com/yascml/yascml/blob/main/packages/userscript',
+            'window.YASCMLConfig = {};'
           ].join('\n')),
         build: {
           fileName: 'yascml.user.js',
