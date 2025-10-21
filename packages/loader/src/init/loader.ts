@@ -6,7 +6,7 @@ import { changeSplashText } from '../splash';
 import api from '../api';
 import { Logs } from '../patcher/console';
 import { importMod } from '../importer';
-import { unescapeHTML, sortMods, isModSuitable } from '../utils';
+import { isBlobAllowed, unescapeHTML, sortMods, isModSuitable } from '../utils';
 import { YASCML } from '../types';
 
 declare global {
@@ -32,12 +32,25 @@ export const initLoader = async () => {
       version: __LOADER_VERSION__,
       mods: [],
       api,
-      stats: {
-        gameName: unescapeHTML(document.querySelector<HTMLElement>('tw-storydata')!.getAttribute('name')!),
-        isLoaderInit: false,
-        isEngineInit: false,
-        logs: Logs,
-      },
+      stats: Object.create(null, {
+        gameName: {
+          get() { return unescapeHTML(document.querySelector<HTMLElement>('tw-storydata')!.getAttribute('name')!) },
+        },
+        canLoadBlob: {
+          get() { return isBlobAllowed; },
+        },
+        isLoaderInit: {
+          writable: true,
+          value: false,
+        },
+        isEngineInit: {
+          writable: true,
+          value: false,
+        },
+        logs: {
+          get() { return Logs },
+        },
+      }),
     } as YASCML)),
   });
 

@@ -63,6 +63,7 @@ export type LoaderConfig = Partial<{
 
 export type LoaderStats = {
   gameName: string,
+  canLoadBlob: boolean,
   isLoaderInit: boolean,
   isEngineInit: boolean,
   logs: LogEntry[],

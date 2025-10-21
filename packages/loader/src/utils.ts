@@ -22,6 +22,55 @@ type ExecuteScriptConfig = Partial<{
   domProps: Partial<Record<keyof HTMLScriptElement & string, string>>;
 }>;
 
+export let isBlobAllowed: boolean | null = null;
+
+export const readFileAsString = (file: Blob) => new Promise<string>((res, rej) => {
+  const reader = new FileReader();
+
+  reader.onload = () => res(reader.result as string);
+  reader.onerror = (e) => rej(e);
+
+  reader.readAsText(file);
+});
+
+/**
+ * Can this page load `blob:`?
+ * 
+ * @returns {boolean}
+ */
+export const canLoadBlob = () => new Promise<boolean>((res) => {
+  if (isBlobAllowed !== null) return res(isBlobAllowed);
+
+  const blob = new Blob([';window.__isBlobAllowed = true;']);
+  const url = URL.createObjectURL(blob);
+  const dom = document.createElement('script');
+
+  const destroyStuff = () => {
+    res(!!isBlobAllowed);
+    document.body.removeChild(dom);
+    URL.revokeObjectURL(url);
+    delete window.__isBlobAllowed;
+  };
+
+  dom.onload = () => {
+    isBlobAllowed = window.__isBlobAllowed === true;
+    destroyStuff();
+  };
+
+  dom.onerror = () => {
+    isBlobAllowed = false;
+    destroyStuff();
+  };
+
+  document.body.appendChild(dom);
+  try {
+    dom.src = url;
+  } catch {
+    isBlobAllowed = false;
+    destroyStuff();
+  }
+});
+
 /**
  * Basically an async alternative to `eval()`, support both script string and blob.
  */
@@ -77,6 +126,36 @@ export const loadStyle = (style: string | Blob, meta?: Partial<Omit<ModFileMeta,
     headDOM.appendChild(dom);
   }
 };
+
+export const loadModScript = (
+  script: string | Blob,
+  config: ExecuteScriptConfig = {}
+) => new Promise(async (res) => {
+  if (isBlobAllowed === null)
+    await canLoadBlob();
+
+  if (typeof script === 'string' || isBlobAllowed)
+    return res(executeScript(script, config));
+
+  return res(
+    executeScript(await readFileAsString(script), config)
+  );
+});
+
+export const loadModStyle = (
+  style: string | Blob,
+  meta?: Partial<Omit<ModFileMeta, 'timing'>>
+) => new Promise(async (res) => {
+  if (isBlobAllowed === null)
+    await canLoadBlob();
+
+  if (typeof style === 'string' || isBlobAllowed)
+    return res(loadStyle(style, meta));
+
+  return res(
+    loadStyle(await readFileAsString(style), meta)
+  );
+});
 
 export const isValidModMeta = (obj: Partial<ModMetaFile>) => (
   obj.id !== (void 0) && obj.name !== (void 0) && obj.author !== (void 0) && obj.version !== (void 0) && verValid(verClean(obj.version))

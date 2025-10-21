@@ -1,6 +1,6 @@
 import * as Setting from '../settings/storage';
 import { changeSplashText } from '../splash';
-import { executeScript, loadStyle } from '../utils';
+import { loadModScript, loadModStyle } from '../utils';
 
 export const initPreloadMods = async () => {
   if (Setting.get('saveMode')) return;
@@ -23,7 +23,7 @@ export const initPreloadMods = async () => {
           continue;
         }
 
-        loadStyle(await blob.async('blob'), {
+        await loadModStyle(await blob.async('blob'), {
           modId: mod.id,
           filename: path,
         });
@@ -39,7 +39,7 @@ export const initPreloadMods = async () => {
             return;
           }
 
-          await executeScript(await blob.async('blob'), {
+          await loadModScript(await blob.async('blob'), {
             meta: {
               modId: mod.id,
               filename: path,
@@ -84,7 +84,7 @@ export const initPostloadMods = async () => {
             return;
           }
 
-          await executeScript(await blob.async('blob'), {
+          await loadModScript(await blob.async('blob'), {
             meta: {
               modId: mod.id,
               filename: path,

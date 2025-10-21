@@ -3,7 +3,7 @@ import { replace } from '@yascml/utils';
 import { showSplash, changeSplashText, hideSplash } from './splash';
 import { initLoader } from './init/loader';
 import { initPostloadMods, initPreloadMods } from './init/mods';
-import { loadStyle, triggerEvent } from './utils';
+import { canLoadBlob, loadStyle, triggerEvent } from './utils';
 
 if (document.querySelector('#script-sugarcube') || window.SugarCube != null) {
   throw new Error('The SugarCube engine already initialized! Aborting...');
@@ -16,6 +16,8 @@ if (window.YASCML != null) {
 if (window.Reflect == null) {
   throw new Error('Your browser is too old! Upgrade your browser to use YASCML');
 }
+
+canLoadBlob().finally();
 
 window.addEventListener('DOMContentLoaded', async () => {
   loadStyle([

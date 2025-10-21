@@ -8,5 +8,7 @@ declare global {
     YASCMLConfig?: LoaderConfig;
     __SUGARCUBE_PATCHER?: () => (void | Promise<void>);
     __AfterInit?: (() => unknown | Promise<unknown>)[];
+
+    __isBlobAllowed?: boolean;
   }
 }
