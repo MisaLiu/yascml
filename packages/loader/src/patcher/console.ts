@@ -25,7 +25,7 @@ const customLog = (level: LogLevel, ...data: any[]) => {
   const ConsoleFn = OrigConsole.get(level);
   if (!ConsoleFn) return;
 
-  Logs.unshift({ time: performance.now(), level, data });
+  if (level !== 'debug') Logs.unshift({ time: performance.now(), level, data });
   if (Logs.length > 200) Logs.length = 200;
 
   if (!__DEVELOPMENT__ && level === 'info') return;
