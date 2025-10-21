@@ -1,4 +1,8 @@
-import semver from 'semver';
+import {
+  valid as verValid,
+  clean as verClean,
+  satisfies as verSatisfies
+} from 'semver';
 import SparkMD5 from 'spark-md5';
 import { ModMetaFile, ModMetaFull, ModFileMeta } from './types';
 
@@ -75,7 +79,7 @@ export const loadStyle = (style: string | Blob, meta?: Partial<Omit<ModFileMeta,
 };
 
 export const isValidModMeta = (obj: Partial<ModMetaFile>) => (
-  obj.id !== (void 0) && obj.name !== (void 0) && obj.author !== (void 0) && obj.version !== (void 0) && semver.valid(semver.clean(obj.version))
+  obj.id !== (void 0) && obj.name !== (void 0) && obj.author !== (void 0) && obj.version !== (void 0) && verValid(verClean(obj.version))
 );
 
 export const sortMods = (a: ModMetaFull, b: ModMetaFull) => {
@@ -134,7 +138,7 @@ export const isModSuitable = (mod: ModMetaFull) => {
   if (mod.dependencies === (void 0)) return true;
   for (const modId in mod.dependencies) {
     if (modId === 'yascml') {
-      if (!semver.satisfies(version, mod.dependencies[modId])) {
+      if (!verSatisfies(version, mod.dependencies[modId])) {
         console.warn(`Mod "${mod.id}" requires loader v${version}, but found v${version}. This mod will not be loaded.`);
         return false;
       } else continue;
@@ -157,7 +161,7 @@ export const isModSuitable = (mod: ModMetaFull) => {
     }
 
     const requiredVersion = mod.dependencies[modId];
-    if (!semver.satisfies(modDep.version, requiredVersion)) {
+    if (!verSatisfies(modDep.version, requiredVersion)) {
       console.warn(`Mod "${mod.id}" requires dependency "${modId} v${requiredVersion}", but found v${modDep.version}. This mod will not be loaded.`);
       return false;
     }

@@ -1,9 +1,8 @@
 import { resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
-import dts from 'unplugin-dts/vite';
 
-const packageJsonPath = resolve(__dirname, './package.json');
+const packageJsonPath = resolve(__dirname, '../package.json');
 const packageJson = JSON.parse(readFileSync(packageJsonPath, { encoding: 'utf-8' })) as { version: string };
 
 export default defineConfig(({ mode }) => ({
@@ -15,9 +14,9 @@ export default defineConfig(({ mode }) => ({
     minify: mode === 'production' ? 'esbuild' : false,
     target: 'es6',
     lib: {
-      entry: resolve(__dirname, 'src/main.ts'),
+      entry: resolve(__dirname, '../src/main.ts'),
       name: 'YASCML',
-      fileName: (format) => `yascml${format !== 'umd' ? `.${format}` : ''}.js`,
+      fileName: () => 'yascml.js',
       formats: [ 'umd' ],
     },
     rollupOptions: {
@@ -28,12 +27,5 @@ export default defineConfig(({ mode }) => ({
         },
       }
     },
-  },
-  plugins: [
-    dts({
-      tsconfigPath: './tsconfig.json',
-      copyDtsFiles: true,
-      insertTypesEntry: true,
-    }),
-  ],
+  }
 }));

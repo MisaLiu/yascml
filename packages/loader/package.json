@@ -11,8 +11,12 @@
     "types": "./dist/index.d.ts"
   },
   "scripts": {
-    "build": "vite build --mode development",
-    "build:prod": "tsc && vite build --mode production"
+    "build:full": "vite build --config config/vite.config.full.ts --mode development",
+    "build:full:prod": "tsc && vite build --config config/vite.config.full.ts --mode production",
+    "build:nolib": "vite build --config config/vite.config.nolib.ts --mode development",
+    "build:nolib:prod": "vite build --config config/vite.config.nolib.ts --mode production",
+    "build": "npm run build:full && npm run build:nolib",
+    "build:prod": "npm run build:full:prod && npm run build:nolib:prod"
   },
   "devDependencies": {
     "typescript": "~5.9.2",
