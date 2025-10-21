@@ -169,7 +169,8 @@
 
 /* Define entry style */
 #menu-yascml #menu-item-yascmanager a::before,
-#ui-bar button#ui-bar-yascmanager::before {
+#ui-bar button#ui-bar-yascmanager::before,
+#edge-yascmanager::before {
   --svg: var(--yascmanager-icon);
   content: " ";
   display: inline-block;
@@ -221,4 +222,35 @@
 
 #ui-bar.stowed #ui-bar-tray button#ui-bar-yascmanager {
   display: none;
+}
+
+#edge-yascmanager {
+  --size: 1.25em;
+  --left-offset: 0.75em;
+
+  display: block;
+  position: fixed;
+  width: calc(var(--size) + 0.5em);
+  height: var(--size);
+  left: calc(0px - var(--left-offset));
+  bottom: 0.75em;
+  color: #FFF !important;
+  opacity: 0.5;
+  filter: drop-shadow(0px 0px 6px black);
+  transition:
+    left .2s ease-out,
+    opacity .2s ease-out;
+  cursor: pointer;
+}
+
+#edge-yascmanager::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  vertical-align: unset;
+}
+
+#edge-yascmanager:hover {
+  --left-offset: -0.2em;
+  opacity: 1;
 }

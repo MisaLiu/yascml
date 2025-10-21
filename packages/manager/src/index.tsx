@@ -1,5 +1,6 @@
 import { render } from 'preact';
 import { App } from './app';
+import { isElementVisible } from './utils';
 
 const dialogContent = document.createElement('div');
 
@@ -44,27 +45,24 @@ const buildManagerEntrySide = () => {
   return dom;
 };
 
+const buildManagerEntryEdge = () => {
+  const dom = document.createElement('div');
+  dom.id = 'edge-yascmanager';
+  dom.title = 'YASCML Manager';
+  dom.onclick = showManagerDialog;
+  return dom;
+};
+
 (() => {
   render(<App />, dialogContent);
   
   document.addEventListener('$gamestarted', () => {
-    const menuDOM = document.querySelector<HTMLDivElement>('#menu-yascml');
-    const isMenuVisible = ((dom) => {
-      if (!dom) return false;
-    
-      const parent = dom.parentElement;
-      if (!parent) return false;
-    
-      const bounding = parent.getBoundingClientRect();
-      if (bounding.width === 0 || bounding.height === 0) return false;
-
-      return true;
-    })(menuDOM);
-
-    if (isMenuVisible) {
-      menuDOM!.appendChild(buildManagerEntry());
+    if (isElementVisible('#menu-yascml', true)) {
+      document.querySelector('#menu-yascml')!.appendChild(buildManagerEntry());
+    } else if (isElementVisible('#ui-bar-toggle')) {
+      document.querySelector('#ui-bar-tray')!.appendChild(buildManagerEntrySide());
     } else {
-      document.querySelector('#ui-bar-tray')?.appendChild(buildManagerEntrySide());
+      document.body.appendChild(buildManagerEntryEdge());
     }
   });
 })();
