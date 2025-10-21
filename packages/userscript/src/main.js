@@ -113,21 +113,25 @@ Reflect.defineProperty(window, '__ImportMods', {
 
 // Build an entry to import mods
 document.addEventListener('$gamestarted', () => {
-  const entryDOM = document.createElement('div');
+  try {
+    window.YASCML.api.mod.get('yascmanager');
+  } catch {
+    const entryDOM = document.createElement('div');
 
-  entryDOM.style = [
-    'display: block',
-    'position: fixed',
-    'right: 0',
-    'bottom: 0',
-    'font-size: 0.75em',
-    'color: #FFF',
-    'text-shadow: 0 0 4px black',
-    'opacity: 0.5',
-    'cursor: pointer'
-  ].join(';');
-  entryDOM.innerText = '[Import Mods]';
-  entryDOM.onclick = importMods;
+    entryDOM.style = [
+      'display: block',
+      'position: fixed',
+      'right: 0',
+      'bottom: 0',
+      'font-size: 0.75em',
+      'color: #FFF',
+      'text-shadow: 0 0 4px black',
+      'opacity: 0.5',
+      'cursor: pointer'
+    ].join(';');
+    entryDOM.innerText = '[Import Mods]';
+    entryDOM.onclick = importMods;
 
-  document.body.appendChild(entryDOM);
+    document.body.appendChild(entryDOM);
+  }
 });
