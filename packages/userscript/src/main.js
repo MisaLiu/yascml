@@ -1,6 +1,6 @@
 import { patchEngineScript } from '@yascml/patcher';
 import { fileSelect } from './file';
-import '../../loader/dist/yascml'; // LOL
+import '../../loader/dist/yascml.nolib'; // LOL
 
 // Prevent SugarCube from initializing
 document.documentElement.setAttribute('data-init', 'yascml-loading');
