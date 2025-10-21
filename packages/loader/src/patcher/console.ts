@@ -4,7 +4,6 @@ import { LogLevel, LogEntry } from '../types';
 interface ConsoleMap<T extends keyof Console> extends Map<T & string, Console[T]> {};
 
 const FnNames: (keyof Console)[] = [
-  'debug',
   'log',
   'info',
   'warn',
@@ -32,11 +31,11 @@ const customLog = (level: LogLevel, ...data: any[]) => {
 
   const ConsoleFn = OrigConsole.get(level);
   if (!ConsoleFn) return;
+  if (!shouldLogInfo() && level === 'info') return;
 
-  if (level !== 'debug') Logs.unshift({ time: performance.now(), level, data });
+  Logs.unshift({ time: performance.now(), level, data });
   if (Logs.length > 200) Logs.length = 200;
 
-  if (!shouldLogInfo() && level === 'info') return;
   return Reflect.apply(ConsoleFn, window.console, data);
 };
 

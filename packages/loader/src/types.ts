@@ -1,7 +1,7 @@
 import JSZip from 'jszip';
 import api from './api';
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+export type LogLevel = 'info' | 'warn' | 'error';
 
 export interface LogEntry {
   time: number,
