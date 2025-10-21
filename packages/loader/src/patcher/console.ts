@@ -1,3 +1,4 @@
+import { _raw as _settings } from '../settings/storage';
 import { LogLevel, LogEntry } from '../types';
 
 interface ConsoleMap<T extends keyof Console> extends Map<T & string, Console[T]> {};
@@ -19,6 +20,13 @@ for (const key of FnNames) {
   OrigConsole.set(key, Reflect.getOwnPropertyDescriptor(window.console, key)!.value!);
 }
 
+const shouldLogInfo = () => (
+  __DEVELOPMENT__ || _settings.logInfo || (
+    window.YASCMLConfig &&
+    window.YASCMLConfig.logInfo
+  )
+);
+
 const customLog = (level: LogLevel, ...data: any[]) => { 
   if (data.length === 0) return;
 
@@ -28,7 +36,7 @@ const customLog = (level: LogLevel, ...data: any[]) => {
   if (level !== 'debug') Logs.unshift({ time: performance.now(), level, data });
   if (Logs.length > 200) Logs.length = 200;
 
-  if (!__DEVELOPMENT__ && level === 'info') return;
+  if (!shouldLogInfo() && level === 'info') return;
   return Reflect.apply(ConsoleFn, window.console, data);
 };
 

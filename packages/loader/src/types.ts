@@ -58,6 +58,7 @@ export type LoaderConfig = Partial<{
     export: string[];
     init: { [name: string]: string };
   }>
+  logInfo: boolean,
 }>;
 
 export type LoaderStats = {

@@ -6,6 +6,7 @@ const _Settings: Settings = ((savedStr: string | null) => {
   if (!savedStr) return ({
     disabledMods: [],
     saveMode: false,
+    logInfo: false,
   }) as Settings;
   return JSON.parse(savedStr) as Settings;
 })(localStorage.getItem(STORAGE_KEY));
