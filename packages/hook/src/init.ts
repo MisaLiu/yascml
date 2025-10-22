@@ -1,18 +1,67 @@
 import { replace } from '@yascml/utils';
 import resources from './resources';
 import PassageMiddleware from './passage';
+import { EmptyImageUrl } from './const';
 
-// Hook `<img>`
-{
+{ // Hook image loading
+  // Hook `<img>`
   const $src = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src')!;
   Reflect.defineProperty(HTMLImageElement.prototype, 'src', {
     get() { return $src.get!.call(this) },
     set(source: string) {
+      if (this._src != null) {
+        $src.set!.call(this, source);
+        return;
+      }
+
       const context = { src: source, element: this };
       resources.image.run(context)
         .then(() => {
           $src.set!.call(this, context.src);
         });
+    },
+  });
+
+  // To prevent duplicated <img> element
+  const imgDomSet = new Set<HTMLImageElement>();
+  let domSetTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  const buildDomSetClear = () => {
+    if (domSetTimeout !== null) clearTimeout(domSetTimeout);
+    domSetTimeout = setTimeout(() => {
+      imgDomSet.clear();
+      domSetTimeout = null;
+    }, 200);
+  };
+
+  // Hook SugarCube.Wikifier
+  const $subWikify = Reflect.getOwnPropertyDescriptor(window.SugarCube!.Wikifier.prototype, 'subWikify')!;
+  Reflect.defineProperty(window.SugarCube!.Wikifier.prototype, 'subWikify', {
+    value(output: Element, terminator?: string, options?: Object) {
+      $subWikify.value!.call(this, output, terminator, options);
+      if (!output.querySelectorAll) return;
+
+      const imgDomList = output.querySelectorAll<HTMLImageElement>('img[src]');
+      if (imgDomList.length === 0) return;
+
+      let validDomCount = 0;
+      imgDomList.forEach((dom) => {
+        if (imgDomSet.has(dom)) return;
+        imgDomSet.add(dom);
+        validDomCount++;
+
+        dom._src = dom.getAttribute('src') ?? '';
+        dom.src = EmptyImageUrl;
+
+        const context = { src: dom._src, element: dom };
+        resources.image.run(context)
+          .then(() => {
+            dom.src = context.src;
+            delete dom._src;
+          });
+      });
+
+      if (validDomCount !== 0) buildDomSetClear();
     },
   });
 }
