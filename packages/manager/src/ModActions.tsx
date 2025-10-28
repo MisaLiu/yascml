@@ -41,6 +41,17 @@ export const ModActinos = () => {
           ref={fileInputRef}
         />
       </li>
+      <li>
+        <button
+          class="restart"
+          onClick={() => window.SugarCube!.UI.restart()}
+          type="button"
+          role="button"
+          tabIndex={0}
+        >
+          Restart
+        </button>
+      </li>
     </ul>
   );
 };
