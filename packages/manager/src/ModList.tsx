@@ -38,17 +38,16 @@ export const ModList = () => {
         <tbody>
           {modList.map((mod) => (
             <tr key={mod.id} class={mod.deleted ? 'deleted' : ''}>
-              <td>
-                <button
-                  class={mod.enabled ? 'enabled' : 'disabled'}
-                  type="button"
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => toggleEnabled(mod.id)}
-                  disabled={mod.deleted || mod.id === 'yascmanager'}
-                />
+              <td class="mod-icon">
+                <div class="icon-container">
+                  {mod.icon ? (
+                    <img src={mod.icon} />
+                  ) : (
+                    <div class="icon-placeholder"></div>
+                  )}
+                </div>
               </td>
-              <td>
+              <td class="mod-info">
                 <div>
                   {mod.name} v{mod.version}
                   {!mod.suitable && <span class="mod-label">⚠️unsuitable</span>}
@@ -83,6 +82,16 @@ export const ModList = () => {
                     </span>
                   </>}
                 </div>
+              </td>
+              <td>
+                <button
+                  class={mod.enabled ? 'enabled' : 'disabled'}
+                  type="button"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => toggleEnabled(mod.id)}
+                  disabled={mod.deleted || mod.id === 'yascmanager'}
+                />
               </td>
               <td>
                 <button
